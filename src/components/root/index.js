@@ -1,7 +1,7 @@
 import Block1 from '../block1';
 import Block2 from '../block2';
 import Block3 from '../block3';
-import Block4 from '../block4';
+import Graph from '../graph';
 
 import './index.css';
 
@@ -11,7 +11,7 @@ const Root = () => {
       <Block1 />
       <Block2 />
       <Block3 />
-      <Block4 />
+      <Graph />
     </div>
   );
 };
