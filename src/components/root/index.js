@@ -1,5 +1,5 @@
 import Block1 from '../block1';
-import Block2 from '../block2';
+import CountryList from '../countryList';
 import Block3 from '../block3';
 import Graph from '../graph';
 
@@ -9,7 +9,7 @@ const Root = () => {
   return (
     <div className="App">
       <Block1 />
-      <Block2 />
+      <CountryList />
       <Block3 />
       <Graph />
     </div>
