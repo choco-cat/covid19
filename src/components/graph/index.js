@@ -1,11 +1,11 @@
 import './index.css';
 
-const Block4 = () => {
+const Graph = () => {
   return (
     <div className="App">
-      Block 4
+      The graph will be built here
     </div>
   );
 };
 
-export default Block4;
+export default Graph;
