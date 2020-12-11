@@ -3,7 +3,7 @@ import { getCovidCountries, getSummaries } from '../../api/covid';
 import { getFlags } from "../../api/flags";
 import Block1 from '../block1';
 import CountryList from '../countryList';
-import Block3 from '../block3';
+import World_map from '../World_map';
 import Graph from '../graph';
 
 import './index.css';
@@ -33,8 +33,8 @@ const Root = () => {
 
   return (
       <div className="main-container">
-        <CountryList />
-        <Block3 summaries={summaries.Countries} />
+        <CountryList flags={flags}/>
+        <World_map summaries={summaries.Countries} />
         <div className="summary-container">
           <Block1 summaries={summaries.Global}/>
           <Graph />
