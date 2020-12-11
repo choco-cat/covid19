@@ -19,8 +19,6 @@ const Root = () => {
       const summariesResult = await getSummaries();
       const flags = await getFlags();
 
-      console.log(flags)
-
       setCountries(result);
       setSummaries(summariesResult);
       setFlags(flags)
