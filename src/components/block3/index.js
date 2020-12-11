@@ -1,9 +1,12 @@
+import Map from './map';
+
 import './index.css';
 
-const Block3 = () => {
+const Block3 = ({ summaries }) => {
   return (
     <div className="App">
-      Block 3
+      <h4>World Map</h4>
+      <Map summaries={summaries} />
     </div>
   );
 };
