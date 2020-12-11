@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getCovidCountries, getSummaries } from '../../api/covid';
 import Block1 from '../block1';
 import CountryList from '../countryList';
-import World_map from '../map';
+import World_map from '../World_map';
 import Graph from '../graph';
 
 import './index.css';
