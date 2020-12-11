@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getCovidCountries, getSummaries } from '../../api/covid';
 import Block1 from '../block1';
 import CountryList from '../countryList';
-import Block3 from '../block3';
+import Map from '../map';
 import Graph from '../graph';
 
 import './index.css';
@@ -30,7 +30,7 @@ const Root = () => {
   return (
     <div className="main-container">
       <CountryList />
-      <Block3 summaries={summaries.Countries} />
+      <map summaries={summaries.Countries} />
       <div className="summary-container">
         <Block1 summaries={summaries.Global}/>
         <Graph />
