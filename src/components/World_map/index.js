@@ -2,7 +2,7 @@ import Map from './map';
 
 import './index.css';
 
-const map = ({ summaries }) => {
+const World_map = ({ summaries }) => {
   return (
     <div className="App">
       <h4>The World Map will be built here</h4>
@@ -11,4 +11,4 @@ const map = ({ summaries }) => {
   );
 };
 
-export default Map;
+export default World_map;
