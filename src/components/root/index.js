@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getCovidCountries, getSummaries } from '../../api/covid';
 import { getFlags } from "../../api/flags";
-import Block1 from '../block1';
+import Summary from '../summary';
 import CountryList from '../countryList';
 import World_map from '../World_map';
 import Graph from '../graph';
@@ -36,7 +36,7 @@ const Root = () => {
         <CountryList flags={flags}/>
         <World_map summaries={summaries.Countries} />
         <div className="summary-container">
-          <Block1 summaries={summaries.Global}/>
+          <Summary summaries={summaries.Global}/>
           <Graph />
         </div>
       </div>

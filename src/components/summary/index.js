@@ -1,6 +1,6 @@
 import './index.css';
 
-const Block1 = ({ summaries = {} }) => {
+const Summary = ({ summaries = {} }) => {
   const {
     NewConfirmed = '',
     TotalConfirmed = '',
@@ -35,4 +35,4 @@ const Block1 = ({ summaries = {} }) => {
   );
 };
 
-export default Block1;
+export default Summary;
