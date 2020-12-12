@@ -1,89 +1,39 @@
 import React from 'react';
 import './index.css';
 
-const CountryList = ({ summaries, flags }) => {
+const missedFlags = {
+    'United Kingdom': 'https://restcountries.eu/data/gbr.svg',
+    'Iran, Islamic Republic of': 'https://restcountries.eu/data/irn.svg',
+    'Bolivia': 'https://restcountries.eu/data/bol.svg',
+    'Moldova': 'https://restcountries.eu/data/mda.svg',
+    'Venezuela (Bolivarian Republic)': 'https://restcountries.eu/data/ven.svg',
+    'Palestinian Territory': 'https://restcountries.eu/data/pse.svg',
+    'Macedonia, Republic of': 'https://restcountries.eu/data/mkd.svg',
+    'Korea (South)': 'https://restcountries.eu/data/kor.svg',
+    'Congo (Kinshasa)': 'https://restcountries.eu/data/cog.svg',
+    'Cape Verde': 'https://restcountries.eu/data/cpv.svg',
+    'Syrian Arab Republic (Syria)': 'https://restcountries.eu/data/syr.svg',
+    'Congo (Brazzaville)': 'https://restcountries.eu/data/cog.svg',
+    'Taiwan, Republic of China': 'https://restcountries.eu/data/twn.svg',
+    'Saint Vincent and Grenadines': 'https://restcountries.eu/data/vct.svg',
+    'Holy See (Vatican City State)': 'https://restcountries.eu/data/vat.svg',
+    'Macao, SAR China': 'https://restcountries.eu/data/mac.svg',
+    'Lao PDR': 'https://restcountries.eu/data/lao.svg'
+};
 
-    const data = [];
-    let sortedBy = 'alphabet'
-
-    if (summaries && flags) {
-        summaries.forEach(element => {
-            const { Country, NewConfirmed, NewDeaths, NewRecovered, TotalConfirmed, TotalDeaths, TotalRecovered } = element;
-            let Flag;
-            const filterFlags = flags.filter(item => item.name === Country)
-            if (filterFlags.length > 0) {
-                Flag = filterFlags[0].flag;
-            }
-            switch (Country) {
-                case 'United Kingdom':
-                    Flag = 'https://restcountries.eu/data/gbr.svg'
-                    break;
-                case 'Iran, Islamic Republic of':
-                    Flag = 'https://restcountries.eu/data/irn.svg'
-                    break;
-                case 'Bolivia':
-                    Flag = 'https://restcountries.eu/data/bol.svg'
-                    break;
-                case 'Moldova':
-                    Flag = 'https://restcountries.eu/data/mda.svg'
-                    break;
-                case 'Venezuela (Bolivarian Republic)':
-                    Flag = 'https://restcountries.eu/data/ven.svg'
-                    break;
-                case 'Palestinian Territory':
-                    Flag = 'https://restcountries.eu/data/pse.svg'
-                    break;
-                case 'Macedonia, Republic of':
-                    Flag = 'https://restcountries.eu/data/mkd.svg'
-                    break;
-                case 'Korea (South)':
-                    Flag = 'https://restcountries.eu/data/kor.svg'
-                    break;
-                case 'Congo (Kinshasa)':
-                    Flag = 'https://restcountries.eu/data/cog.svg'
-                    break;
-                case 'Cape Verde':
-                    Flag = 'https://restcountries.eu/data/cpv.svg'
-                    break;
-                case 'Syrian Arab Republic (Syria)':
-                    Flag = 'https://restcountries.eu/data/syr.svg'
-                    break;
-                case 'Congo (Brazzaville)':
-                    Flag = 'https://restcountries.eu/data/cog.svg'
-                    break;
-                case 'Taiwan, Republic of China':
-                    Flag = 'https://restcountries.eu/data/twn.svg'
-                    break;
-                case 'Saint Vincent and Grenadines':
-                    Flag = 'https://restcountries.eu/data/vct.svg'
-                    break;
-                case 'Holy See (Vatican City State)':
-                    Flag = 'https://restcountries.eu/data/vat.svg'
-                    break;
-                case 'Macao, SAR China':
-                    Flag = 'https://restcountries.eu/data/mac.svg'
-                    break;
-                case 'Lao PDR':
-                    Flag = 'https://restcountries.eu/data/lao.svg'
-                    break;
-            }
-
-            data.push({
-                Country,
-                NewConfirmed,
-                NewDeaths,
-                NewRecovered,
-                TotalConfirmed,
-                TotalDeaths,
-                TotalRecovered,
-                Flag
-            })
-        })
-    }
+const CountryList = ({ summaries = [], flags = []}) => {
+    let sortedBy = 'alphabet';
+    const data = summaries.map((country) => {
+        const [selectedCountry] = flags.filter(item => item.name === country.Country);
+        return {
+            ...country,
+            flag: selectedCountry ? selectedCountry.flag : missedFlags[country.Country],
+        }
+    });
 
     const sortByParameter = (parameter) => {
         data.sort((a, b) => a[parameter] < b[parameter] ? 1 : -1)
-    }
+    };
 
     const onSortChange = () => {
         switch (sortedBy) {
@@ -100,22 +50,22 @@ const CountryList = ({ summaries, flags }) => {
                 sortByParameter('Country');
                 break;
         }
-    }
+    };
 
-    sortByParameter('TotalConfirmed')
-    sortedBy = 'total cases'
+    sortByParameter('TotalConfirmed');
+    sortedBy = 'total cases';
 
-    const items = data.map((item) => {
-        const { Country, TotalConfirmed, Flag, id } = item;
+    const items = data.map((item, index) => {
+        const { Country, TotalConfirmed, flag } = item;
 
         return (
-            <li className="country-list-item" key={id}>
-                <img className="country-list-item-flag" src={Flag} alt="flag"/>
+            <li className="country-list-item" key={index}>
+                <img className="country-list-item-flag" src={flag} alt="flag"/>
                 <span className="country-list-item-country">{Country} </span>
                 {TotalConfirmed}
             </li>
         )
-    })
+    });
 
     return (
         <div className="country-list-container">
