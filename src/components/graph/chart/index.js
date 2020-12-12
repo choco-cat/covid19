@@ -26,7 +26,7 @@ const prepereData = (data) => {
   const resultArr = [];
   resultArr.push(["Date", "Кол-во заболевших"]);
   if(Array.isArray(data)) {
-    data.forEach((el, index) => resultArr.push([index, el.TotalDeaths]));
+    data.forEach((el, index) => resultArr.push([index, el.Confirmed]));
   }
   return resultArr;
 };
