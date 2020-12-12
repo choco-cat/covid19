@@ -9,35 +9,11 @@ const chartEvents = [
     }
   }
 ];
-const data = [
-  ["Date", "Кол-во заболевших"],
-  [1, 12],
-  [2, 20],
-  [3, 33],
-  [4, 23],
-  [5, 45],
-  [6, 45],
-  [7, 56],
-  [8, 55],
-  [9, 2],
-  [10, 56],
-  [11, 66],
-  [12, 77],
-  [13, 88],
-  [14, 99],
-  [15, 12],
-  [16, 20],
-  [17, 33],
-  [18, 23],
-  [18, 45],
-  [19, 45],
-  [20, 56],
-];
 
 const options = {
   title: "Кол-во заболевших по датам",
-  hAxis: { title: "Дата", viewWindow: { min: 1, max: 20 } },
-  vAxis: { title: "Кол-во заболевших", viewWindow: { min: 0, max: 100 } },
+  hAxis: { title: "Дни", viewWindow: { min: 1, max: 244 } },
+  vAxis: { title: "Кол-во заболевших", viewWindow: { min: 0, max: 5000000 } },
   legend: "none",
   animation: {
     duration: 1000,
@@ -46,11 +22,21 @@ const options = {
   },
 };
 
-const CovidChart = () => {
+const prepereData = (data) => {
+  const resultArr = [];
+  resultArr.push(["Date", "Кол-во заболевших"]);
+  if(Array.isArray(data)) {
+    data.forEach((el, index) => resultArr.push([index, el.Confirmed]));
+  }
+  return resultArr;
+};
+
+const CovidChart = ({ dataWorld }) => {
+  const correctData = prepereData(dataWorld);
   return (
     <Chart
       chartType="AreaChart"
-      data={data}
+      data={correctData}
       options={options}
       graphID="ScatterChart"
       width="100%"
