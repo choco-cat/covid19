@@ -33,7 +33,7 @@ const Root = () => {
 
   return (
       <div className="main-container">
-        <CountryList flags={flags}/>
+        <CountryList summaries={summaries.Countries} flags={flags}/>
         <WorldMap summaries={summaries.Countries} />
         <div className="summary-container">
           <Summary summaries={summaries.Global}/>

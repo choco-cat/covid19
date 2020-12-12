@@ -1,0 +1,28 @@
+.country-list-container {
+    max-height: 80vh;
+    width: 25vw;
+}
+
+.country-list-sortBy {
+    cursor: pointer;
+    background: whitesmoke;
+}
+
+.country-list {
+    list-style: none;
+    height: 80%;
+    overflow-y: scroll;
+}
+
+.country-list-item {
+    font-size: 0.7rem;
+}
+
+.country-list-item-country {
+    color: darkred;
+}
+
+.country-list-item-flag {
+    width: 1rem;
+    height: auto;
+}
