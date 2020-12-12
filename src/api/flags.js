@@ -12,3 +12,13 @@ export const getFlags = async () => {
     const { data: flags } = await axios.get(url);
     return flags;
 };
+
+/*
+Возвращает количество населения страны country_slug
+*/
+
+export const getPopulationCountry = async (country_slug) => {
+    const url =  `https://restcountries.eu/rest/v2/name/${country_slug}`;
+    const { data: country } = await axios.get(url);
+    return country[0].population;
+};
