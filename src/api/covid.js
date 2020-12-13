@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { parse, compareAsc, format, addDays, endOfToday } from 'date-fns';
-import { getPopulationCountry } from './flags';
+import { parse, format, addDays, endOfToday } from 'date-fns';
 
+const cache = {};
 const BASE_URL = 'https://api.covid19api.com/';
 
 //TODO добавить обработчик ошибок
@@ -32,8 +32,13 @@ Date: "2020-12-10T00:00:00Z"
 }
 */
 export const getDataCountry = async (country_slug) => {
+  if (cache[country_slug]) {
+    return cache[country_slug];
+  }
+
   const endPointCountries = `total/country/${country_slug}`;
   const { data: summaries } =  await axios.get(`${BASE_URL}${endPointCountries}`);
+  cache[country_slug] = summaries;
   return summaries;
 };
 
@@ -50,10 +55,15 @@ Recovered: 87707
 }
 */
 export const getDataCountryLastDay = async (country_slug) => {
+  if (cache[`${country_slug}_last_day`]) {
+    return cache[`${country_slug}_last_day`];
+  }
+
   const currentDate = endOfToday();
   const yesterday = addDays(currentDate, -1);
   const endPointCountries = `total/country/${country_slug}?from=${format(yesterday, 'Y-MM-dd')}&to=${format(currentDate,'Y-MM-dd')}`;
   const { data: summaries } =  await axios.get(`${BASE_URL}${endPointCountries}`);
+  cache[`${country_slug}_last_day`] = summaries[0];
   return summaries[0];
 };
 
@@ -69,6 +79,10 @@ Recovered: 490147
 }
 */
 export const getDataWorld = async () => {
+  if (cache['world']) {
+    return cache['world'];
+  }
+
   const endPointCountries = 'world';
   const { data: summaries } =  await axios.get(`${BASE_URL}${endPointCountries}`);
   summaries.sort((a, b) => a.TotalConfirmed > b.TotalConfirmed ? 1 : -1);
@@ -80,6 +94,7 @@ export const getDataWorld = async () => {
     el.Recovered = el.TotalRecovered;
     return el;
   });
+  cache['world'] = summaries;
   return summaries;
 };
 
@@ -94,6 +109,10 @@ Recovered: 44373880
 }
  */
 export const getDataWorldLastDay = async () => {
+  if (cache['world_last_day']) {
+    return cache['world_last_day'];
+  }
+
   const currentDate = endOfToday();
   const yesterday = addDays(currentDate, -1);
   const endPointCountries = `world?from=${format(yesterday, 'Y-MM-dd')}&to=${format(currentDate,'Y-MM-dd')}`;
@@ -105,11 +124,16 @@ export const getDataWorldLastDay = async () => {
     el.Recovered = el.TotalRecovered;
     return el;
   });
+  cache['world_last_day'] = summaries[0];
   return summaries[0];
 };
 
 //Итоговые данные по миру
 export const getSummaries = async () => {
+  if (cache['summaries']) {
+    return cache['summaries'];
+  }
+
   const endPointCountries = 'summary';
   const { data: summaries } =  await axios.get(`${BASE_URL}${endPointCountries}`);
   summaries.Countries.map((el) => {
@@ -118,58 +142,6 @@ export const getSummaries = async () => {
     el.Recovered = el.TotalRecovered;
     return el;
   });
+  cache['summaries'] = summaries;
   return summaries;
 };
-
-/*
-Возвращает статистику всех статусов по миру по всем датам на 100 тыс. населения, массив объектов вида
-{
-Country: "China",
-CountryCode: "",
-CityCode: "",
-Lat: "0",
-Lon: "0",
-Confirmed: 0.08,
-Deaths: 0.056,
-Recovered: 0.023,
-Date: "2020-12-10T00:00:00Z"
-}
-*/
-export const getDataWorld100 = async () => {
-  const populationWorld = 7 * 10**9;
-  const data = await getDataWorld();
-  calc100Men(data, populationWorld);
-  return data;
-};
-
-/*
-Возвращает статистику всех статусов по стране по всем датам на 100 тыс. населения, массив объектов вида
-{
-Country: "China",
-CountryCode: "",
-CityCode: "",
-Lat: "0",
-Lon: "0",
-Confirmed: 0.08,
-Deaths: 0.056,
-Recovered: 0.023,
-Date: "2020-12-10T00:00:00Z"
-}
-country_slug = название страны, все маленькие буквы
-*/
-export const getDataCountry100 = async (country_slug) => {
-  const data = await getDataCountry(country_slug);
-  const population = await getPopulationCountry(country_slug);
-  calc100Men(data, population);
-  return data;
-};
-
-
-const calc100Men = (data, population) => {
-  return data.map((el) => {
-    el.Confirmed = el.Confirmed / (population / 10 ** 5);
-    el.Deaths = el.Deaths / (population / 10 ** 5);
-    el.Recovered = el.Recovered / (population / 10 ** 5);
-    return el;
-  });
-}

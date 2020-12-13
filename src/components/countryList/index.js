@@ -1,45 +1,9 @@
 import React from 'react';
+import { missedFlags, missedPopulations } from '../../constants/missed';
+import { sortByParameter } from '../../services/sorting';
+import { filters } from "../../constants/filters";
+
 import './index.css';
-
-const missedFlags = {
-    'United Kingdom': 'https://restcountries.eu/data/gbr.svg',
-    'Iran, Islamic Republic of': 'https://restcountries.eu/data/irn.svg',
-    'Bolivia': 'https://restcountries.eu/data/bol.svg',
-    'Moldova': 'https://restcountries.eu/data/mda.svg',
-    'Venezuela (Bolivarian Republic)': 'https://restcountries.eu/data/ven.svg',
-    'Palestinian Territory': 'https://restcountries.eu/data/pse.svg',
-    'Macedonia, Republic of': 'https://restcountries.eu/data/mkd.svg',
-    'Korea (South)': 'https://restcountries.eu/data/kor.svg',
-    'Congo (Kinshasa)': 'https://restcountries.eu/data/cog.svg',
-    'Cape Verde': 'https://restcountries.eu/data/cpv.svg',
-    'Syrian Arab Republic (Syria)': 'https://restcountries.eu/data/syr.svg',
-    'Congo (Brazzaville)': 'https://restcountries.eu/data/cog.svg',
-    'Taiwan, Republic of China': 'https://restcountries.eu/data/twn.svg',
-    'Saint Vincent and Grenadines': 'https://restcountries.eu/data/vct.svg',
-    'Holy See (Vatican City State)': 'https://restcountries.eu/data/vat.svg',
-    'Macao, SAR China': 'https://restcountries.eu/data/mac.svg',
-    'Lao PDR': 'https://restcountries.eu/data/lao.svg',
-};
-
-const missedPopulations = {
-    'United Kingdom': 65110000,
-    'Iran, Islamic Republic of': 79369900,
-    'Bolivia': 10985059,
-    'Moldova': 3553100,
-    'Venezuela (Bolivarian Republic)': 31028700,
-    'Palestinian Territory': 4682467,
-    'Macedonia, Republic of': 2058539,
-    'Korea (South)': 50801405,
-    'Congo (Kinshasa)': 4741000,
-    'Cape Verde': 531239,
-    'Syrian Arab Republic (Syria)': 18564000,
-    'Congo (Brazzaville)': 4741000,
-    'Taiwan, Republic of China': 23503349,
-    'Saint Vincent and Grenadines': 109991,
-    'Holy See (Vatican City State)': 451,
-    'Macao, SAR China': 649100,
-    'Lao PDR': 6492400,
-};
 
 const sortParameters = {
     'total cases': 'TotalConfirmed',
@@ -57,28 +21,48 @@ const sortParameters = {
 };
 
 class CountryList extends React.Component {
-
     constructor() {
         super();
+
         this.state = {
             sortedBy: 'total cases',
+            status: '',
+            period: '',
+            relative: '',
             filterText: ''
+        };
+    }
+
+    componentDidMount() {
+        this.setState({
+              sortedBy: 'total cases',
+              status: this.props.filters.status,
+              period: this.props.filters.period,
+              relative: this.props.filters.relative,
+              filterText: ''
+          })
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevState.sortedBy !== this.state.sortedBy) {
+            this.props.updateFilter({
+                status: this.state.status,
+                period: this.state.period,
+                relative: this.state.relative,
+                sortedBy: this.state.sortedBy,
+            });
         }
     }
 
-    sortByParameter = (data, parameter) => {
-        if (parameter === 'Country') return data.sort((a, b) => a[parameter] > b[parameter] ? 1 : -1)
-        else return data.sort((a, b) => a[parameter] < b[parameter] ? 1 : -1)
-    };
-
     makeList(data = []) {
-        const { sortedBy } = this.state
-        data = this.sortByParameter(data, sortParameters[sortedBy]);
-        return data.map((item, index) => {
+        const { sortedBy } = this.state;
+
+        return sortByParameter(data, sortParameters[sortedBy]).map((item, index) => {
             const { Country, flag } = item;
-            let amount = item[sortParameters[sortedBy]];
+            const amount = item[sortParameters[sortedBy]];
+
             return (
-                <li className="country-list-item" key={index}>
+                <li className="country-list-item" key={index} onClick={() => this.props.handleClickOnCountry(Country)}>
                     <img className="country-list-item-flag" src={flag} alt="flag"/>
                     <span className="country-list-item-country">{Country} </span>
                     {amount}
@@ -87,89 +71,93 @@ class CountryList extends React.Component {
         })
     }
 
-    onSortChange = () => {
-        const { sortedBy } = this.state
+    onSortChange = (sortedBy) => {
+        //TODO Отрефакторить
         switch (sortedBy) {
             case 'total cases':
-                this.setState({ sortedBy: 'new cases'} );
+                this.setState({ sortedBy: 'new cases', status: filters.status.confirmed, relative: filters.relative.absolute, period: filters.period.lastDay } );
                 break;
             case 'new cases':
-                this.setState({ sortedBy: 'total deaths'} );
+                this.setState({ sortedBy: 'total deaths', status: filters.status.deaths, relative: filters.relative.absolute, period: filters.period.all } );
                 break;
             case 'total deaths':
-                this.setState({ sortedBy: 'new deaths'} );
+                this.setState({ sortedBy: 'new deaths', status: filters.status.deaths, relative: filters.relative.absolute, period: filters.period.lastDay } );
                 break;
             case 'new deaths':
-                this.setState({ sortedBy: 'total recovered'} );
+                this.setState({ sortedBy: 'total recovered', status: filters.status.recovered, relative: filters.relative.absolute, period: filters.period.all } );
                 break;
             case 'total recovered':
-                this.setState({ sortedBy: 'new recovered'} );
+                this.setState({ sortedBy: 'new recovered', status: filters.status.recovered, relative: filters.relative.absolute, period: filters.period.lastDay });
                 break;
             case 'new recovered':
-                this.setState({ sortedBy: 'total cases per 100k'} );
+                this.setState({ sortedBy: 'total cases per 100k', status: filters.status.confirmed, relative: filters.relative.to100men, period: filters.period.all } );
                 break;
             case 'total cases per 100k':
-                this.setState({ sortedBy: 'new cases per 100k'} );
+                this.setState({ sortedBy: 'new cases per 100k', status: filters.status.confirmed, relative: filters.relative.to100men, period: filters.period.lastDay } );
                 break;
             case 'new cases per 100k':
-                this.setState({ sortedBy: 'total deaths per 100k'} );
+                this.setState({ sortedBy: 'total deaths per 100k', status: filters.status.deaths, relative: filters.relative.to100men, period: filters.period.all } );
                 break;
             case 'total deaths per 100k':
-                this.setState({ sortedBy: 'new deaths per 100k'} );
+                this.setState({ sortedBy: 'new deaths per 100k', status: filters.status.deaths, relative: filters.relative.to100men, period: filters.period.lastDay } );
                 break;
             case 'new deaths per 100k':
-                this.setState({ sortedBy: 'total recovered per 100k'} );
+                this.setState({ sortedBy: 'total recovered per 100k', status: filters.status.recovered, relative: filters.relative.to100men, period: filters.period.all } );
                 break;
             case 'total recovered per 100k':
-                this.setState({ sortedBy: 'new recovered per 100k'} );
+                this.setState({ sortedBy: 'new recovered per 100k', status: filters.status.recovered, relative: filters.relative.to100men, period: filters.period.lastDay } );
                 break;
             case 'new recovered per 100k':
-                this.setState({ sortedBy: 'total cases'} );
+                this.setState({ sortedBy: 'total cases', status: filters.status.confirmed, relative: filters.relative.absolute, period: filters.period.all } );
                 break;
         }
     };
 
     onInputChange = (e) => {
-        this.setState({filterText: e.target.value})
-    }
+        this.setState({filterText: e.target.value});
+    };
 
     render() {
-        const { summaries, flags } = this.props
-        let data
-        let listItems = []
-        if (summaries && flags) {
-            data = summaries.map((country) => {
-                const [selectedCountry] = flags.filter(item => item.name === country.Country);
-                const population = selectedCountry ? selectedCountry.population : missedPopulations[country.Country];
-                return {
-                    ...country,
-                    flag: selectedCountry ? selectedCountry.flag : missedFlags[country.Country],
-                    population,
-                    TotalConfirmedPerPopulation: Math.round((country.TotalConfirmed * 100000) / population),
-                    NewConfirmedPerPopulation: Math.round((country.NewConfirmed * 100000) / population),
-                    TotalDeathsPerPopulation: Math.round((country.TotalDeaths * 100000) / population),
-                    NewDeathsPerPopulation: Math.round((country.NewDeaths * 100000) / population),
-                    TotalRecoveredPerPopulation: Math.round((country.TotalRecovered * 100000) / population),
-                    NewRecoveredPerPopulation: Math.round((country.NewRecovered * 100000) / population),
-                }
-            })
-            const { filterText } = this.state
-            if (filterText !== '') {
-                data = data.filter(el => el['Country'].toLowerCase().includes(filterText.toLowerCase()))
+        const { summaries = [], flags = [] } = this.props;
+        const { sortedBy, filterText } = this.state;
+
+        let data = summaries.map((country) => {
+            const [selectedCountry] = flags.filter(item => item.name === country.Country);
+            const population = selectedCountry ? selectedCountry.population : missedPopulations[country.Country];
+
+            return {
+                ...country,
+                flag: selectedCountry ? selectedCountry.flag : missedFlags[country.Country],
+                population,
+                TotalConfirmedPerPopulation: Math.round((country.TotalConfirmed * 100000) / population),
+                NewConfirmedPerPopulation: Math.round((country.NewConfirmed * 100000) / population),
+                TotalDeathsPerPopulation: Math.round((country.TotalDeaths * 100000) / population),
+                NewDeathsPerPopulation: Math.round((country.NewDeaths * 100000) / population),
+                TotalRecoveredPerPopulation: Math.round((country.TotalRecovered * 100000) / population),
+                NewRecoveredPerPopulation: Math.round((country.NewRecovered * 100000) / population),
             }
-            listItems = this.makeList(data)
+        });
+
+
+        if (filterText !== '') {
+            data = data.filter(el => el['Country'].toLowerCase().includes(filterText.toLowerCase()))
         }
-        const { sortedBy } = this.state
+
+        let listItems = this.makeList(data);
+
         return (
             <div className="country-list-container">
-                <h2>Sorted by <span onClick={() => this.onSortChange()} className="country-list-sortBy">{sortedBy}</span></h2>
-                <input onChange={this.onInputChange} type="text"/>
+                <h2>
+                    <span>Sorted by </span>
+                    <span onClick={() => this.onSortChange(sortedBy)} className="country-list-sortBy">{sortedBy}</span>
+                </h2>
+                <input onChange={this.onInputChange} type="text" />
                 <ul className="country-list">
                     {listItems}
                 </ul>
             </div>
         );
     }
-};
+}
 
 export default CountryList;
