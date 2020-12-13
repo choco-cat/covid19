@@ -19,6 +19,7 @@
 
 .country-list-item {
     font-size: 0.7rem;
+    cursor: pointer;
 }
 
 .country-list-item-country {
