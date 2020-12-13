@@ -6,6 +6,9 @@
 .country-list-sortBy {
     cursor: pointer;
     background: whitesmoke;
+    border: solid 1px black;
+    border-right: none;
+    border-left: none;
 }
 
 .country-list {
