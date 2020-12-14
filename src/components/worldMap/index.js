@@ -1,7 +1,5 @@
 import Map from './map';
 
-import './index.css';
-
 const WorldMap = ({ summaries, handleClickOnCountry }) => {
   return (
     <div className="App">

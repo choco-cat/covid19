@@ -1,7 +1,5 @@
 import CovidChart from './chart';
 
-import './index.css';
-
 const Graph = ({ dataWorld }) => {
     return (
       <div className="App">

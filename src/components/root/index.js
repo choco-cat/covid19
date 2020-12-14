@@ -7,7 +7,7 @@ import CountryList from '../countryList';
 import WorldMap from '../worldMap';
 import Graph from '../graph';
 
-import './index.css';
+import '../../styles/main.scss';
 
 const Root = () => {
   const [countries, setCountries] = useState( []);

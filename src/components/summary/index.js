@@ -1,4 +1,3 @@
-import './index.css';
 
 const Summary = ({ summaries = {} }) => {
   const {
@@ -11,7 +10,7 @@ const Summary = ({ summaries = {} }) => {
   }  = summaries;
 
   return (
-    <div>
+    <div className='test'>
       <h4>Summary</h4>
       <div>
         NewConfirmed: {NewConfirmed}
