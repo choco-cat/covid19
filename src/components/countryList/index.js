@@ -3,8 +3,6 @@ import { missedFlags, missedPopulations } from '../../constants/missed';
 import { sortByParameter } from '../../services/sorting';
 import { filters } from "../../constants/filters";
 
-import './index.css';
-
 const sortParameters = {
     'total cases': 'TotalConfirmed',
     'new cases': 'NewConfirmed',

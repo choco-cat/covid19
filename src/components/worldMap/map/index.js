@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import country from 'world-map-country-shapes';
-import './index.css';
 
 const Map = ({summaries = [], handleClickOnCountry}) => {
   const [selectedCountries, setSelectedCountries] = useState({});
