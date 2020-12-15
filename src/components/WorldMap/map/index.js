@@ -3,6 +3,8 @@ import country from 'world-map-country-shapes';
 import './index.css';
 
 const Map = ({ summaries = [] }) => {
+
+
     const [selectedCountries, setSelectedCountries] = useState({});
 
     const mapCountries = country.map(country => {
@@ -28,6 +30,7 @@ const Map = ({ summaries = [] }) => {
 
 
       return (
+
         <path
             key={country.id}
             d={country.shape}
@@ -40,19 +43,24 @@ const Map = ({ summaries = [] }) => {
             onMouseOut= {() => onOutCountry(country)}
         >
         </path>
+
       )
     });
 
     return (
+
         <svg
             xmlns="http://www.w3.org/2000/svg"
             height="500"
             width="700"
             viewBox="0 0 2000 1001"
+            transform = "scale(1,1)"
         >
+
             {mapCountries}
         </svg>
     )
+
 };
 
 
