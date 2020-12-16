@@ -8,10 +8,10 @@ const Map = ({summaries = [], handleClickOnCountry}) => {
   // выводим подсказки при наведении на страну
   const onHoverCountry = (e, country, covidDataForCountry) => {
     //todo Добавить вывод показателя, который используется в данный момент
-    tooltip.innerHTML = `${covidDataForCountry.Country} 'Добавить вывод показателя, который используется в данный момент '`;
-    tooltip.style.display = "block";
-    tooltip.style.left = e.pageX + 1 + 'px';
-    tooltip.style.top = e.pageY + 1 + 'px';
+    // tooltip.innerHTML = `${covidDataForCountry.Country} 'Добавить вывод показателя, который используется в данный момент '`;
+    // tooltip.style.display = "block";
+    // tooltip.style.left = e.pageX + 1 + 'px';
+    // tooltip.style.top = e.pageY + 1 + 'px';
     setSelectedCountries({
       [country.id]: !selectedCountries[country.id]
     });

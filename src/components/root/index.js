@@ -16,6 +16,7 @@ const Root = () => {
   const [dataWorldFromDays, setDataWorld] = useState([]);
   const [dataCountryFromDays, setDataCountry] = useState([]);
   const [dataAll, setDataAll] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const [indicatorsForFilter, updateIndicators] = useState({
     status: filters.status.confirmed,
@@ -43,6 +44,7 @@ const Root = () => {
       setSummaries(summariesResult);
       setDataWorld(dataWorldFromDaysResult);
       setFlags(flagsResult);
+      setIsLoaded(true);
     };
 
     fetchData();
@@ -90,22 +92,27 @@ const Root = () => {
     setDataCountry(dataCountryFromDaysResult);
   };
 
-  return (
-    <div className="main-container">
-      <CountryList
-        summaries={summaries.Countries}
-        flags={flags}
-        filters={indicatorsForFilter}
-        updateFilter={updateFilter}
-        handleClickOnCountry={getDataForCountry}
-      />
-      <WorldMap summaries={summaries.Countries} filters={indicatorsForFilter} handleClickOnCountry={getDataForCountry}/>
-      <div className="summary-container">
-        <Summary summaries={summaries.Global} filters={indicatorsForFilter}/>
-        <Graph dataWorld={dataAll} filters={indicatorsForFilter}/>
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  } else {
+    return (
+      <div className="main-container">
+        <CountryList
+          summaries={summaries.Countries}
+          flags={flags}
+          filters={indicatorsForFilter}
+          updateFilter={updateFilter}
+          handleClickOnCountry={getDataForCountry}
+        />
+        <WorldMap summaries={summaries.Countries} filters={indicatorsForFilter}
+                  handleClickOnCountry={getDataForCountry}/>
+        <div className="summary-container">
+          <Summary summaries={summaries.Global} filters={indicatorsForFilter}/>
+          <Graph dataWorld={dataAll} filters={indicatorsForFilter}/>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default Root;
