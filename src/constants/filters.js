@@ -1,8 +1,8 @@
 export const filters = {
   status: {
-    confirmed : 'Confirmed',
-    deaths : 'Deaths',
-    recovered: 'Recovered',
+    confirmed : 'TotalConfirmed',
+    deaths : 'TotalDeaths',
+    recovered: 'TotalRecovered',
   },
   period: {
     all : 'All',

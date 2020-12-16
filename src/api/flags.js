@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+const cache = {};
+
 //TODO добавить обработчик ошибок
 
 /*
@@ -20,5 +22,7 @@ export const getFlags = async () => {
 export const getPopulationCountry = async (country_slug) => {
     const url =  `https://restcountries.eu/rest/v2/name/${country_slug}`;
     const { data: country } = await axios.get(url);
-    return country[0].population;
+    const [result] = country.filter((el) => el.name.toLowerCase() === country_slug);
+
+    return result.population;
 };
