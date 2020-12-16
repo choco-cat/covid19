@@ -2,6 +2,7 @@ import React from 'react';
 import { missedFlags, missedPopulations } from '../../constants/missed';
 import { sortByParameter } from '../../services/sorting';
 import { filters } from "../../constants/filters";
+import { getSelectFilters } from "../../services/selectFilters"
 
 const sortParameters = {
     'total cases': 'TotalConfirmed',
@@ -78,7 +79,9 @@ class CountryList extends React.Component {
     }
 
     onSelectChange = (e) => {
-        this.setState({sortedBy: e.target.value});
+        const optionNumber = e.target.selectedIndex;
+        let { status, period, relative } = getSelectFilters(optionNumber);
+        this.setState({sortedBy: e.target.value, status, period, relative});
     };
 
     onInputChange = (e) => {
@@ -137,7 +140,7 @@ class CountryList extends React.Component {
                         <option value="new recovered per 100k">new recovered per 100k</option>
                     </select>
                 </h2>
-                <input onChange={this.onInputChange} type="text"/>
+                <input onChange={this.onInputChange} type="text" />
                 <ul className="country-list">
                     {listItems}
                 </ul>
