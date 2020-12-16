@@ -2,7 +2,6 @@ import { endOfToday } from "date-fns";
 
 const populationWorld = 7 * 10 ** 9;
 
-
 /*
 Возвращает статистику всех статусов по стране по всем датам на 100 тыс. населения, массив объектов вида
 {
@@ -18,7 +17,6 @@ Date: "2020-12-10T00:00:00Z"
 }
 country_slug = название страны, все маленькие буквы
 */
-
 
 const calc100Men = (data, population) => {
   return data.map((el) => ({
@@ -47,24 +45,22 @@ const calc100Men = (data, population) => {
 */
 
 export const getDataWorldLastDay = (data, filters) => {
-  if (!data.Global) {
+  if (!data) {
     return;
   }
 
-  const populationWorld = 7 * 10 ** 9;
-
   const currentDate = endOfToday();
-  let result = [data.Global];
+  let result = [...data];
 
   if (filters.relative === 'To100men') {
     result = calc100Men(result, populationWorld);
   }
 
-  const resultData = result.map((el) => {
+   result = result.map((el) => {
     return { Date: currentDate, Data: el[filters.status] };
   });
 
-  return resultData;
+  return result;
 };
 
 //Данные для мира и по выбранной стране по дням
@@ -75,13 +71,20 @@ export const getData = (data, filters, population = populationWorld) => {
   }
 
   let result = [...data];
+  let filtersStatus = filters.status;
+  let currentDate = false;
 
+  //Данные за последний  день
+  if(result.length === 1) {
+    currentDate = endOfToday();
+    filtersStatus = filters.status.replace('Total', 'New');
+  }
   if (filters.relative === 'To100men') {
     result = calc100Men(result, population);
   }
 
   result = result.map((el) => {
-    return { Date: el.Date, Data: el[filters.status] };
+    return { Date: currentDate ? currentDate : el.Date, Data: el[filtersStatus] };
   });
 
   return result;

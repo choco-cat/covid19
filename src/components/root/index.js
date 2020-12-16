@@ -49,6 +49,7 @@ const Root = () => {
   }, []);
 
   useEffect(() => {
+    //TODO рефакторить этот код!!!
     if (indicatorsForFilter.geography) {
       const country = indicatorsForFilter.geography;
       let population = 1;
@@ -56,12 +57,17 @@ const Root = () => {
       if (flags.find(flag => flag.name === country)) {
         population = flags.find(flag => flag.name === country).population;
       }
-      setDataAll(getData(dataCountryFromDays, indicatorsForFilter, population));
+      if (indicatorsForFilter.period === filters.period.all) {
+        setDataAll(getData(dataCountryFromDays, indicatorsForFilter, population));
+      } else {
+        const currentCountry = summaries.Countries.find(el => el.Country === country);
+        setDataAll(getData([currentCountry], indicatorsForFilter, population));
+      }
     } else {
       if (indicatorsForFilter.period === filters.period.all) {
         setDataAll(getData(dataWorldFromDays, indicatorsForFilter));
       } else {
-        setDataAll(getDataWorldLastDay(summaries, indicatorsForFilter));
+        setDataAll(getData([summaries.Global], indicatorsForFilter));
       }
     }
   }, [indicatorsForFilter, summaries, dataWorldFromDays, dataCountryFromDays]);
