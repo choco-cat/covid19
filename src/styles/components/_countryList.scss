@@ -22,6 +22,10 @@
     cursor: pointer;
 }
 
+.country-list-item_selected {
+    background: thistle;
+}
+
 .country-list-item-country {
     color: darkred;
 }
