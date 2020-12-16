@@ -2,7 +2,7 @@ import React from 'react';
 import { missedFlags, missedPopulations } from '../../constants/missed';
 import { sortByParameter } from '../../services/sorting';
 import { filters } from "../../constants/filters";
-import { getSelectFilters } from "../../services/selectFilters"
+import { getSelectFilters } from "../../services/selectFilters";
 
 const sortParameters = {
     'total cases': 'TotalConfirmed',
@@ -63,13 +63,8 @@ class CountryList extends React.Component {
             const { selectedCountry } = this.state;
             const amount = item[sortParameters[sortedBy]];
 
-            let liClasses = 'country-list-item'
-            if (selectedCountry === Country) {
-                liClasses += ' country-list-item_selected'
-            }
-
             return (
-                <li className={liClasses} key={index} onClick={() => this.onCountryClick(Country)}>
+                <li className={`country-list-item ${selectedCountry === Country ? 'country-list-item_selected' : ''}`} key={index} onClick={() => this.onCountryClick(Country)}>
                     <img className="country-list-item-flag" src={flag} alt="flag"/>
                     <span className="country-list-item-country">{Country} </span>
                     {amount}
@@ -80,7 +75,7 @@ class CountryList extends React.Component {
 
     onSelectChange = (e) => {
         const optionNumber = e.target.selectedIndex;
-        let { status, period, relative } = getSelectFilters(optionNumber);
+        const { status, period, relative } = getSelectFilters(optionNumber);
         this.setState({sortedBy: e.target.value, status, period, relative});
     };
 

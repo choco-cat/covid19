@@ -17,8 +17,13 @@ export const getSelectFilters = (optionNumber) => {
         case 9:
             status = filters.status.deaths;
             break;
-        default:
+        case 4:
+        case 5:
+        case 10:
+        case 11:
             status = filters.status.recovered;
+            break;
+        default:
             break;
     }
 
