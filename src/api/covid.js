@@ -31,15 +31,25 @@ Active: 1570,
 Date: "2020-12-10T00:00:00Z"
 }
 */
-export const getDataCountry = async (country_slug) => {
+export const getDataCountryFromDays = async (country_slug) => {
   if (cache[country_slug]) {
     return cache[country_slug];
   }
 
   const endPointCountries = `total/country/${country_slug}`;
-  const { data: summaries } =  await axios.get(`${BASE_URL}${endPointCountries}`);
-  cache[country_slug] = summaries;
-  return summaries;
+  const { data: summaries } = await axios.get(`${BASE_URL}${endPointCountries}`);
+
+  cache[country_slug] = summaries.map((el) => {
+    return {
+      ...el,
+      TotalConfirmed: el.Confirmed,
+      TotalDeaths: el.Deaths,
+      TotalRecovered: el.Recovered,
+    }
+  });
+
+  // cache[country_slug] = summaries;
+  return cache[country_slug];
 };
 
 /* Возвращает данные по стране за последний день, объект типа:
@@ -61,9 +71,10 @@ export const getDataCountryLastDay = async (country_slug) => {
 
   const currentDate = endOfToday();
   const yesterday = addDays(currentDate, -1);
-  const endPointCountries = `total/country/${country_slug}?from=${format(yesterday, 'Y-MM-dd')}&to=${format(currentDate,'Y-MM-dd')}`;
-  const { data: summaries } =  await axios.get(`${BASE_URL}${endPointCountries}`);
+  const endPointCountries = `total/country/${country_slug}?from=${format(yesterday, 'Y-MM-dd')}&to=${format(currentDate, 'Y-MM-dd')}`;
+  const { data: summaries } = await axios.get(`${BASE_URL}${endPointCountries}`);
   cache[`${country_slug}_last_day`] = summaries[0];
+
   return summaries[0];
 };
 
@@ -78,70 +89,34 @@ Deaths: 149156
 Recovered: 490147
 }
 */
-export const getDataWorld = async () => {
+export const getDataWorldFromDays = async () => {
   if (cache['world']) {
     return cache['world'];
   }
 
   const endPointCountries = 'world';
-  const { data: summaries } =  await axios.get(`${BASE_URL}${endPointCountries}`);
+  const { data: summaries } = await axios.get(`${BASE_URL}${endPointCountries}`);
   summaries.sort((a, b) => a.TotalConfirmed > b.TotalConfirmed ? 1 : -1);
   const date = parse('22-01-2020', 'dd-mm-yyyy', new Date());
-  summaries.map((el, index) => {
-    el.Date = addDays(date, index);
-    el.Confirmed = el.TotalConfirmed;
-    el.Deaths = el.TotalDeaths;
-    el.Recovered = el.TotalRecovered;
-    return el;
+
+  cache['world'] = summaries.map((el, index) => {
+    return {
+      ...el,
+      Date: addDays(date, index)
+    }
   });
-  cache['world'] = summaries;
-  return summaries;
+
+  return cache['world'];
 };
 
-/* Возвращает данные по миру за последний день, объект типа:
-{
-NewConfirmed: 668755
-NewDeaths: 12540
-NewRecovered: 425817
-Confirmed: 68884181
-Deaths: 1569277
-Recovered: 44373880
-}
- */
-export const getDataWorldLastDay = async () => {
-  if (cache['world_last_day']) {
-    return cache['world_last_day'];
-  }
-
-  const currentDate = endOfToday();
-  const yesterday = addDays(currentDate, -1);
-  const endPointCountries = `world?from=${format(yesterday, 'Y-MM-dd')}&to=${format(currentDate,'Y-MM-dd')}`;
-  const { data: summaries } =  await axios.get(`${BASE_URL}${endPointCountries}`);
-  summaries.map((el) => {
-    el.Date = currentDate;
-    el.Confirmed = el.TotalConfirmed;
-    el.Deaths = el.TotalDeaths;
-    el.Recovered = el.TotalRecovered;
-    return el;
-  });
-  cache['world_last_day'] = summaries[0];
-  return summaries[0];
-};
-
-//Итоговые данные по миру
 export const getSummaries = async () => {
   if (cache['summaries']) {
     return cache['summaries'];
   }
 
   const endPointCountries = 'summary';
-  const { data: summaries } =  await axios.get(`${BASE_URL}${endPointCountries}`);
-  summaries.Countries.map((el) => {
-    el.Confirmed = el.TotalConfirmed;
-    el.Deaths = el.TotalDeaths;
-    el.Recovered = el.TotalRecovered;
-    return el;
-  });
+  const { data: summaries } = await axios.get(`${BASE_URL}${endPointCountries}`);
   cache['summaries'] = summaries;
+
   return summaries;
 };

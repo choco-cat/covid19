@@ -1,10 +1,11 @@
 import CovidChart from './chart';
 
-const Graph = ({ dataWorld }) => {
+const Graph = ({ dataWorld , filters }) => {
     return (
       <div className="App">
-        <h4>The graph will be built here</h4>
-        <CovidChart dataWorld={dataWorld}/>
+        <h3>{filters.geography ? filters.geography : 'World'}, {filters.relative}</h3>
+        <h4>{filters.status}</h4>
+        <CovidChart dataWorld={dataWorld} title={filters.status}/>
       </div>
     );
 };
