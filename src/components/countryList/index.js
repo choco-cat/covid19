@@ -29,7 +29,8 @@ class CountryList extends React.Component {
             status: '',
             period: '',
             relative: '',
-            filterText: ''
+            filterText: '',
+            selectedCountry: '',
         };
     }
 
@@ -39,7 +40,8 @@ class CountryList extends React.Component {
               status: this.props.filters.status,
               period: this.props.filters.period,
               relative: this.props.filters.relative,
-              filterText: ''
+              filterText: '',
+              selectedCountry: '',
           })
     }
 
@@ -59,10 +61,16 @@ class CountryList extends React.Component {
 
         return sortByParameter(data, sortParameters[sortedBy]).map((item, index) => {
             const { Country, flag } = item;
+            const { selectedCountry } = this.state;
             const amount = item[sortParameters[sortedBy]];
 
+            let liClasses = 'country-list-item'
+            if (selectedCountry === Country) {
+                liClasses += ' country-list-item_selected'
+            }
+
             return (
-                <li className="country-list-item" key={index} onClick={() => this.props.handleClickOnCountry(Country)}>
+                <li className={liClasses} key={index} onClick={() => this.onCountryClick(Country)}>
                     <img className="country-list-item-flag" src={flag} alt="flag"/>
                     <span className="country-list-item-country">{Country} </span>
                     {amount}
@@ -71,51 +79,18 @@ class CountryList extends React.Component {
         })
     }
 
-    onSortChange = (sortedBy) => {
-        //TODO Отрефакторить
-        switch (sortedBy) {
-            case 'total cases':
-                this.setState({ sortedBy: 'new cases', status: filters.status.confirmed, relative: filters.relative.absolute, period: filters.period.lastDay } );
-                break;
-            case 'new cases':
-                this.setState({ sortedBy: 'total deaths', status: filters.status.deaths, relative: filters.relative.absolute, period: filters.period.all } );
-                break;
-            case 'total deaths':
-                this.setState({ sortedBy: 'new deaths', status: filters.status.deaths, relative: filters.relative.absolute, period: filters.period.lastDay } );
-                break;
-            case 'new deaths':
-                this.setState({ sortedBy: 'total recovered', status: filters.status.recovered, relative: filters.relative.absolute, period: filters.period.all } );
-                break;
-            case 'total recovered':
-                this.setState({ sortedBy: 'new recovered', status: filters.status.recovered, relative: filters.relative.absolute, period: filters.period.lastDay });
-                break;
-            case 'new recovered':
-                this.setState({ sortedBy: 'total cases per 100k', status: filters.status.confirmed, relative: filters.relative.to100men, period: filters.period.all } );
-                break;
-            case 'total cases per 100k':
-                this.setState({ sortedBy: 'new cases per 100k', status: filters.status.confirmed, relative: filters.relative.to100men, period: filters.period.lastDay } );
-                break;
-            case 'new cases per 100k':
-                this.setState({ sortedBy: 'total deaths per 100k', status: filters.status.deaths, relative: filters.relative.to100men, period: filters.period.all } );
-                break;
-            case 'total deaths per 100k':
-                this.setState({ sortedBy: 'new deaths per 100k', status: filters.status.deaths, relative: filters.relative.to100men, period: filters.period.lastDay } );
-                break;
-            case 'new deaths per 100k':
-                this.setState({ sortedBy: 'total recovered per 100k', status: filters.status.recovered, relative: filters.relative.to100men, period: filters.period.all } );
-                break;
-            case 'total recovered per 100k':
-                this.setState({ sortedBy: 'new recovered per 100k', status: filters.status.recovered, relative: filters.relative.to100men, period: filters.period.lastDay } );
-                break;
-            case 'new recovered per 100k':
-                this.setState({ sortedBy: 'total cases', status: filters.status.confirmed, relative: filters.relative.absolute, period: filters.period.all } );
-                break;
-        }
+    onSelectChange = (e) => {
+        this.setState({sortedBy: e.target.value});
     };
 
     onInputChange = (e) => {
         this.setState({filterText: e.target.value});
     };
+
+    onCountryClick = (Country) => {
+        this.setState({selectedCountry: Country});
+        this.props.handleClickOnCountry(Country);
+    }
 
     render() {
         const { summaries = [], flags = [] } = this.props;
@@ -149,9 +124,22 @@ class CountryList extends React.Component {
             <div className="country-list-container">
                 <h2>
                     <span>Sorted by </span>
-                    <span onClick={() => this.onSortChange(sortedBy)} className="country-list-sortBy">{sortedBy}</span>
+                    <select onChange={this.onSelectChange}>
+                        <option defaultValue="total cases">total cases</option>
+                        <option value="new cases">new cases</option>
+                        <option value="total deaths">total deaths</option>
+                        <option value="new deaths">new deaths</option>
+                        <option value="total recovered">total recovered</option>
+                        <option value="new recovered">new recovered</option>
+                        <option value="total cases per 100k">total cases per 100k</option>
+                        <option value="new cases per 100k">new cases per 100k</option>
+                        <option value="total deaths per 100k">total deaths per 100k</option>
+                        <option value="new deaths per 100k">new deaths per 100k</option>
+                        <option value="total recovered per 100k">total recovered per 100k</option>
+                        <option value="new recovered per 100k">new recovered per 100k</option>
+                    </select>
                 </h2>
-                <input onChange={this.onInputChange} type="text" />
+                <input onChange={this.onInputChange} type="text"/>
                 <ul className="country-list">
                     {listItems}
                 </ul>
