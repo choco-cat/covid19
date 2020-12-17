@@ -1,6 +1,6 @@
 import Map from './map';
 
-const WorldMap = ({ summaries, handleClickOnCountry, isLoaded }) => {
+const WorldMap = ({ summaries, handleClickOnCountry }) => {
   return (
     <div className="map-container">
       <h4>The World Map will be built here</h4>
