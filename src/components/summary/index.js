@@ -10,16 +10,20 @@ export default class Summary extends React.Component {
       current: this.getBySelect()
     };
     this.handleChange = this.handleChange.bind(this);
+    this.getBySelect = this.getBySelect.bind(this);
   }
 
   getBySelect(value = 'total') {
+    
+    const allowedNew = ['NewConfirmed', 'NewDeaths', 'NewRecovered'];
+    const alloweTotal = ['TotalConfirmed', 'TotalDeaths', 'TotalRecovered'];
+
     let allowed;
 
     if (value === 'lastDay') {
-      allowed = ['NewConfirmed', 'NewDeaths', 'NewRecovered'];
-    }
-    else if (value === 'total') {
-      allowed = ['TotalConfirmed', 'TotalDeaths', 'TotalRecovered'];
+      allowed = allowedNew;
+    } else if (value === 'total') {
+      allowed = alloweTotal;
     }
 
     return Object.keys(this.props.summaries)

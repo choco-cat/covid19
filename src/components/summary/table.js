@@ -16,17 +16,10 @@ export default function Table(props) {
             <tbody>
                 <tr>
                     {items.map((el) =>
-                        <TdItem key={el.toString()}
-                            value={el} />
+                        <TdItem key={el.toString()} value={el} />
                     )}
                 </tr>
             </tbody>
         </table>
     )
 }
-
-
-       
-
-
-
