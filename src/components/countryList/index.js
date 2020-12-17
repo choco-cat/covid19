@@ -29,7 +29,7 @@ class CountryList extends React.Component {
             period: '',
             relative: '',
             filterText: '',
-            selectedCountry: '',
+            geography: '',
         };
     }
 
@@ -39,8 +39,8 @@ class CountryList extends React.Component {
             status: this.props.filters.status,
             period: this.props.filters.period,
             relative: this.props.filters.relative,
+            geography: this.props.filters.geography,
             filterText: '',
-            selectedCountry: '',
         })
     }
 
@@ -53,6 +53,7 @@ class CountryList extends React.Component {
                 sortedBy: this.state.sortedBy,
             });
         }
+        if (this.props.filters.geography !== this.state.geography) this.setState({geography: this.props.filters.geography})
     }
 
     makeList(data = []) {
@@ -60,11 +61,11 @@ class CountryList extends React.Component {
 
         return sortByParameter(data, sortParameters[sortedBy]).map((item, index) => {
             const { Country, flag } = item;
-            const { selectedCountry } = this.state;
+            const { geography } = this.state;
             const amount = item[sortParameters[sortedBy]];
 
             return (
-                <li className={`country-list-item ${selectedCountry === Country ? 'country-list-item_selected' : ''}`} key={index} onClick={() => this.onCountryClick(Country)}>
+                <li className={`country-list-item ${geography === Country ? 'country-list-item_selected' : ''}`} key={index} onClick={() => this.onCountryClick(Country)}>
                     <img className="country-list-item-flag" src={flag} alt="flag"/>
                     <span className="country-list-item-country">{Country} </span>
                     {amount}
@@ -84,7 +85,7 @@ class CountryList extends React.Component {
     };
 
     onCountryClick = (Country) => {
-        this.setState({selectedCountry: Country});
+        this.setState({geography: Country});
         this.props.handleClickOnCountry(Country);
     }
 
@@ -93,12 +94,12 @@ class CountryList extends React.Component {
         const { sortedBy, filterText } = this.state;
 
         let data = summaries.map((country) => {
-            const [selectedCountry] = flags.filter(item => item.name === country.Country);
-            const population = selectedCountry ? selectedCountry.population : missedPopulations[country.Country];
+            const [geography] = flags.filter(item => item.name === country.Country);
+            const population = geography ? geography.population : missedPopulations[country.Country];
 
             return {
                 ...country,
-                flag: selectedCountry ? selectedCountry.flag : missedFlags[country.Country],
+                flag: geography ? geography.flag : missedFlags[country.Country],
                 population,
                 TotalConfirmedPerPopulation: Math.round((country.TotalConfirmed * 100000) / population),
                 NewConfirmedPerPopulation: Math.round((country.NewConfirmed * 100000) / population),
