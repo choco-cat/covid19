@@ -97,19 +97,27 @@ const Root = () => {
   } else {
     return (
       <div className="main-container">
-        <CountryList
-          summaries={summaries.Countries}
-          flags={flags}
-          filters={indicatorsForFilter}
-          updateFilter={updateFilter}
-          handleClickOnCountry={getDataForCountry}
-        />
-        <WorldMap summaries={summaries.Countries} filters={indicatorsForFilter}
-                  handleClickOnCountry={getDataForCountry}/>
-        <div className="summary-container">
-          <Summary summaries={summaries.Global} filters={indicatorsForFilter}/>
-          <Graph dataWorld={dataAll} filters={indicatorsForFilter}/>
-        </div>
+        {
+          !isLoaded ? (
+            <div>Loading...</div>
+          ) : (
+            <>
+              <CountryList
+                summaries={summaries.Countries}
+                flags={flags}
+                filters={indicatorsForFilter}
+                updateFilter={updateFilter}
+                handleClickOnCountry={getDataForCountry}
+              />
+              <WorldMap summaries={summaries.Countries} filters={indicatorsForFilter}
+                        handleClickOnCountry={getDataForCountry}/>
+              <div className="summary-container">
+                <Summary summaries={summaries.Global} filters={indicatorsForFilter}/>
+                <Graph dataWorld={dataAll} filters={indicatorsForFilter}/>
+              </div>
+            </>
+          )
+        }
       </div>
     );
   }
