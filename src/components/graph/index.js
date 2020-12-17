@@ -5,7 +5,7 @@ const Graph = ({ dataWorld , filters }) => {
       <div className="graph-wrapper">
         <h3>{filters.geography ? filters.geography : 'World'}, {filters.relative}</h3>
         <h4>{filters.status}</h4>
-        <CovidChart dataWorld={dataWorld} title={filters.status}/>
+        <CovidChart dataWorld={dataWorld} status={filters.status}/>
       </div>
     );
 };

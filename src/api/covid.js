@@ -102,7 +102,7 @@ export const getDataWorldFromDays = async () => {
   cache['world'] = summaries.map((el, index) => {
     return {
       ...el,
-      Date: addDays(date, index)
+      Date: addDays(date, index).toDateString()
     }
   });
 
