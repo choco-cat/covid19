@@ -24,13 +24,16 @@ const Map = ({summaries = [], handleClickOnCountry}) => {
 
   const mapCountries = country.map(country => {
     const covidDataForCountry = summaries.find(summaryForCountry => summaryForCountry.CountryCode === country.id) || {};
-
+    let coefficient = (covidDataForCountry.TotalConfirmed / covidDataForCountry.population * 220) / 5;
+    if (coefficient > 1) coefficient = 1;
+    if (isNaN(coefficient)) coefficient = 0.3;
+    if (coefficient < 0.1) coefficient = 0.3;
     return (
       <path
         key={country.id}
         d={country.shape}
         style={{
-          fill: selectedCountries[country.id] ? "tomato" : "#eee",
+          fill: selectedCountries[country.id] ? "lightgrey" : `rgba(255,0,0,${coefficient})`,
           cursor: "pointer",
           stroke: "#ccc"
         }}
