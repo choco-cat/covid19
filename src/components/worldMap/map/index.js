@@ -1,25 +1,36 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import country from 'world-map-country-shapes';
+import Tooltip from './tooltip'
 
-const Map = ({summaries = [], handleClickOnCountry}) => {
+const Map = ({ summaries = [], handleClickOnCountry }) => {
+
   const [selectedCountries, setSelectedCountries] = useState({});
-  const tooltip = document.getElementById("tooltip");
+  const [style, setStyle] = useState({ display: 'none' });
+  const [dataCountry, setDataCountry] = useState({});
 
-  // выводим подсказки при наведении на страну
-  const onHoverCountry = (e, country, covidDataForCountry) => {
+  const showCountry = (e, country, covidDataForCountry) => {
+
     //todo Добавить вывод показателя, который используется в данный момент
-    tooltip.innerHTML = `${covidDataForCountry.Country} 'Добавить вывод показателя, который используется в данный момент '`;
-    tooltip.style.display = "block";
-    tooltip.style.left = e.pageX + 1 + 'px';
-    tooltip.style.top = e.pageY + 1 + 'px';
     setSelectedCountries({
       [country.id]: !selectedCountries[country.id]
     });
+
+    setStyle({
+      display: "block",
+      left: e.pageX + 1 + 'px',
+      top: e.pageY + 1 + 'px',
+    });
+
+    setDataCountry({
+      data: `${covidDataForCountry.Country} 'Добавить вывод показателя, который используется в данный момент '`
+    });
+
   };
 
-  // прячем подсказку, если вышли за пределы страны
-  const onOutCountry = (country) => {
-    tooltip.style.display = "none";
+  const hideCountry = (country) => {
+    setStyle({
+      display: "none"
+    });
   };
 
   const mapCountries = country.map(country => {
@@ -37,8 +48,8 @@ const Map = ({summaries = [], handleClickOnCountry}) => {
           cursor: "pointer",
           stroke: "#ccc"
         }}
-        onMouseOver={(evt) => onHoverCountry(evt, country, covidDataForCountry)}
-        onMouseOut={() => onOutCountry(country)}
+        onMouseOver={(evt) => showCountry(evt, country, covidDataForCountry)}
+        onMouseOut={() => hideCountry(country)}
         onClick={() => handleClickOnCountry(covidDataForCountry.Country)}
       >
       </path>
@@ -46,14 +57,18 @@ const Map = ({summaries = [], handleClickOnCountry}) => {
   });
 
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      height="500"
-      width="700"
-      viewBox="0 0 2000 1001"
-    >
-      {mapCountries}
-    </svg>
+    <div>
+      <Tooltip style={style} dataCountry={dataCountry} />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="500"
+        width="700"
+        viewBox="0 0 2000 1001"
+      >
+        {mapCountries}
+      </svg>
+    </div>
+
   )
 };
 

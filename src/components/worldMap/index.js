@@ -2,8 +2,7 @@ import Map from './map';
 
 const WorldMap = ({ summaries, handleClickOnCountry }) => {
   return (
-    <div className="App">
-    <div id="tooltip" display="none" />
+    <div className="map-container">
       <h4>The World Map will be built here</h4>
       <Map summaries={summaries} handleClickOnCountry={handleClickOnCountry} />
     </div>
