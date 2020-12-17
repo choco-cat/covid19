@@ -7,7 +7,7 @@ import CountryList from '../countryList';
 import WorldMap from '../worldMap';
 import Graph from '../graph';
 import { getData, getDataWorldLastDay } from '../../services/calculations';
-
+import { missedPopulations, missedFlags } from '../../constants/missed';
 import '../../styles/main.scss';
 
 const Root = () => {
@@ -32,12 +32,10 @@ const Root = () => {
       const flagsResult = await getFlags();
 
       summariesResult.Countries = summariesResult.Countries.map(country => {
-        const isFind = flagsResult.find(flag => flag.name === country.Country);
         return {
           ...country,
-          //TODO недостающие страны,флаги пофиксить
-          population: isFind ? isFind.population : 1,
-          flag: isFind ? isFind.flag : '',
+          population: missedPopulations[country.Country] || flagsResult.find(flag => flag.name === country.Country).population,
+          flag: missedFlags[country.Country] || flagsResult.find(flag => flag.name === country.Country).flag,
         }
       });
 
@@ -51,27 +49,14 @@ const Root = () => {
   }, []);
 
   useEffect(() => {
-    //TODO рефакторить этот код!!!
     if (indicatorsForFilter.geography) {
       const country = indicatorsForFilter.geography;
-      let population = 1;
-
-      if (flags.find(flag => flag.name === country)) {
-        population = flags.find(flag => flag.name === country).population;
-      }
-      if (indicatorsForFilter.period === filters.period.all) {
-        setDataAll(getData(dataCountryFromDays, indicatorsForFilter, population));
-      } else {
-        const currentCountry = summaries.Countries.find(el => el.Country === country);
-        setDataAll(getData([currentCountry], indicatorsForFilter, population));
-      }
+      const population = missedPopulations[country] || flags.find(flag => flag.name === country).population;
+      setDataAll(getData(dataCountryFromDays, indicatorsForFilter, population));
     } else {
-      if (indicatorsForFilter.period === filters.period.all) {
-        setDataAll(getData(dataWorldFromDays, indicatorsForFilter));
-      } else {
-        setDataAll(getData([summaries.Global], indicatorsForFilter));
-      }
+      setDataAll(getData(dataWorldFromDays, indicatorsForFilter));
     }
+
   }, [indicatorsForFilter, summaries, dataWorldFromDays, dataCountryFromDays]);
 
   const updateFilter = (newFilterParams) => {

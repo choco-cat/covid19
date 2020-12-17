@@ -20,12 +20,12 @@ country_slug = название страны, все маленькие букв
 
 const calc100Men = (data, population) => {
   return data.map((el) => ({
-    TotalConfirmed: el.TotalConfirmed / (population / 10 ** 5),
-    TotalDeaths: el.TotalDeaths / (population / 10 ** 5),
-    TotalRecovered: el.TotalRecovered / (population / 10 ** 5),
-    NewConfirmed: el.NewConfirmed / (population / 10 ** 5),
-    NewDeaths: el.NewDeaths / (population / 10 ** 5),
-    NewRecovered: el.NewRecovered / (population / 10 ** 5),
+    TotalConfirmed: Math.round(el.TotalConfirmed / (population / 10 ** 5) * 10) / 10,
+    TotalDeaths: Math.round(el.TotalDeaths / (population / 10 ** 5) * 10) / 10,
+    TotalRecovered: Math.round(el.TotalRecovered / (population / 10 ** 5) * 10) / 10,
+    NewConfirmed: Math.round(el.NewConfirmed / (population / 10 ** 5) * 10) / 10,
+    NewDeaths: Math.round(el.NewDeaths / (population / 10 ** 5) * 10) / 10,
+    NewRecovered: Math.round(el.NewRecovered / (population / 10 ** 5) * 10) / 10,
     Date: el.Date,
   }));
 };
