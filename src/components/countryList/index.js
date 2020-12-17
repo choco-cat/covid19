@@ -59,10 +59,13 @@ class CountryList extends React.Component {
     makeList(data = []) {
         const { sortedBy } = this.state;
 
+        const userLang = navigator.language;
+
         return sortByParameter(data, sortParameters[sortedBy]).map((item, index) => {
             const { Country, flag } = item;
             const { geography } = this.state;
-            const amount = item[sortParameters[sortedBy]];
+            let amount = item[sortParameters[sortedBy]];
+            amount = new Intl.NumberFormat(userLang, { minimumFractionDigits: 0, maximumFractionDigits: 2}).format(amount);
 
             return (
                 <li className={`country-list-item ${geography === Country ? 'country-list-item_selected' : ''}`} key={index} onClick={() => this.onCountryClick(Country)}>
@@ -101,12 +104,12 @@ class CountryList extends React.Component {
                 ...country,
                 flag: geography ? geography.flag : missedFlags[country.Country],
                 population,
-                TotalConfirmedPerPopulation: Math.round((country.TotalConfirmed * 100000) / population),
-                NewConfirmedPerPopulation: Math.round((country.NewConfirmed * 100000) / population),
-                TotalDeathsPerPopulation: Math.round((country.TotalDeaths * 100000) / population),
-                NewDeathsPerPopulation: Math.round((country.NewDeaths * 100000) / population),
-                TotalRecoveredPerPopulation: Math.round((country.TotalRecovered * 100000) / population),
-                NewRecoveredPerPopulation: Math.round((country.NewRecovered * 100000) / population),
+                TotalConfirmedPerPopulation: ((country.TotalConfirmed * 100000) / population),
+                NewConfirmedPerPopulation: ((country.NewConfirmed * 100000) / population),
+                TotalDeathsPerPopulation: ((country.TotalDeaths * 100000) / population),
+                NewDeathsPerPopulation: ((country.NewDeaths * 100000) / population),
+                TotalRecoveredPerPopulation: ((country.TotalRecovered * 100000) / population),
+                NewRecoveredPerPopulation: ((country.NewRecovered * 100000) / population),
             }
         });
 
