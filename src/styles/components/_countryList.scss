@@ -1,23 +1,40 @@
 .country-list-container {
-    max-height: 80vh;
+    height: 87vh;
     width: 25vw;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
     background-color: white;
     z-index: 1000;
     margin: 2rem;
     border-radius: 10px;
+    overflow: hidden;
 }
 
-.country-list-sortBy {
-    cursor: pointer;
-    background: whitesmoke;
-    border: solid 1px black;
-    border-right: none;
-    border-left: none;
+.country-list-container-fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    z-index: 9999;
+}
+
+.country-list-header {
+    margin-top: 2rem;
 }
 
 .country-list {
     list-style: none;
+    overflow: hidden;
+}
+
+.country-list-fullscreen {
+    width: 95%;
+    height: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    gap: 1rem;
 }
 
 .country-list-item {
@@ -35,5 +52,19 @@
 
 .country-list-item-flag {
     width: 1rem;
+    height: auto;
+}
+
+.fullscreen-button {
+    width: 2rem;
+    height: 2rem;
+    position: absolute;
+    top: 0.3rem;
+    right: 0.3rem;
+    outline: none;
+}
+
+.fullscreen-image {
+    width: 100%;
     height: auto;
 }
