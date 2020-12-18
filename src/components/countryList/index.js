@@ -31,6 +31,8 @@ class CountryList extends React.Component {
             filterText: '',
             geography: '',
         };
+
+        this.myRef = React.createRef();
     }
 
     componentDidMount() {
@@ -53,7 +55,14 @@ class CountryList extends React.Component {
                 sortedBy: this.state.sortedBy,
             });
         }
-        if (this.props.filters.geography !== this.state.geography) this.setState({geography: this.props.filters.geography})
+        if (this.props.filters.geography !== this.state.geography) {
+            this.setState({geography: this.props.filters.geography})
+            const countryIdx = sortByParameter(this.props.summaries, sortParameters[this.state.sortedBy]).findIndex(el => el['Country'] === this.props.filters.geography);
+            this.myRef.current.children[countryIdx].scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+            })
+        }
     }
 
     makeList(data = []) {
@@ -140,7 +149,7 @@ class CountryList extends React.Component {
                     </select>
                 </h2>
                 <input onChange={this.onInputChange} type="text" />
-                <ul className="country-list">
+                <ul ref={this.myRef} className="country-list">
                     {listItems}
                 </ul>
             </div>
