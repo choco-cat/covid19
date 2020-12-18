@@ -70,17 +70,16 @@ const CovidChart = ({dataWorld, status}) => {
   const correctData = prepereData(dataWorld);
   const correctOptions = prepereOptions(dataWorld, status);
 
-  return (
+  return correctData ? (
     <Chart
       chartType="AreaChart"
       data={correctData}
       options={correctOptions}
       graphID="ScatterChart"
-      width="100%"
-      height="320px"
+      className="chart"
       chartEvents={chartEvents}
     />
-  );
+  ) : null;
 };
 
 export default CovidChart;
