@@ -3,7 +3,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import Draggable from 'react-draggable';
 import { missedFlags, missedPopulations } from '../../constants/missed';
 import { sortByParameter } from '../../services/sorting';
-import { getSelectFilters } from "../../services/selectFilters";
+import { getSelectFilters, getSortedBy } from "../../services/selectFilters";
 
 const sortParameters = {
     'total cases': 'TotalConfirmed',
@@ -35,6 +35,7 @@ class CountryList extends React.Component {
 
         this.listRef = React.createRef();
         this.containerRef = React.createRef();
+        this.selectRef = React.createRef();
     }
 
     componentDidMount() {
@@ -58,14 +59,25 @@ class CountryList extends React.Component {
             });
         }
         if (this.props.filters.status !== this.state.status || this.props.filters.period !== this.state.period || this.props.filters.relative !== this.state.relative) {
-            this.setState({status: this.props.filters.status, period: this.props.filters.period, relative: this.props.filters.relative});
+            const { status, period, relative } = this.props.filters;
+            const sortedByObj = getSortedBy(status, period, relative);
+            this.selectRef.current.selectedIndex = sortedByObj.idx;
+            this.setState({ sortedBy: sortedByObj.sortedBy, status, period, relative });
+            if (this.state.geography) {
+                const countryIdx = sortByParameter(this.props.summaries, sortParameters[this.state.sortedBy]).findIndex(el => el['Country'] === this.props.filters.geography);
+                this.listRef.current.children[0].children[0].children[countryIdx].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                });
+            }
         }
-        if (this.props.filters.geography !== this.state.geography) {
+
+        if (this.props.filters.geography !== this.state.geography && this.props.filters.geography) {
             this.setState({geography: this.props.filters.geography});
             const countryIdx = sortByParameter(this.props.summaries, sortParameters[this.state.sortedBy]).findIndex(el => el['Country'] === this.props.filters.geography);
             this.listRef.current.children[0].children[0].children[countryIdx].scrollIntoView({
                 behavior: 'smooth',
-                block: 'nearest',
+                block: 'center',
             });
         }
     }
@@ -144,7 +156,7 @@ class CountryList extends React.Component {
               <div ref={this.containerRef} className="country-list-container">
                   <h2 className="country-list-header">
                       <span>Sorted by </span>
-                      <select onChange={this.onSelectChange}>
+                      <select ref={this.selectRef} onChange={this.onSelectChange}>
                           <option defaultValue="total cases">total cases</option>
                           <option value="new cases">new cases</option>
                           <option value="total deaths">total deaths</option>
