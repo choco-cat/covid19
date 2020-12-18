@@ -54,6 +54,9 @@ const calculateMaxY = (data) => {
 
 const prepereData = (data) => {
   const resultArr = [];
+  if (!data.length) {
+   return [];
+  }
   resultArr.push(["Month", "Number of people"]);
 
   if (Array.isArray(data)) {
@@ -70,17 +73,16 @@ const CovidChart = ({dataWorld, status}) => {
   const correctData = prepereData(dataWorld);
   const correctOptions = prepereOptions(dataWorld, status);
 
-  return (
+  return correctData.length ? (
     <Chart
       chartType="AreaChart"
       data={correctData}
       options={correctOptions}
       graphID="ScatterChart"
-      width="100%"
-      height="320px"
+      className="chart"
       chartEvents={chartEvents}
     />
-  );
+  ) : null;
 };
 
 export default CovidChart;
