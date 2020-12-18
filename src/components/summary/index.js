@@ -1,4 +1,5 @@
 import React from 'react';
+import Draggable from 'react-draggable';
 import Table from './table';
 
 export default class Summary extends React.Component {
@@ -41,16 +42,17 @@ export default class Summary extends React.Component {
 
   render() {
     return (
-      <div className="tablesWrap">
-        <Table {...this.state.current} />
-        <div className="summarySelectWrap">
-          <select onChange={this.handleChange}>
-            <option value="total">Entire period</option>
-            <option value="lastDay">Last day</option>
-          </select>
+      <Draggable>
+        <div className="tablesWrap">
+          <Table {...this.state.current} />
+          <div className="summarySelectWrap">
+            <select onChange={this.handleChange}>
+              <option value="total">Entire period</option>
+              <option value="lastDay">Last day</option>
+            </select>
+          </div>
         </div>
-
-      </div>
+      </Draggable>
     );
   }
 }

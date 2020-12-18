@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { getCovidCountries, getSummaries, getDataWorldFromDays, getDataCountryFromDays } from '../../api/covid';
+import ClockLoader from "react-spinners/ClockLoader";
+import { getSummaries, getDataWorldFromDays, getDataCountryFromDays } from '../../api/covid';
 import { getFlags } from "../../api/flags";
 import { filters } from "../../constants/filters";
 import Summary from '../summary';
 import CountryList from '../countryList';
 import WorldMap from '../worldMap';
 import Graph from '../graph';
-import { getData, getDataWorldLastDay } from '../../services/calculations';
+import { getData } from '../../services/calculations';
 import { missedPopulations, missedFlags } from '../../constants/missed';
 import '../../styles/main.scss';
 
@@ -77,35 +78,37 @@ const Root = () => {
     setDataCountry(dataCountryFromDaysResult);
   };
 
-  if (!isLoaded) {
-    return <div>Loading...</div>;
-  } else {
-    return (
-      <div className="main-container">
-        {
-          !isLoaded ? (
-            <div>Loading...</div>
-          ) : (
-            <>
-              <CountryList
-                summaries={summaries.Countries}
-                flags={flags}
-                filters={indicatorsForFilter}
-                updateFilter={updateFilter}
-                handleClickOnCountry={getDataForCountry}
-              />
-              <WorldMap summaries={summaries.Countries} filters={indicatorsForFilter}
-                        handleClickOnCountry={getDataForCountry}/>
-              <div className="summary-container">
-                <Summary summaries={summaries.Global} filters={indicatorsForFilter}/>
-                <Graph dataWorld={dataAll} filters={indicatorsForFilter}/>
-              </div>
-            </>
-          )
-        }
-      </div>
-    );
-  }
+  return (
+    <div className="main-container">
+      {
+        !isLoaded ? (
+          <div className="main-loader">
+            <ClockLoader
+              size={100}
+              color={"#ff3440"}
+              loading={!isLoaded}
+            />
+          </div>
+        ) : (
+          <>
+            <CountryList
+              summaries={summaries.Countries}
+              flags={flags}
+              filters={indicatorsForFilter}
+              updateFilter={updateFilter}
+              handleClickOnCountry={getDataForCountry}
+            />
+            <WorldMap summaries={summaries.Countries} filters={indicatorsForFilter}
+                      handleClickOnCountry={getDataForCountry}/>
+            <div className="summary-container">
+              <Summary summaries={summaries.Global} filters={indicatorsForFilter}/>
+              <Graph dataWorld={dataAll} filters={indicatorsForFilter}/>
+            </div>
+          </>
+        )
+      }
+    </div>
+  );
 };
 
 export default Root;

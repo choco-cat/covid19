@@ -1,3 +1,11 @@
+.tablesWrap {
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    background-color: white;
+    z-index: 1000;
+    margin: 2rem;
+    border-radius: 10px;
+}
+
 .totalTable {
     border: 1px solid #ccc;
     border-collapse: collapse;
