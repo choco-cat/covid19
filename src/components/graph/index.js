@@ -1,23 +1,21 @@
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 import Draggable from 'react-draggable';
 import CovidChart from './chart';
-import { ReactComponent as Expand }  from '../../icons/expand.svg';
-import { ReactComponent as ToggleSize }  from '../../icons/small.svg';
-import {missedPopulations} from "../../constants/missed";
-import {getData} from "../../services/calculations";
+import {ReactComponent as Expand} from '../../icons/expand.svg';
+import {ReactComponent as ToggleSize} from '../../icons/small.svg';
 import {filters} from "../../constants/filters";
-import {getSelectFilters} from "../../services/selectFilters";
 
-const Graph = ({dataWorld, globalFilters, updateFilters}) => {
+
+const Graph = ({dataWorld, globalFilters, updateFilters, dataForCountry}) => {
   const [expanded, setExpanded] = useState(false);
   const [fullSize, setSize] = useState(true);
-  const defaultPosition = { x: 0, y: 0 };
+  const defaultPosition = {x: 0, y: 0};
 
   const handleToggleExpanded = () => {
     setExpanded(!expanded);
   };
 
-  const handleToggSize= () => {
+  const handleToggSize = () => {
     setSize(!fullSize);
   };
 
@@ -29,18 +27,26 @@ const Graph = ({dataWorld, globalFilters, updateFilters}) => {
     updateFilters({relative: e.target.value});
   };
 
+  const onCheckChange = (e) => {
+    if (e.target.checked) {
+      updateFilters({geography: ""});
+    } else {
+      dataForCountry("Belarus");
+    }
+  };
+
   return (
     <Draggable position={expanded ? defaultPosition : null}>
       <div className={`graph-wrapper ${expanded ? 'expanded' : ''}`}>
         <div className="controls">
           {
             fullSize && (
-              <Expand className="controls-icons" onClick={handleToggleExpanded} />
+              <Expand className="controls-icons" onClick={handleToggleExpanded}/>
             )
           }
           {
             !expanded && (
-              <ToggleSize className="controls-icons" onClick={handleToggSize} />
+              <ToggleSize className="controls-icons" onClick={handleToggSize}/>
             )
           }
         </div>
@@ -48,9 +54,9 @@ const Graph = ({dataWorld, globalFilters, updateFilters}) => {
         {
           fullSize ? (
             <>
-              <h3>{globalFilters.geography ? globalFilters.geography : 'World'}, {globalFilters.relative}</h3>
+              <h3>{globalFilters.geography ? globalFilters.geography : 'World'}</h3>
               <div>
-                <select onChange={onSelectChange} value={globalFilters.status} >
+                <select onChange={onSelectChange} value={globalFilters.status}>
                   <option value={filters.status.confirmed}>Confirmed
                   </option>
                   <option value={filters.status.deaths}>Deaths
@@ -75,6 +81,16 @@ const Graph = ({dataWorld, globalFilters, updateFilters}) => {
                   checked={globalFilters.relative === filters.relative.to100men ? 'selected' : ''}
                 />
                 <label htmlFor="dewey">Per 100k</label>
+              </div>
+              <div>
+                <input
+                  type="checkbox"
+                  name="geography"
+                  value=""
+                  onChange={onCheckChange}
+                  checked={globalFilters.geography === ''}
+                />
+                <label htmlFor="dewey">World</label>
               </div>
               <CovidChart dataWorld={dataWorld} status={globalFilters.status}/>
             </>
