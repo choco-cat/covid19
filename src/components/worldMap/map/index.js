@@ -127,7 +127,6 @@ const Map = ({ summaries = [], handleClickOnCountry }) => {
           {mapCountries}
         </svg>
       </div>
-
       <Legend data={legend} />
     </>
   )

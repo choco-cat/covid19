@@ -7,11 +7,19 @@
   text-align: center;
   display: grid;
   grid-template-columns: 1fr 4fr 2fr;
-  min-height: 90vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .summary-container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.main-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

@@ -1,7 +1,8 @@
 import React from 'react';
+import { Scrollbars } from 'react-custom-scrollbars';
+import Draggable from 'react-draggable';
 import { missedFlags, missedPopulations } from '../../constants/missed';
 import { sortByParameter } from '../../services/sorting';
-import { filters } from "../../constants/filters";
 import { getSelectFilters } from "../../services/selectFilters";
 
 const sortParameters = {
@@ -90,7 +91,7 @@ class CountryList extends React.Component {
     onCountryClick = (Country) => {
         this.setState({geography: Country});
         this.props.handleClickOnCountry(Country);
-    }
+    };
 
     render() {
         const { summaries = [], flags = [] } = this.props;
@@ -121,29 +122,34 @@ class CountryList extends React.Component {
         let listItems = this.makeList(data);
 
         return (
-            <div className="country-list-container">
-                <h2>
-                    <span>Sorted by </span>
-                    <select onChange={this.onSelectChange}>
-                        <option defaultValue="total cases">total cases</option>
-                        <option value="new cases">new cases</option>
-                        <option value="total deaths">total deaths</option>
-                        <option value="new deaths">new deaths</option>
-                        <option value="total recovered">total recovered</option>
-                        <option value="new recovered">new recovered</option>
-                        <option value="total cases per 100k">total cases per 100k</option>
-                        <option value="new cases per 100k">new cases per 100k</option>
-                        <option value="total deaths per 100k">total deaths per 100k</option>
-                        <option value="new deaths per 100k">new deaths per 100k</option>
-                        <option value="total recovered per 100k">total recovered per 100k</option>
-                        <option value="new recovered per 100k">new recovered per 100k</option>
-                    </select>
-                </h2>
-                <input onChange={this.onInputChange} type="text" />
-                <ul className="country-list">
-                    {listItems}
-                </ul>
-            </div>
+          <Draggable>
+              <div className="country-list-container">
+                  <h2>
+                      <span>Sorted by </span>
+                      <select onChange={this.onSelectChange}>
+                          <option defaultValue="total cases">total cases</option>
+                          <option value="new cases">new cases</option>
+                          <option value="total deaths">total deaths</option>
+                          <option value="new deaths">new deaths</option>
+                          <option value="total recovered">total recovered</option>
+                          <option value="new recovered">new recovered</option>
+                          <option value="total cases per 100k">total cases per 100k</option>
+                          <option value="new cases per 100k">new cases per 100k</option>
+                          <option value="total deaths per 100k">total deaths per 100k</option>
+                          <option value="new deaths per 100k">new deaths per 100k</option>
+                          <option value="total recovered per 100k">total recovered per 100k</option>
+                          <option value="new recovered per 100k">new recovered per 100k</option>
+                      </select>
+                  </h2>
+                  <input onChange={this.onInputChange} type="text" />
+                  <ul className="country-list">
+                      <Scrollbars style={{width: 'auto', height: '65vh'}}>
+                          {listItems}
+                      </Scrollbars>
+
+                  </ul>
+              </div>
+          </Draggable>
         );
     }
 }
