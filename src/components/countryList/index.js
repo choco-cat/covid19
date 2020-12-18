@@ -33,7 +33,8 @@ class CountryList extends React.Component {
             geography: '',
         };
 
-        this.myRef = React.createRef();
+        this.listRef = React.createRef();
+        this.containerRef = React.createRef();
     }
 
     componentDidMount() {
@@ -56,10 +57,13 @@ class CountryList extends React.Component {
                 sortedBy: this.state.sortedBy,
             });
         }
+        if (this.props.filters.status !== this.state.status || this.props.filters.period !== this.state.period || this.props.filters.relative !== this.state.relative) {
+            this.setState({status: this.props.filters.status, period: this.props.filters.period, relative: this.props.filters.relative});
+        }
         if (this.props.filters.geography !== this.state.geography) {
             this.setState({geography: this.props.filters.geography});
             const countryIdx = sortByParameter(this.props.summaries, sortParameters[this.state.sortedBy]).findIndex(el => el['Country'] === this.props.filters.geography);
-            this.myRef.current.children[countryIdx].scrollIntoView({
+            this.listRef.current.children[0].children[0].children[countryIdx].scrollIntoView({
                 behavior: 'smooth',
                 block: 'nearest',
             });
@@ -102,6 +106,11 @@ class CountryList extends React.Component {
         this.props.handleClickOnCountry(Country);
     };
 
+    onFullscreenButtonClick = () => {
+        this.containerRef.current.classList.toggle('country-list-container-fullscreen');
+        this.listRef.current.children[0].children[0].classList.toggle('country-list-fullscreen');
+    }
+
     render() {
         const { summaries = [], flags = [] } = this.props;
         const { sortedBy, filterText } = this.state;
@@ -132,8 +141,8 @@ class CountryList extends React.Component {
 
         return (
           <Draggable>
-              <div className="country-list-container">
-                  <h2>
+              <div ref={this.containerRef} className="country-list-container">
+                  <h2 className="country-list-header">
                       <span>Sorted by </span>
                       <select onChange={this.onSelectChange}>
                           <option defaultValue="total cases">total cases</option>
@@ -150,13 +159,14 @@ class CountryList extends React.Component {
                           <option value="new recovered per 100k">new recovered per 100k</option>
                       </select>
                   </h2>
-                  <input onChange={this.onInputChange} type="text" />
-                  <ul ref={this.myRef} className="country-list">
+                  <input onChange={this.onInputChange} placeholder="Search..." type="text" />
+                  <ul ref={this.listRef} className="country-list">
                       <Scrollbars style={{width: 'auto', height: '65vh'}}>
                           {listItems}
                       </Scrollbars>
 
                   </ul>
+                  <button className="fullscreen-button" onClick={() => this.onFullscreenButtonClick()}><img className="fullscreen-image" src="https://icon-icons.com/icons2/1848/PNG/128/fullscreen_116387.png" alt="fullscreen"/></button>
               </div>
           </Draggable>
         );
