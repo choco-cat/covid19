@@ -20,7 +20,7 @@ Date: "2020-12-10T00:00:00Z"
 country_slug = название страны, все маленькие буквы
 */
 
-const calc100Men = (data, population) => {
+export const calc100Men = (data, population) => {
   return data.map((el) => ({
     TotalConfirmed: Math.round(el.TotalConfirmed / (population / 10 ** 5) * 100) / 100,
     TotalDeaths: Math.round(el.TotalDeaths / (population / 10 ** 5) * 100) / 100,
