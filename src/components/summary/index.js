@@ -6,7 +6,7 @@ import { ReactComponent as Expand } from "../../icons/expand.svg";
 
 const defaultPosition = {x: 0, y: 0};
 
-export default class Summary extends React.Component {
+class Summary extends React.Component {
   constructor(props) {
     super(props);
 
@@ -80,3 +80,5 @@ export default class Summary extends React.Component {
     );
   }
 }
+
+export default React.memo(Summary);

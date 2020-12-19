@@ -2,6 +2,7 @@ import React from 'react';
 import {Chart} from 'react-google-charts';
 import {format} from 'date-fns';
 import {filters} from '../../../constants/filters';
+import { getColorsFromFilters } from '../../../services/calculations';
 
 const chartEvents = [
   {
@@ -37,19 +38,7 @@ const getColors = (statuses) => {
 };
 
 const getColor = (status) => {
-  let color;
-  switch (status) {
-    case filters.status.recovered:
-      color = '#34f5ae';
-      break;
-    case filters.status.deaths:
-      color = '#f50000';
-      break;
-    default:
-      color = '#f5ab06';
-      break;
-  }
-  return color;
+  return `rgb(${getColorsFromFilters(status)})`;
 };
 
 const calculateMaxY = (data) => {

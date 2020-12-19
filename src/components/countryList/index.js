@@ -123,11 +123,11 @@ class CountryList extends React.Component {
     onFullscreenButtonClick = () => {
         this.containerRef.current.classList.toggle('country-list-container-fullscreen');
         this.listRef.current.children[0].children[0].classList.toggle('country-list-fullscreen');
-    }
+    };
 
     render() {
         const { summaries = [], flags = [] } = this.props;
-        const { sortedBy, filterText } = this.state;
+        const { filterText } = this.state;
 
         let data = summaries.map((country) => {
             const [geography] = flags.filter(item => item.name === country.Country);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import ClockLoader from "react-spinners/ClockLoader";
 import { getSummaries, getDataWorldFromDays, getDataCountryFromDays } from '../../api/covid';
 import { getFlags } from "../../api/flags";
@@ -7,7 +7,7 @@ import Summary from '../summary';
 import CountryList from '../countryList';
 import WorldMap from '../worldMap';
 import Graph from '../graph';
-import { getData } from '../../services/calculations';
+import { getData, getDataCountries } from '../../services/calculations';
 import { missedPopulations, missedFlags } from '../../constants/missed';
 import '../../styles/main.scss';
 
@@ -17,7 +17,9 @@ const Root = () => {
   const [dataWorldFromDays, setDataWorld] = useState([]);
   const [dataCountryFromDays, setDataCountry] = useState([]);
   const [dataAll, setDataAll] = useState([]);
+  const [dataMap, setDataMap] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState('');
 
   const [indicatorsForFilter, updateIndicators] = useState({
     status: filters.status.confirmed,
@@ -28,22 +30,26 @@ const Root = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const summariesResult = await getSummaries();
-      const dataWorldFromDaysResult = await getDataWorldFromDays();
-      const flagsResult = await getFlags();
+      try {
+        const flagsResult = await getFlags();
+        const summariesResult = await getSummaries();
+        const dataWorldFromDaysResult = await getDataWorldFromDays();
 
-      summariesResult.Countries = summariesResult.Countries.map(country => {
-        return {
-          ...country,
-          population: missedPopulations[country.Country] || flagsResult.find(flag => flag.name === country.Country).population,
-          flag: missedFlags[country.Country] || flagsResult.find(flag => flag.name === country.Country).flag,
-        }
-      });
+        summariesResult.Countries = summariesResult.Countries.map(country => {
+          return {
+            ...country,
+            population: missedPopulations[country.Country] || flagsResult.find(flag => flag.name === country.Country).population,
+            flag: missedFlags[country.Country] || flagsResult.find(flag => flag.name === country.Country).flag,
+          }
+        });
 
-      setSummaries(summariesResult);
-      setDataWorld(dataWorldFromDaysResult);
-      setFlags(flagsResult);
-      setIsLoaded(true);
+        setSummaries(summariesResult);
+        setDataWorld(dataWorldFromDaysResult);
+        setFlags(flagsResult);
+        setIsLoaded(true);
+      } catch (error) {
+        setError('API is not available. Could you please refresh page or try a bit later.');
+      }
     };
 
     fetchData();
@@ -57,8 +63,9 @@ const Root = () => {
     } else {
       setDataAll(getData(dataWorldFromDays, indicatorsForFilter));
     }
-
-  }, [indicatorsForFilter, summaries, dataWorldFromDays, dataCountryFromDays]);
+    //для карты
+      setDataMap(getDataCountries(summaries.Countries, indicatorsForFilter));
+  }, [indicatorsForFilter, summaries, dataWorldFromDays, dataCountryFromDays, flags]);
 
   const updateFilter = (newFilterParams) => {
     updateIndicators({
@@ -88,6 +95,7 @@ const Root = () => {
               color={"#ff3440"}
               loading={!isLoaded}
             />
+            {error}
           </div>
         ) : (
           <>
@@ -99,7 +107,7 @@ const Root = () => {
               handleClickOnCountry={getDataForCountry}
             />
             <WorldMap
-              summaries={summaries.Countries}
+              summaries={dataMap}
               globalFilters={indicatorsForFilter}
               handleClickOnCountry={getDataForCountry}
             />
