@@ -1,3 +1,6 @@
+h2, h3{
+    margin: 0;
+}
 .graph-wrapper {
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
     background-color: white;
@@ -23,6 +26,12 @@
 .controls {
     padding: 8px;
     text-align: right;
+
+    .title {
+        margin-left: 0.5em;
+        float: left;
+        font-weight: bold;
+    }
 }
 
 .expanded {
@@ -33,10 +42,22 @@
     bottom: 0;
     margin: 0;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    height:100vh;
 
     .chart {
         width: 100%;
         height: 100%;
+    }
+
+    .chart-container {
+        flex:1 0 auto;
+        max-height: none;
+
+        div {
+            height: 100%;
+        }
     }
 }
 
@@ -46,4 +67,8 @@
     display: inline-block;
     margin-right: 8px;
     cursor: pointer;
+}
+
+.chart-container {
+    max-height: 300px;
 }

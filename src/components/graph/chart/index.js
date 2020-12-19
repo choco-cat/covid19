@@ -12,13 +12,14 @@ const chartEvents = [
   }
 ];
 
-const prepereOptions = (data, status) => {
+const prepereOptions = (data, statuses) => {
   return {
     title: '',
     hAxis: {title: "Days", viewWindow: {min: 1, max: data.length}},
     vAxis: {title: "Number of people by time", viewWindow: {min: 0, max: calculateMaxY(data)}},
-    legend: "none",
-    colors: [getColor(status)],
+    legend: { position: 'top', maxLines: 3 },
+    colors: getColors(statuses),
+    chartArea: { width: '80%', height: '70%' },
     animation: {
       duration: 600,
       easing: 'out',
@@ -27,6 +28,13 @@ const prepereOptions = (data, status) => {
   }
 };
 
+const getColors = (statuses) => {
+  let colors = [];
+  statuses.forEach(status => {
+    colors.push(getColor(status));
+  });
+  return colors;
+};
 
 const getColor = (status) => {
   let color;
@@ -42,7 +50,7 @@ const getColor = (status) => {
       break;
   }
   return color;
-}
+};
 
 const calculateMaxY = (data) => {
   if (!data.length) {
@@ -52,26 +60,27 @@ const calculateMaxY = (data) => {
   return data.reduce((acc, curr) => acc.Data > curr.Data ? acc : curr);
 };
 
-const prepereData = (data) => {
-  const resultArr = [];
-  if (!data.length) {
-   return [];
+const prepereData = (data, status, compare) => {
+  let resultArr = [];
+  if (!data.length || !Array.isArray(data)) {
+    return [];
   }
-  resultArr.push(["Month", "Number of people"]);
-
-  if (Array.isArray(data)) {
-    //TODO шкалу Х подписать как месяцы
-    //data.forEach((el, index) => resultArr.push([format(new Date(el.Date),'MMM'), el.Data]));
-    data.forEach((el) => resultArr.push([format(new Date(el.Date), 'dd-MMM-yyyy'), el.Data]));
+  if (compare) {
+    resultArr.push(["Date", "Confirmed", "Recovered", "Deaths"]);
+    data.forEach((el) => resultArr.push([format(new Date(el.Date), 'dd-MMM-yyyy'), el.TotalConfirmed, el.TotalRecovered, el.TotalDeaths]));
+  } else {
+    resultArr.push(["Date", "Number of people"]);
+    data.forEach((el) => resultArr.push([format(new Date(el.Date), 'dd-MMM-yyyy'), el[status]]));
   }
 
   return resultArr;
 };
 
-const CovidChart = ({dataWorld, status}) => {
+const CovidChart = ({dataWorld, status, compare}) => {
 
-  const correctData = prepereData(dataWorld);
-  const correctOptions = prepereOptions(dataWorld, status);
+  const correctData = prepereData(dataWorld, status, compare);
+  const statuses = compare ? [filters.status.confirmed, filters.status.recovered, filters.status.deaths] : [status];
+  const correctOptions = prepereOptions(dataWorld, statuses);
 
   return correctData.length ? (
     <Chart
@@ -81,7 +90,7 @@ const CovidChart = ({dataWorld, status}) => {
       graphID="ScatterChart"
       className="chart"
       chartEvents={chartEvents}
-    />
+     />
   ) : null;
 };
 

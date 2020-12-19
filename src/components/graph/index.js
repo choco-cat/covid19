@@ -1,18 +1,22 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import Draggable from 'react-draggable';
 import CovidChart from './chart';
-import {ReactComponent as Expand} from '../../icons/expand.svg';
-import {ReactComponent as ToggleSize} from '../../icons/small.svg';
-import {filters} from "../../constants/filters";
-
+import { ReactComponent as Expand } from '../../icons/expand.svg';
+import { ReactComponent as ToggleSize } from '../../icons/small.svg';
+import { filters } from "../../constants/filters";
 
 const Graph = ({dataWorld, globalFilters, updateFilters, dataForCountry}) => {
   const [expanded, setExpanded] = useState(false);
   const [fullSize, setSize] = useState(true);
+  const [compare, setCompare] = useState(false);
   const defaultPosition = {x: 0, y: 0};
 
   const handleToggleExpanded = () => {
     setExpanded(!expanded);
+  };
+
+  const handleToggleCompare = () => {
+    setCompare(!compare);
   };
 
   const handleToggSize = () => {
@@ -39,18 +43,10 @@ const Graph = ({dataWorld, globalFilters, updateFilters, dataForCountry}) => {
     <Draggable position={expanded ? defaultPosition : null}>
       <div className={`graph-wrapper ${expanded ? 'expanded' : ''}`}>
         <div className="controls">
-          {
-            fullSize && (
-              <Expand className="controls-icons" onClick={handleToggleExpanded}/>
-            )
-          }
-          {
-            !expanded && (
-              <ToggleSize className="controls-icons" onClick={handleToggSize}/>
-            )
-          }
+          <div className="title">Chart</div>
+          <ToggleSize className="controls-icons" onClick={handleToggSize} style={{display: !expanded ? 'inline-block' : 'none'}} />
+          <Expand className="controls-icons" onClick={handleToggleExpanded} style={{display: fullSize ? 'inline-block' : 'none'}} />
         </div>
-        <h2>Chart</h2>
         {
           fullSize ? (
             <>
@@ -90,9 +86,21 @@ const Graph = ({dataWorld, globalFilters, updateFilters, dataForCountry}) => {
                   onChange={onCheckChange}
                   checked={globalFilters.geography === ''}
                 />
-                <label htmlFor="dewey">World</label>
+                <label htmlFor="geography">World</label>
               </div>
-              <CovidChart dataWorld={dataWorld} status={globalFilters.status}/>
+              <div>
+                <input
+                  type="checkbox"
+                  id="compare"
+                  name="compare"
+                  value="1"
+                  onChange={handleToggleCompare}
+                />
+                <label htmlFor="compare">Compare</label>
+              </div>
+              <div className="chart-container">
+                <CovidChart dataWorld={dataWorld} status={globalFilters.status} compare={compare}/>
+              </div>
             </>
           ) : null
         }
