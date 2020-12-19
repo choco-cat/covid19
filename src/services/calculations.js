@@ -1,4 +1,5 @@
 import { endOfToday } from "date-fns";
+import { format } from 'date-fns';
 
 const populationWorld = 7 * 10 ** 9;
 
@@ -84,7 +85,7 @@ export const getData = (data, filters, population = populationWorld) => {
   }
 
   result = result.map((el) => {
-    return { Date: currentDate ? currentDate : el.Date, Data: el[filtersStatus] };
+    return { Date: currentDate ? format(new Date(currentDate), 'dd-MMM-yyyy') : format(new Date(el.Date),'dd-MMM-yyyy'), ...el};
   });
 
   return result;

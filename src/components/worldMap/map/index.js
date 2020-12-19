@@ -5,7 +5,7 @@ import Legend from './legend';
 
 import './index.scss';
 
-const Map = ({ summaries = [], handleClickOnCountry }) => {
+const Map = ({ summaries = [], handleClickOnCountry, globalFilters }) => {
   const [selectedCountries, setSelectedCountries] = useState({});
   const [customStyles, setStyle] = useState({ display: 'none' });
   const [dataCountry, setDataCountry] = useState({});
@@ -59,6 +59,17 @@ const Map = ({ summaries = [], handleClickOnCountry }) => {
     updateLegend([...listOfCoef]);
   }, [summaries]);
 
+  const getColorForCountry = (countryID, covidDataForCountry) => {
+    if (covidDataForCountry.Country === globalFilters.geography) {
+       return 'green';
+    }
+
+    if (selectedCountries[countryID]) {
+      return "#fde5bc";
+    }
+
+    return `rgba(255,0,0,${covidDataForCountry.coefficient || 0.3})`;
+  };
 
   const mapCountries = country.map(country => {
     const covidDataForCountry = summariesAfterCalculation.find(summaryForCountry => summaryForCountry.CountryCode === country.id) || {};
@@ -68,7 +79,7 @@ const Map = ({ summaries = [], handleClickOnCountry }) => {
         key={country.id}
         d={country.shape}
         style={{
-          fill: selectedCountries[country.id] ? "#fde5bc" : `rgba(255,0,0,${covidDataForCountry.coefficient || 0.3})`,
+          fill: getColorForCountry(country.id, covidDataForCountry),
           cursor: "pointer",
           stroke: "#ccc"
         }}
