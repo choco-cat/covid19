@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import country from 'world-map-country-shapes';
 import Tooltip from './tooltip';
 import Legend from './legend';
+import { getColorsFromFilters } from '../../../services/calculations';
 
 import './index.scss';
 
@@ -11,6 +12,7 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters }) => {
   const [dataCountry, setDataCountry] = useState({});
   const [scaleIndex, setScaleIndex] = useState(1);
   const [legend, updateLegend] = useState([]);
+  const [diffCoeff, updateDiffCoeff] = useState([]);
   const [summariesAfterCalculation, updateSummaries] = useState([]);
   const zoomIndex = 0.25;
   const maxZoom = 8;
@@ -37,7 +39,7 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters }) => {
 
   const getFormatedCoefficient = (coefficient) => {
     let formattedCoefficiend = parseFloat(coefficient.toFixed(1));
-
+    formattedCoefficiend += 0.2;
     if (formattedCoefficiend > 1) formattedCoefficiend = 1;
     if (isNaN(formattedCoefficiend)) formattedCoefficiend = 0.3;
     if (formattedCoefficiend < 0.1) formattedCoefficiend = 0.3;
@@ -47,8 +49,11 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters }) => {
 
   useEffect(() => {
     const listOfCoef = new Set();
+    const temp = summaries.sort((el1, el2) => el1.Data > el2.Data ? 1 : -1);
+    //TODO цвета для карты сдвинуть на 1 градацию, чтобы на последний самый насыщенный цвет попадал диапазон стран, а не одна страна
+    const diffCoeff = temp[temp.length-1].Data - temp[0].Data;
     const summariesWithCoef = summaries.map(summaryForCountry => {
-      const coefficient = (summaryForCountry.TotalConfirmed / summaryForCountry.population * 220) / 5;
+      const coefficient = (summaryForCountry.Data - temp[0].Data) / diffCoeff;
       listOfCoef.add(getFormatedCoefficient(coefficient));
       return {
         ...summaryForCountry,
@@ -57,6 +62,7 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters }) => {
     });
     updateSummaries(summariesWithCoef);
     updateLegend([...listOfCoef]);
+    updateDiffCoeff(diffCoeff);
   }, [summaries]);
 
   const getColorForCountry = (countryID, covidDataForCountry) => {
@@ -67,8 +73,7 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters }) => {
     if (selectedCountries[countryID]) {
       return "#fde5bc";
     }
-
-    return `rgba(255,0,0,${covidDataForCountry.coefficient || 0.3})`;
+    return `rgba(${getColorsFromFilters(globalFilters.status)},${covidDataForCountry.coefficient || 0.2})`;
   };
 
   const mapCountries = country.map(country => {
@@ -81,7 +86,7 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters }) => {
         style={{
           fill: getColorForCountry(country.id, covidDataForCountry),
           cursor: "pointer",
-          stroke: "#ccc"
+          stroke: "#555"
         }}
         onMouseOver={(evt) => showCountry(evt, country, covidDataForCountry)}
         onMouseOut={hideCountry}
@@ -125,7 +130,7 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters }) => {
       </div>
 
       <div className='map-container' onWheel={handleMouseWeel}>
-        <Tooltip customStyles={customStyles} dataCountry={dataCountry}/>
+        <Tooltip customStyles={customStyles} dataCountry={dataCountry} status={globalFilters.status}/>
 
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -138,7 +143,7 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters }) => {
           {mapCountries}
         </svg>
       </div>
-      <Legend data={legend} />
+      <Legend data={legend} diffCoeff={diffCoeff} status={globalFilters.status}/>
     </>
   )
 };

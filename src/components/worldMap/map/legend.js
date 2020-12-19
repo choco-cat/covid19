@@ -2,8 +2,9 @@ import React, {useState} from 'react';
 import Draggable from 'react-draggable';
 import { ReactComponent as ToggleSize } from "../../../icons/small.svg";
 import { ReactComponent as Expand } from "../../../icons/expand.svg";
+import { getColorsFromFilters } from '../../../services/calculations';
 
-const Legend = ({ data }) => {
+const Legend = ({ data, diffCoeff, status }) => {
   const [expanded, setExpanded] = useState(false);
   const [fullSize, setSize] = useState(true);
   const defaultPosition = {x: 0, y: 0};
@@ -37,9 +38,9 @@ const Legend = ({ data }) => {
               {
                 data.sort().map((value, index) => (
                   <tr key={index}>
-                    <td style={{width: '25px', backgroundColor: `rgba(255,0,0,${value || 0.3})`}} />
+                    <td style={{width: '25px', backgroundColor: `rgba(${getColorsFromFilters(status)},${value})`}} />
                     <td>
-                      {(value * 5 / 220 * 10**5).toFixed(1)}
+                      {(value * diffCoeff).toFixed(1)}
                     </td>
                   </tr>
                 ))

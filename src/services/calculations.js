@@ -1,5 +1,6 @@
 import { endOfToday } from "date-fns";
 import { format } from 'date-fns';
+import {filters} from "../constants/filters";
 
 const populationWorld = 7 * 10 ** 9;
 
@@ -65,7 +66,6 @@ export const getDataWorldLastDay = (data, filters) => {
 };
 
 //Данные для мира и по выбранной стране по дням
-// TODO Combine getDataCountry and getDataWorld in one function
 export const getData = (data, filters, population = populationWorld) => {
   if (!data) {
     return;
@@ -85,9 +85,56 @@ export const getData = (data, filters, population = populationWorld) => {
   }
 
   result = result.map((el) => {
+    //Костыль, что-то не так со статистикой в API у Китая в один день
+    if(filters.geography === 'China' && el.TotalConfirmed > 6000000) {
+      el.TotalConfirmed = 90100;
+    }
     return { Date: currentDate ? format(new Date(currentDate), 'dd-MMM-yyyy') : format(new Date(el.Date),'dd-MMM-yyyy'), ...el};
   });
 
   return result;
 };
 
+export const getDataCountries = (data, globalFilters) => {
+  if (!data) {
+    return;
+  }
+
+  let result = [...data];
+  let filtersStatus = globalFilters.status;
+  let currentDate;
+  //Данные за последний день, передать сюда константу filters
+  if(globalFilters.period === filters.period.lastDay) {
+    currentDate = endOfToday();
+    filtersStatus = globalFilters.status.replace('Total', 'New');
+  }
+  result = result.map((el) => {
+    return { Data: el[filtersStatus], ...el };
+  });
+
+  if (globalFilters.relative === 'To100men') {
+    result = result.map((el) => {
+      return {
+    ...el,
+     Data: Math.round( el.Data / (el.population / 10 ** 5) * 100) / 100
+     }});
+  }
+
+  return result;
+};
+
+export const getColorsFromFilters = (status) => {
+  let color;
+  switch (status) {
+    case filters.status.recovered:
+      color = `52,245,174`;
+      break;
+    case filters.status.deaths:
+      color =  `144,73,0`;
+      break;
+    default:
+      color =  `245,0,0`;
+      break;
+  }
+  return color;
+};

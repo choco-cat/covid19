@@ -1,9 +1,5 @@
 import axios from 'axios';
 
-const cache = {};
-
-//TODO добавить обработчик ошибок
-
 /*
 Список флагов
 Возвращает массив из объектов вида data[n], флаг - data[n].flag, название страны - data[n].name, население - data[n].population
