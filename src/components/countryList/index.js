@@ -58,11 +58,13 @@ class CountryList extends React.Component {
                 sortedBy: this.state.sortedBy,
             });
         }
-        if (this.props.filters.status !== this.state.status || this.props.filters.period !== this.state.period || this.props.filters.relative !== this.state.relative) {
+
+        if ((this.props.filters.status !== this.state.status || this.props.filters.period !== this.state.period || this.props.filters.relative !== this.state.relative) && this.props != prevProps) {
             const { status, period, relative } = this.props.filters;
             const sortedByObj = getSortedBy(status, period, relative);
             this.selectRef.current.selectedIndex = sortedByObj.idx;
             this.setState({ sortedBy: sortedByObj.sortedBy, status, period, relative });
+
             if (this.state.geography) {
                 const countryIdx = sortByParameter(this.props.summaries, sortParameters[this.state.sortedBy]).findIndex(el => el['Country'] === this.props.filters.geography);
                 this.listRef.current.children[0].children[0].children[countryIdx].scrollIntoView({
