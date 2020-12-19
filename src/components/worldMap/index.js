@@ -1,11 +1,10 @@
 import Map from './map';
-import Tooltip from "./map/tooltip";
 
-const WorldMap = ({ summaries, handleClickOnCountry }) => {
+const WorldMap = ({ summaries, handleClickOnCountry, globalFilters }) => {
   return (
     <div className="world-map-container">
       <h2>The World Map</h2>
-      <Map summaries={summaries} handleClickOnCountry={handleClickOnCountry} />
+      <Map summaries={summaries} handleClickOnCountry={handleClickOnCountry} globalFilters={globalFilters} />
     </div>
   );
 };
