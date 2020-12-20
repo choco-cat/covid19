@@ -1,7 +1,10 @@
 import React from 'react';
 import TdItem from './tdItem';
 
-export default function Table({tableName, current, currentCountryTitle}) {
+export default function Table({ tableName, current, currentCountryTitle }) {
+
+    const thNames = ['Confirmed', 'Deaths', 'Recovered']
+
     const items = Object.values(current);
     return (
         <table className='summaries-table'>
@@ -9,15 +12,15 @@ export default function Table({tableName, current, currentCountryTitle}) {
             <caption><h4 className='current-country'>{currentCountryTitle}</h4></caption>
             <thead>
                 <tr>
-                    <th scope="col">Confirmed</th>
-                    <th scope="col">Deaths</th>
-                    <th scope="col">Recovered</th>
+                    {thNames.map((el) =>
+                        <th scope="col">{el}</th>
+                    )}
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    {items.map((el) =>
-                        <TdItem key={el.toString()} value={el} />
+                    {items.map((el, i) =>
+                        <TdItem thNames = {thNames[i]} key={i} value={el} />
                     )}
                 </tr>
             </tbody>
