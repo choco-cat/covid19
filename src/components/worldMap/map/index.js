@@ -13,6 +13,12 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters }) => {
   const [scaleIndex, setScaleIndex] = useState(1);
   const [legend, updateLegend] = useState([]);
   const [diffCoeff, updateDiffCoeff] = useState([]);
+  const [mapPositionX, setMapPositionX] = useState(0);
+  const [diffX, setDiffX] = useState(0);
+  const [diffY, setDiffY] = useState(0);
+
+  const [mapPositionY, setMapPositionY] = useState(0);
+  const [isDragStart, setDragStart] = useState(0);
   const [summariesAfterCalculation, updateSummaries] = useState([]);
   const zoomIndex = 0.25;
   const maxZoom = 8;
@@ -103,10 +109,42 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters }) => {
   };
 
   const handleMouseWeel = (e) => {
+    e.stopPropagation();
     if (e.deltaY < 0) {
       scaleMap(scaleIndex + zoomIndex);
     } else {
       scaleMap(scaleIndex - zoomIndex);
+    }
+  };
+
+  const handleMouseDown = (e) => {
+    e.stopPropagation();
+    //isDragStart = true;
+    setDragStart(true);
+    setMapPositionX(e.pageX);
+    setMapPositionY(e.pageY);
+  };
+
+  const handleMouseUp = (e) => {
+    e.stopPropagation();
+    console.log('handleMouseUp');
+    setDragStart(false);
+  //  isDragStart = false;
+  };
+
+  const handleMouseMove = (e) => {
+    e.stopPropagation();
+    //console.log('isDragStart',isDragStart);
+    if (isDragStart) {
+
+
+      console.log('Разница', e.pageX - mapPositionX);
+      setDiffX(e.pageX - mapPositionX);
+      setDiffY(e.pageY - mapPositionY);
+//тут должна быть разница!!!!!!!!
+      //setMapPositionX(e.pageX);
+
+
     }
   };
 
@@ -129,20 +167,24 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters }) => {
         </button>
       </div>
 
-      <div className='map-container' onWheel={handleMouseWeel}>
-        <Tooltip customStyles={customStyles} dataCountry={dataCountry} status={globalFilters.status}/>
+      <Tooltip customStyles={customStyles} dataCountry={dataCountry} status={globalFilters.status}/>
 
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="500"
-          width="700"
-          viewBox="0 0 2000 1001"
-          style={{transform: `scale(${scaleIndex})`}}
-          className="map"
-        >
-          {mapCountries}
-        </svg>
+      <div className='map-container' onWheel={handleMouseWeel}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="500"
+            width="700"
+            viewBox="0 0 2000 1001"
+            style={{transform: `scale(${scaleIndex}) translate(${diffX}px, ${diffY}px`}}
+            className="map"
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+            onMouseMove={handleMouseMove}
+          >
+            {mapCountries}
+          </svg>
       </div>
+
       <Legend data={legend} diffCoeff={diffCoeff} status={globalFilters.status}/>
     </>
   )

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { parse, format, addDays, endOfToday } from 'date-fns';
+import { setCache, getCache } from '../services/cache';
 
 const cache = {};
 const BASE_URL = 'https://api.covid19api.com/';
@@ -36,6 +37,10 @@ export const getDataCountryFromDays = async (country_slug) => {
     return cache[country_slug];
   }
 
+  if (getCache(country_slug)) {
+    return getCache(country_slug);
+  }
+
   const endPointCountries = `total/country/${country_slug}`;
   const { data: summaries } = await axios.get(`${BASE_URL}${endPointCountries}`);
 
@@ -49,6 +54,7 @@ export const getDataCountryFromDays = async (country_slug) => {
   });
 
   // cache[country_slug] = summaries;
+  setCache(country_slug, cache[country_slug]);
   return cache[country_slug];
 };
 
@@ -94,6 +100,10 @@ export const getDataWorldFromDays = async () => {
     return cache['world'];
   }
 
+  if (getCache('world')) {
+    return getCache('world');
+  }
+
   const endPointCountries = 'world';
   const { data: summaries } = await axios.get(`${BASE_URL}${endPointCountries}`);
   summaries.sort((a, b) => a.TotalConfirmed > b.TotalConfirmed ? 1 : -1);
@@ -106,6 +116,8 @@ export const getDataWorldFromDays = async () => {
     }
   });
 
+  setCache('world', cache['world']);
+
   return cache['world'];
 };
 
@@ -114,9 +126,13 @@ export const getSummaries = async () => {
     return cache['summaries'];
   }
 
+  if (getCache('summaries')) {
+    return getCache('summaries');
+  }
+
   const endPointCountries = 'summary';
   const { data: summaries } = await axios.get(`${BASE_URL}${endPointCountries}`);
   cache['summaries'] = summaries;
-
+  setCache('summaries', cache['summaries']);
   return summaries;
 };

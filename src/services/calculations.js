@@ -130,11 +130,39 @@ export const getColorsFromFilters = (status) => {
       color = `52,245,174`;
       break;
     case filters.status.deaths:
-      color =  `144,73,0`;
+      color =  `0,23,144`;
       break;
     default:
       color =  `245,0,0`;
       break;
   }
   return color;
+};
+
+export const getFilterName = (value) => {
+  let result;
+  switch (value) {
+    case filters.status.recovered:
+      result = 'Recovered';
+      break;
+    case filters.status.deaths:
+      result =  'Deaths';
+      break;
+    case filters.status.confirmed:
+      result =  'Confirmed';
+      break;
+    case filters.period.All:
+      result = 'All Time';
+      break;
+    case filters.period.LastDay:
+      result =  'Last Day';
+      break;
+    case filters.relative.Absolute:
+      result =  'Absolute';
+      break;
+    case filters.relative.To100men:
+      result =  'Per 100k';
+      break;
+  }
+  return result;
 };
