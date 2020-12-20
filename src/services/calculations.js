@@ -127,7 +127,7 @@ export const getColorsFromFilters = (status) => {
   let color;
   switch (status) {
     case filters.status.recovered:
-      color = `52,245,174`;
+      color = `39,150,3`;
       break;
     case filters.status.deaths:
       color =  `0,23,144`;
@@ -151,16 +151,16 @@ export const getFilterName = (value) => {
     case filters.status.confirmed:
       result =  'Confirmed';
       break;
-    case filters.period.All:
+    case filters.period.all:
       result = 'All Time';
       break;
-    case filters.period.LastDay:
+    case filters.period.lastDay:
       result =  'Last Day';
       break;
-    case filters.relative.Absolute:
+    case filters.relative.absolute:
       result =  'Absolute';
       break;
-    case filters.relative.To100men:
+    case filters.relative.to100men:
       result =  'Per 100k';
       break;
   }
