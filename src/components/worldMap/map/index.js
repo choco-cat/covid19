@@ -159,7 +159,7 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters, updateFilter
         </button>
       </div>
 
-      <Tooltip customStyles={customStyles} dataCountry={dataCountry} status={globalFilters.status}/>
+      <Tooltip customStyles={customStyles} dataCountry={dataCountry} globalFilters={globalFilters}/>
 
       <div className='map-container' onWheel={handleMouseWeel}>
           <svg
