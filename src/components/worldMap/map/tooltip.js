@@ -1,4 +1,5 @@
 import {getFilterName} from "../../../services/calculations";
+const userLang = navigator.language;
 
 const Tooltip = ({ dataCountry, customStyles, status }) => {
     return (
@@ -8,7 +9,7 @@ const Tooltip = ({ dataCountry, customStyles, status }) => {
               <tbody>
               <tr>
                   <td>{getFilterName(status)}</td>
-                  <td>{dataCountry.Data || 0}</td>
+                  <td>{new Intl.NumberFormat(userLang, { minimumFractionDigits: 0, maximumFractionDigits: 2}).format((dataCountry.Data || 0).toFixed(0))}</td>
               </tr>
               </tbody>
           </table>
