@@ -1,3 +1,5 @@
+import {getFilterName} from "../../../services/calculations";
+
 const Tooltip = ({ dataCountry, customStyles, status }) => {
     return (
       <div id="tooltip" className="tooltip" style={{ display: 'none', ...customStyles }}>
@@ -5,7 +7,7 @@ const Tooltip = ({ dataCountry, customStyles, status }) => {
           <table>
               <tbody>
               <tr>
-                  <td>{status}</td>
+                  <td>{getFilterName(status)}</td>
                   <td>{dataCountry.Data || 0}</td>
               </tr>
               </tbody>

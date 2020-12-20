@@ -6,7 +6,8 @@ import { getColorsFromFilters } from '../../../services/calculations';
 
 import './index.scss';
 
-const Map = ({ summaries = [], handleClickOnCountry, globalFilters }) => {
+const Map = ({ summaries = [], handleClickOnCountry, globalFilters, updateFilters }) => {
+
   const [selectedCountries, setSelectedCountries] = useState({});
   const [customStyles, setStyle] = useState({ display: 'none' });
   const [dataCountry, setDataCountry] = useState({});
@@ -37,18 +38,21 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters }) => {
     setDataCountry(covidDataForCountry);
   };
 
-  const hideCountry = () => {
+  const hideCountry = (country) => {
     setStyle({
       display: "none"
+    });
+
+    setSelectedCountries({
+      [country.id]: !selectedCountries[country.id]
     });
   };
 
   const getFormatedCoefficient = (coefficient) => {
     let formattedCoefficiend = parseFloat(coefficient.toFixed(1));
-    formattedCoefficiend += 0.2;
     if (formattedCoefficiend > 1) formattedCoefficiend = 1;
-    if (isNaN(formattedCoefficiend)) formattedCoefficiend = 0.3;
-    if (formattedCoefficiend < 0.1) formattedCoefficiend = 0.3;
+    if (isNaN(formattedCoefficiend)) formattedCoefficiend = 0.1;
+    if (formattedCoefficiend < 0.1) formattedCoefficiend = 0.1;
 
     return formattedCoefficiend;
   };
@@ -56,8 +60,7 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters }) => {
   useEffect(() => {
     const listOfCoef = new Set();
     const temp = summaries.sort((el1, el2) => el1.Data > el2.Data ? 1 : -1);
-    //TODO цвета для карты сдвинуть на 1 градацию, чтобы на последний самый насыщенный цвет попадал диапазон стран, а не одна страна
-    const diffCoeff = temp[temp.length-1].Data - temp[0].Data;
+    const diffCoeff = (temp[temp.length-1].Data - temp[0].Data) * 0.8;
     const summariesWithCoef = summaries.map(summaryForCountry => {
       const coefficient = (summaryForCountry.Data - temp[0].Data) / diffCoeff;
       listOfCoef.add(getFormatedCoefficient(coefficient));
@@ -95,7 +98,7 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters }) => {
           stroke: "#555"
         }}
         onMouseOver={(evt) => showCountry(evt, country, covidDataForCountry)}
-        onMouseOut={hideCountry}
+        onMouseOut={() => hideCountry(country)}
         onClick={() => handleClickOnCountry(covidDataForCountry.Country)}
       >
       </path>
@@ -119,32 +122,21 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters }) => {
 
   const handleMouseDown = (e) => {
     e.stopPropagation();
-    //isDragStart = true;
     setDragStart(true);
-    setMapPositionX(e.pageX);
-    setMapPositionY(e.pageY);
+    setMapPositionX(e.pageX - diffX);
+    setMapPositionY(e.pageY - diffY);
   };
 
   const handleMouseUp = (e) => {
     e.stopPropagation();
-    console.log('handleMouseUp');
     setDragStart(false);
-  //  isDragStart = false;
   };
 
   const handleMouseMove = (e) => {
     e.stopPropagation();
-    //console.log('isDragStart',isDragStart);
     if (isDragStart) {
-
-
-      console.log('Разница', e.pageX - mapPositionX);
-      setDiffX(e.pageX - mapPositionX);
-      setDiffY(e.pageY - mapPositionY);
-//тут должна быть разница!!!!!!!!
-      //setMapPositionX(e.pageX);
-
-
+      setDiffX((e.pageX - mapPositionX) / scaleIndex);
+      setDiffY((e.pageY - mapPositionY) / scaleIndex);
     }
   };
 
@@ -185,7 +177,7 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters }) => {
           </svg>
       </div>
 
-      <Legend data={legend} diffCoeff={diffCoeff} status={globalFilters.status}/>
+      <Legend data={legend} diffCoeff={diffCoeff} globalFilters={globalFilters} updateFilters={updateFilters}/>
     </>
   )
 };

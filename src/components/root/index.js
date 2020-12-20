@@ -110,6 +110,7 @@ const Root = () => {
               summaries={dataMap}
               globalFilters={indicatorsForFilter}
               handleClickOnCountry={getDataForCountry}
+              updateFilters={updateFilter}
             />
             <div className="summary-container">
               <Summary

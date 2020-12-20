@@ -1,5 +1,6 @@
 import React from "react";
 import { filters } from "../../constants/filters";
+import {getFilterName} from "../../services/calculations";
 
 const Filters = ({ globalFilters, updateFilters, dataForCountry, options }) => {
   const onSelectChange = (e) => {
@@ -30,9 +31,9 @@ const Filters = ({ globalFilters, updateFilters, dataForCountry, options }) => {
         options.status && (
       <div>
         <select onChange={onSelectChange} value={globalFilters.status}>
-          <option value={filters.status.confirmed}>Confirmed</option>
-          <option value={filters.status.deaths}>Deaths</option>
-          <option value={filters.status.recovered}>Recovered</option>
+          <option value={filters.status.confirmed}>{getFilterName(filters.status.confirmed)}</option>
+          <option value={filters.status.deaths}>{getFilterName(filters.status.deaths)}</option>
+          <option value={filters.status.recovered}>{getFilterName(filters.status.recovered)}</option>
         </select>
       </div>
         )
@@ -42,19 +43,17 @@ const Filters = ({ globalFilters, updateFilters, dataForCountry, options }) => {
           <div>
             <input
               type="radio"
-              name="relative"
               value={filters.relative.absolute}
               checked={globalFilters.relative === filters.relative.absolute ? 'selected' : ''}
               onChange={onRadioChangeRelative}/>
-            <label htmlFor="dewey">Absolute count</label>
+            <label htmlFor="dewey">{getFilterName(filters.relative.absolute)}</label>
             <input
               type="radio"
-              name="relative"
               value={filters.relative.to100men}
               onChange={onRadioChangeRelative}
               checked={globalFilters.relative === filters.relative.to100men ? 'selected' : ''}
             />
-            <label htmlFor="dewey">Per 100k</label>
+            <label htmlFor="dewey">{getFilterName(filters.relative.to100men)}</label>
           </div>
         )
       }
@@ -63,24 +62,22 @@ const Filters = ({ globalFilters, updateFilters, dataForCountry, options }) => {
       <div>
         <input
           type="radio"
-          name="period"
           value={filters.period.all}
           checked={globalFilters.period === filters.period.all ? 'selected' : ''}
           onChange={onRadioChangePeriod}/>
-        <label htmlFor="dewey">All time</label>
+        <label htmlFor="dewey">{getFilterName(filters.period.all)}</label>
         <input
           type="radio"
-          name="period"
           value={filters.period.lastDay}
           onChange={onRadioChangePeriod}
           checked={globalFilters.period === filters.period.lastDay ? 'selected' : ''}
         />
-        <label htmlFor="dewey">Last Day</label>
+        <label htmlFor="dewey">{getFilterName(filters.period.lastDay)}</label>
       </div>
         )
       }
       {
-        options.word && (
+        options.world && (
       <div>
         <input
           type="checkbox"

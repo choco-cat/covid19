@@ -3,9 +3,10 @@ import Draggable from 'react-draggable';
 import { ReactComponent as ToggleSize } from "../../../icons/small.svg";
 import { ReactComponent as Expand } from "../../../icons/expand.svg";
 import { getColorsFromFilters, getFilterName } from '../../../services/calculations';
+import { filters } from "../../../constants/filters";
 import Filters from "../../filters";
 
-const Legend = ({ data, diffCoeff, status }) => {
+const Legend = ({ data, diffCoeff, globalFilters, updateFilters }) => {
   const [expanded, setExpanded] = useState(false);
   const [fullSize, setSize] = useState(true);
   const defaultPosition = {x: 0, y: 0};
@@ -14,9 +15,13 @@ const Legend = ({ data, diffCoeff, status }) => {
     setExpanded(!expanded);
   };
 
+  const options = {'status': true, 'relative': true, 'period': true};
   const handleToggSize = () => {
     setSize(!fullSize);
   };
+
+  const roundDijit = (globalFilters.relative === filters.relative.to100men) ? 2 : 0;
+  const userLang = navigator.language;
 
   return (
     <Draggable position={expanded ? defaultPosition : null}>
@@ -28,26 +33,29 @@ const Legend = ({ data, diffCoeff, status }) => {
         </div>
         {
           fullSize ? (
+              <>
+            <Filters globalFilters={globalFilters} updateFilters={updateFilters} options={options}/>
             <table style={{margin: 'auto'}}>
               <thead>
               <tr>
                 <th>Colors</th>
-                <th>{getFilterName(status)}</th>
+                <th>{getFilterName(globalFilters.status)} {getFilterName(globalFilters.relative)} {getFilterName(globalFilters.period)}</th>
               </tr>
               </thead>
               <tbody>
               {
                 data.sort().map((value, index) => (
                   <tr key={index}>
-                    <td style={{width: '25px', backgroundColor: `rgba(${getColorsFromFilters(status)},${value})`}} />
+                    <td style={{width: '25px', backgroundColor: `rgba(${getColorsFromFilters(globalFilters.status)},${value})`}} />
                     <td>
-                      {(value * diffCoeff).toFixed(1)}
+                      from {(new Intl.NumberFormat(userLang, { minimumFractionDigits: 0, maximumFractionDigits: 2}).format((value * diffCoeff).toFixed(roundDijit)))}
                     </td>
                   </tr>
                 ))
               }
               </tbody>
             </table>
+            </>
           ) : null
         }
       </div>
