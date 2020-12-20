@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { setCache, getCache } from '../services/cache';
 
 /*
 Список флагов
@@ -6,8 +7,13 @@ import axios from 'axios';
 */
 
 export const getFlags = async () => {
+    if (getCache('flags')) {
+        return getCache('flags');
+    }
+
     const url =  'https://restcountries.eu/rest/v2/all?fields=name;population;flag';
     const { data: flags } = await axios.get(url);
+    setCache('flags', flags);
     return flags;
 };
 

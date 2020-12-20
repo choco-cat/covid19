@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import ClockLoader from "react-spinners/ClockLoader";
 import { getSummaries, getDataWorldFromDays, getDataCountryFromDays } from '../../api/covid';
 import { getFlags } from "../../api/flags";
@@ -116,6 +116,7 @@ const Root = () => {
                 summaries={summaries.Global}
                 summariesCountries = {summaries.Countries}
                 filters={indicatorsForFilter}
+                updateFilters={updateFilter}
               />
               <Graph dataWorld={dataAll} globalFilters={indicatorsForFilter} updateFilters={updateFilter} dataForCountry={getDataForCountry}/>
             </div>

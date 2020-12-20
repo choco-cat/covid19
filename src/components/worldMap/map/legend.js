@@ -2,7 +2,8 @@ import React, {useState} from 'react';
 import Draggable from 'react-draggable';
 import { ReactComponent as ToggleSize } from "../../../icons/small.svg";
 import { ReactComponent as Expand } from "../../../icons/expand.svg";
-import { getColorsFromFilters } from '../../../services/calculations';
+import { getColorsFromFilters, getFilterName } from '../../../services/calculations';
+import Filters from "../../filters";
 
 const Legend = ({ data, diffCoeff, status }) => {
   const [expanded, setExpanded] = useState(false);
@@ -31,7 +32,7 @@ const Legend = ({ data, diffCoeff, status }) => {
               <thead>
               <tr>
                 <th>Colors</th>
-                <th>Total cases per 100k</th>
+                <th>{getFilterName(status)}</th>
               </tr>
               </thead>
               <tbody>

@@ -5,8 +5,10 @@ import { ReactComponent as ToggleSize } from "../../icons/small.svg";
 import { ReactComponent as Expand } from "../../icons/expand.svg";
 import { sortByParameter } from '../../services/sorting';
 import { calc100Men } from '../../services/calculations';
+import Filters from "../filters";
 
 const defaultPosition = {x: 0, y: 0};
+const options = {'status': false, 'relative': true, 'world': true};
 
 class Summary extends React.Component {
   constructor(props) {
@@ -81,6 +83,10 @@ class Summary extends React.Component {
       checkedAbsolute: false,
       checkedPer100k: true
     });
+
+    this.props.updateFilters({
+      relative: 'To100men'
+    })
   }
 
   handleAbsoluteChange() {
@@ -93,6 +99,10 @@ class Summary extends React.Component {
       checkedAbsolute: true,
       checkedPer100k: false,
     });
+
+    this.props.updateFilters({
+      relative: 'Absolute'
+    })
   }
 
   handleTotalChange(event) {
@@ -125,18 +135,16 @@ class Summary extends React.Component {
   }
 
   handleCountryChange(event) {
+    const { checkedPer100k } = this.state;
+    const countryObj = this.summariesSelect(this.props.summariesCountries, event.target.value, true);
 
-    const { checkedPer100k } = this.state
-    const countryObj = this.summariesSelect(this.props.summariesCountries, event.target.value, true)
-    console.log(countryObj)
     this.setState({
       currentCountry: (checkedPer100k) ? countryObj.per100k : countryObj.absolute
     });
   }
 
   componentDidUpdate(prevProps, prevState) {
-
-    const { filters, summariesCountries } = this.props
+    const { filters, summariesCountries } = this.props;
 
     const currentCountryObj = this.getByCountry(summariesCountries, filters.geography);
 
@@ -161,7 +169,7 @@ class Summary extends React.Component {
   render() {
 
     const { filters } = this.props;
-    const { defaultCountryTitle, currentCountry, currentTotal, checkedAbsolute, checkedPer100k } = this.state;
+    const { defaultCountryTitle, currentCountry, currentTotal } = this.state;
 
     return (
       <Draggable  position={this.state.expanded ? defaultPosition : null}>
@@ -174,17 +182,16 @@ class Summary extends React.Component {
           {
             this.state.fullSize ? (
               <div className="tables-wrap">
-
                 <div className="count-change-wrap">
                   <div className="absolute-change">
                     <label>
-                      <input type="radio" value="absolute" checked={checkedAbsolute} onChange={this.handleAbsoluteChange} />
+                      <input type="radio" value="absolute" checked={filters.relative === 'Absolute'} onChange={this.handleAbsoluteChange} />
                       Absolute
                     </label>
                   </div>
                   <div className="per100k-change">
                     <label>
-                      <input type="radio" value="per100k" checked={checkedPer100k} onChange={this.handlePer100kChange} />
+                      <input type="radio" value="per100k" checked={filters.relative === 'To100men'} onChange={this.handlePer100kChange} />
                       Per 100k
                     </label>
                   </div>

@@ -1,7 +1,7 @@
 import React from 'react';
-import {Chart} from 'react-google-charts';
-import {format} from 'date-fns';
-import {filters} from '../../../constants/filters';
+import { Chart } from 'react-google-charts';
+import { format } from 'date-fns';
+import { filters } from '../../../constants/filters';
 import { getColorsFromFilters } from '../../../services/calculations';
 
 const chartEvents = [
@@ -66,7 +66,6 @@ const prepereData = (data, status, compare) => {
 };
 
 const CovidChart = ({dataWorld, status, compare}) => {
-
   const correctData = prepereData(dataWorld, status, compare);
   const statuses = compare ? [filters.status.confirmed, filters.status.recovered, filters.status.deaths] : [status];
   const correctOptions = prepereOptions(dataWorld, statuses);
