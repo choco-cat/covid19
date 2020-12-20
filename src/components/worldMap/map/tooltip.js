@@ -10,7 +10,7 @@ const Tooltip = ({ dataCountry, customStyles, globalFilters }) => {
           <table>
               <tbody>
               <tr>
-                  <td>{getFilterName(globalFilters.status)}</td>
+                  <td>{getFilterName(globalFilters.status)}, {getFilterName(globalFilters.relative)}, {getFilterName(globalFilters.period)}:</td>
                   <td>{new Intl.NumberFormat(userLang, { minimumFractionDigits: 0, maximumFractionDigits: 2}).format((dataCountry.Data || 0).toFixed(roundDijit))}</td>
               </tr>
               </tbody>
