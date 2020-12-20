@@ -6,13 +6,23 @@
     border-radius: 10px;
 }
 
-.totalTable {
+.summaries-table {
     border: 1px solid #ccc;
     border-collapse: collapse;
     margin: 0;
     padding: 0;
     width: 100%;
     table-layout: fixed;
+
+    .current-country {
+        margin-bottom: 15px;
+        margin-top: 15px;
+    }
+
+    .title {
+        margin-bottom: 0;
+        margin-top: 20px;
+    }
 
     th {
         font-size: .85em;
@@ -31,10 +41,19 @@
         padding: .625em;
         text-align: center;
     }
+
+}
+
+.count-change-wrap {
+    padding: 10px 10px;
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-around;
+    border: 1px solid #ccc;
 }
 
 @media screen and (max-width: 600px) {
-    .totalTable {
+    .summaries-table {
         border: 0;
 
         caption {

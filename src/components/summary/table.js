@@ -1,11 +1,12 @@
 import React from 'react';
 import TdItem from './tdItem';
 
-export default function Table(props) {
-    const items = Object.values(props);
+export default function Table({tableName, current, currentCountryTitle}) {
+    const items = Object.values(current);
     return (
-        <table className='totalTable'>
-            <caption><h2>Total</h2></caption>
+        <table className='summaries-table'>
+            <caption><h2 className='title'>{tableName}</h2></caption>
+            <caption><h4 className='current-country'>{currentCountryTitle}</h4></caption>
             <thead>
                 <tr>
                     <th scope="col">Confirmed</th>
