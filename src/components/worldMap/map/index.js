@@ -123,8 +123,8 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters, updateFilter
   const handleMouseDown = (e) => {
     e.stopPropagation();
     setDragStart(true);
-    setMapPositionX(e.pageX - diffX);
-    setMapPositionY(e.pageY - diffY);
+    setMapPositionX(e.pageX - diffX * scaleIndex);
+    setMapPositionY(e.pageY - diffY * scaleIndex);
   };
 
   const handleMouseUp = (e) => {

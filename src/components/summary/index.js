@@ -144,7 +144,7 @@ class Summary extends React.Component {
     const countryObj = getByCountry(summariesCountries, filters.geography);
     const per100kCountry = getBySelect(calc100Men([getBySelect(countryObj)], populationCountry)[0])
 
-    if (filters.geography !== prevProps.filters.geography) {
+    if (filters.geography !== prevProps.filters.geography && filters.geography !== '') {
       this.setState({
         currentCountry: (checkedPer100k) ? per100kCountry : this.getBySelect(countryObj),
         checkedAbsolute: checkedAbsolute,
