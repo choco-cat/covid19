@@ -5,7 +5,15 @@
     margin: 2rem;
     border-radius: 10px;
 }
-
+.tables-wrap {
+    .period-wrap {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+    }
+}
 .tables-wrap:last-child {
     margin-bottom: 15px;
 }
@@ -48,11 +56,11 @@
 
 }
 
-.count-change-wrap {
+.tables-filters-wrap {
     padding: 15px 10px;
     margin-top: 15px;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     border: 1px solid #ccc;
     align-items: center;
 
@@ -60,7 +68,7 @@
 
 @media screen and (max-width: 600px) {
 
-    .count-change-wrap {
+    .tables-filters-wrap {
         padding: 15px 5px;
         flex-direction: column;
         div {

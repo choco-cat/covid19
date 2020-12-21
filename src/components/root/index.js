@@ -116,7 +116,7 @@ const Root = () => {
               <Summary
                 summaries={summaries.Global}
                 summariesCountries = {summaries.Countries}
-                filters={indicatorsForFilter}
+                globalFilters={indicatorsForFilter}
                 updateFilters={updateFilter}
               />
               <Graph dataWorld={dataAll} globalFilters={indicatorsForFilter} updateFilters={updateFilter} dataForCountry={getDataForCountry}/>
