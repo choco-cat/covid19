@@ -177,8 +177,8 @@ class CountryList extends React.Component {
                   </div>
                   {
                       this.state.fullSize ? (
-                        <>
-                            <h2 className="country-list-header">
+                        <div className="block-inner">
+                            <div className="country-list-header">
                                 <span>Sorted by </span>
                                 <select ref={this.selectRef} onChange={this.onSelectChange}>
                                     <option defaultValue="total cases">total cases</option>
@@ -194,15 +194,15 @@ class CountryList extends React.Component {
                                     <option value="total recovered per 100k">total recovered per 100k</option>
                                     <option value="new recovered per 100k">new recovered per 100k</option>
                                 </select>
-                            </h2>
+                            </div>
                             <input onChange={this.onInputChange} placeholder="Search..." type="text" />
                             <ul ref={this.listRef} className="country-list">
-                                <Scrollbars style={{width: 'auto', height: '70vh'}}>
+                                <Scrollbars style={{width: 'auto', height: '75vh'}}>
                                     {listItems}
                                 </Scrollbars>
 
                             </ul>
-                        </>
+                        </div>
                       ) : null
                   }
               </div>

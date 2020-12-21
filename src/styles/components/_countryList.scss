@@ -1,11 +1,9 @@
 .country-list-container {
     height: 87vh;
     width: 25vw;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
     background-color: white;
     z-index: 1000;
     margin: 2rem;
-    border-radius: 10px;
     overflow: hidden;
 
     &.min-size {
@@ -21,10 +19,6 @@
     height: 100vh;
     margin: 0;
     z-index: 9999;
-}
-
-.country-list-header {
-    margin-top: 2rem;
 }
 
 .country-list {

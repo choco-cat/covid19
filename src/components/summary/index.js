@@ -177,6 +177,7 @@ class Summary extends React.Component {
           </div>
           {
             this.state.fullSize ? (
+              <div className="block-inner">
               <div className="tables-wrap">
                 <div className="count-change-wrap">
                   <div className="table-filter-select-wrap">
@@ -203,6 +204,7 @@ class Summary extends React.Component {
 
                 <Table currentCountryTitle={filters.geography || defaultCountryTitle} tableName='Country' current={currentCountry} />
 
+              </div>
               </div>
             ) : null
           }

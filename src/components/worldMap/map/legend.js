@@ -33,7 +33,8 @@ const Legend = ({ data, diffCoeff, globalFilters, updateFilters }) => {
         </div>
         {
           fullSize ? (
-              <div className="container-block">
+            <div className="block-inner">
+              <div className="flex-block">
             <table style={{margin: 'auto'}}>
               <thead>
               <tr>
@@ -55,6 +56,7 @@ const Legend = ({ data, diffCoeff, globalFilters, updateFilters }) => {
               </tbody>
             </table>
             <Filters globalFilters={globalFilters} updateFilters={updateFilters} options={options}/>
+            </div>
             </div>
           ) : null
         }

@@ -35,7 +35,7 @@ const Graph = ({dataWorld, globalFilters, updateFilters, dataForCountry}) => {
         </div>
         {
           fullSize ? (
-            <>
+            <div className="block-inner">
               <h3>{globalFilters.geography ? globalFilters.geography : 'World'}</h3>
               <Filters globalFilters={globalFilters} updateFilters={updateFilters} dataForCountry={dataForCountry} options={options}/>
               <div>
@@ -52,7 +52,7 @@ const Graph = ({dataWorld, globalFilters, updateFilters, dataForCountry}) => {
               <div className="chart-container">
                 <CovidChart dataWorld={dataWorld} status={globalFilters.status} compare={compare}/>
               </div>
-            </>
+            </div>
           ) : null
         }
       </div>
