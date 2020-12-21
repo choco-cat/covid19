@@ -5,8 +5,6 @@ import { setCache, getCache } from '../services/cache';
 const cache = {};
 const BASE_URL = 'https://api.covid19api.com/';
 
-//TODO добавить обработчик ошибок
-
 /*
 Список стран
 Возвращает массив из объектов вида data[n], country_slug - data[n].Slug, название страны - data[n].Country
@@ -33,6 +31,7 @@ Date: "2020-12-10T00:00:00Z"
 }
 */
 export const getDataCountryFromDays = async (country_slug) => {
+  country_slug = country_slug.split('(').join().split(')').join();
   if (cache[country_slug]) {
     return cache[country_slug];
   }
