@@ -102,8 +102,8 @@ const Root = () => {
             <CountryList
               summaries={summaries.Countries}
               flags={flags}
-              filters={indicatorsForFilter}
-              updateFilter={updateFilter}
+              globalFilters={indicatorsForFilter}
+              updateFilters={updateFilter}
               handleClickOnCountry={getDataForCountry}
             />
             <WorldMap

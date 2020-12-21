@@ -4,6 +4,7 @@ import Draggable from 'react-draggable';
 import { missedFlags, missedPopulations } from '../../constants/missed';
 import { sortByParameter } from '../../services/sorting';
 import { getSelectFilters, getSortedBy } from "../../services/selectFilters";
+import { getFilterName } from "../../services/calculations";
 import {ReactComponent as ToggleSize} from "../../icons/small.svg";
 import {ReactComponent as Expand} from "../../icons/expand.svg";
 
@@ -47,10 +48,10 @@ class CountryList extends React.Component {
     componentDidMount() {
         this.setState({
             sortedBy: 'total cases',
-            status: this.props.filters.status,
-            period: this.props.filters.period,
-            relative: this.props.filters.relative,
-            geography: this.props.filters.geography,
+            status: this.props.globalFilters.status,
+            period: this.props.globalFilters.period,
+            relative: this.props.globalFilters.relative,
+            geography: this.props.globalFilters.geography,
             filterText: '',
             expanded: false,
             fullSize: true,
@@ -59,7 +60,7 @@ class CountryList extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevState.sortedBy !== this.state.sortedBy) {
-            this.props.updateFilter({
+            this.props.updateFilters({
                 status: this.state.status,
                 period: this.state.period,
                 relative: this.state.relative,
@@ -67,28 +68,43 @@ class CountryList extends React.Component {
             });
         }
 
-        if ((this.props.filters.status !== this.state.status || this.props.filters.period !== this.state.period || this.props.filters.relative !== this.state.relative) && this.props !== prevProps) {
-            const { status, period, relative } = this.props.filters;
+        if ((this.props.globalFilters.status !== this.state.status || this.props.globalFilters.period !== this.state.period || this.props.globalFilters.relative !== this.state.relative) && this.props !== prevProps) {
+            const { status, period, relative } = this.props.globalFilters;
             const sortedByObj = getSortedBy(status, period, relative);
             this.selectRef.current.selectedIndex = sortedByObj.idx;
             this.setState({ sortedBy: sortedByObj.sortedBy, status, period, relative });
 
             if (this.state.geography) {
-                const countryIdx = sortByParameter(this.props.summaries, sortParameters[this.state.sortedBy]).findIndex(el => el['Country'] === this.props.filters.geography);
-                this.listRef.current.children[0].children[0].children[countryIdx].scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center',
-                });
+                const data = this.props.summaries.map(country => {
+                    return {
+                        ...country,
+                        TotalConfirmedPerPopulation: ((country.TotalConfirmed * 100000) / country.population),
+                        NewConfirmedPerPopulation: ((country.NewConfirmed * 100000) / country.population),
+                        TotalDeathsPerPopulation: ((country.TotalDeaths * 100000) / country.population),
+                        NewDeathsPerPopulation: ((country.NewDeaths * 100000) / country.population),
+                        TotalRecoveredPerPopulation: ((country.TotalRecovered * 100000) / country.population),
+                        NewRecoveredPerPopulation: ((country.NewRecovered * 100000) / country.population),
+                    }
+                })
+                const countryIdx = sortByParameter(data, sortParameters[sortedByObj.sortedBy]).findIndex(el => el['Country'] === this.props.globalFilters.geography);
+                if (countryIdx) {
+                    this.listRef.current.children[0].children[0].children[countryIdx].scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start',
+                    });
+                }
             }
         }
 
-        if (this.props.filters.geography !== this.state.geography && this.props.filters.geography) {
-            this.setState({geography: this.props.filters.geography});
-            const countryIdx = sortByParameter(this.props.summaries, sortParameters[this.state.sortedBy]).findIndex(el => el['Country'] === this.props.filters.geography);
-            this.listRef.current.children[0].children[0].children[countryIdx].scrollIntoView({
-                behavior: 'smooth',
-                block: 'center',
-            });
+        if (this.props.globalFilters.geography !== this.state.geography && this.props.globalFilters.geography) {
+            this.setState({geography: this.props.globalFilters.geography});
+            const countryIdx = sortByParameter(this.props.summaries, sortParameters[this.state.sortedBy]).findIndex(el => el['Country'] === this.props.globalFilters.geography);
+            if (countryIdx) {
+                this.listRef.current.children[0].children[0].children[countryIdx].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start',
+                });
+            }
         }
     }
 
