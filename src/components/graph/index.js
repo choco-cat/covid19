@@ -19,11 +19,21 @@ const Graph = ({dataWorld, globalFilters, updateFilters, dataForCountry}) => {
     setCompare(!compare);
   };
 
+  const onCheckChange = (e) => {
+    if (e.target.checked) {
+      updateFilters({geography: ""});
+    } else {
+      if (dataForCountry) {
+        dataForCountry("Belarus");
+      }
+    }
+  };
+
   const handleToggSize = () => {
     setSize(!fullSize);
   };
 
-  const options = {'status': true, 'relative': true, 'world': true};
+  const options = {'status': true, 'relative': true};
 
   return (
     <Draggable position={expanded ? defaultPosition : null}>
@@ -36,8 +46,20 @@ const Graph = ({dataWorld, globalFilters, updateFilters, dataForCountry}) => {
         {
           fullSize ? (
             <div className="block-inner">
-              <h3>{globalFilters.geography ? globalFilters.geography : 'World'}</h3>
+              <h4>{globalFilters.geography ? globalFilters.geography : 'World'}</h4>
+              <div className="filters">
               <Filters globalFilters={globalFilters} updateFilters={updateFilters} dataForCountry={dataForCountry} options={options}/>
+              <div className="adv-filters">
+              <div>
+                  <input
+                    type="checkbox"
+                    name="geography"
+                    value=""
+                    onChange={onCheckChange}
+                    checked={globalFilters.geography === ''}
+                  />
+                  <label htmlFor="geography">World</label>
+              </div>
               <div>
                 <input
                   type="checkbox"
@@ -48,7 +70,8 @@ const Graph = ({dataWorld, globalFilters, updateFilters, dataForCountry}) => {
                 />
                 <label htmlFor="compare">Compare</label>
               </div>
-
+              </div>
+              </div>
               <div className="chart-container">
                 <CovidChart dataWorld={dataWorld} status={globalFilters.status} compare={compare}/>
               </div>

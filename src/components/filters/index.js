@@ -15,18 +15,8 @@ const Filters = ({ globalFilters, updateFilters, dataForCountry, options }) => {
     updateFilters({period: e.target.value});
   };
 
-  const onCheckChange = (e) => {
-    if (e.target.checked) {
-      updateFilters({geography: ""});
-    } else {
-      if (dataForCountry) {
-        dataForCountry("Belarus");
-      }
-    }
-  };
-
   return (
-    <div className="filters">
+    <>
       {
         options.status && (
       <div>
@@ -41,12 +31,15 @@ const Filters = ({ globalFilters, updateFilters, dataForCountry, options }) => {
       {
         options.relative && (
           <div>
+            <div>
             <input
               type="radio"
               value={filters.relative.absolute}
               checked={globalFilters.relative === filters.relative.absolute ? 'selected' : ''}
               onChange={onRadioChangeRelative}/>
             <label htmlFor="dewey">{getFilterName(filters.relative.absolute)}</label>
+            </div>
+            <div>
             <input
               type="radio"
               value={filters.relative.to100men}
@@ -54,11 +47,13 @@ const Filters = ({ globalFilters, updateFilters, dataForCountry, options }) => {
               checked={globalFilters.relative === filters.relative.to100men ? 'selected' : ''}
             />
             <label htmlFor="dewey">{getFilterName(filters.relative.to100men)}</label>
+            </div>
           </div>
         )
       }
       {
         options.period && (
+      <div>
       <div>
         <input
           type="radio"
@@ -66,6 +61,8 @@ const Filters = ({ globalFilters, updateFilters, dataForCountry, options }) => {
           checked={globalFilters.period === filters.period.all ? 'selected' : ''}
           onChange={onRadioChangePeriod}/>
         <label htmlFor="dewey">{getFilterName(filters.period.all)}</label>
+        </div>
+        <div>
         <input
           type="radio"
           value={filters.period.lastDay}
@@ -74,23 +71,10 @@ const Filters = ({ globalFilters, updateFilters, dataForCountry, options }) => {
         />
         <label htmlFor="dewey">{getFilterName(filters.period.lastDay)}</label>
       </div>
-        )
-      }
-      {
-        options.world && (
-      <div>
-        <input
-          type="checkbox"
-          name="geography"
-          value=""
-          onChange={onCheckChange}
-          checked={globalFilters.geography === ''}
-        />
-        <label htmlFor="geography">World</label>
       </div>
         )
       }
-    </div>
+    </>
   );
 };
 

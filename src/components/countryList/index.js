@@ -195,7 +195,7 @@ class CountryList extends React.Component {
                                     <option value="new recovered per 100k">new recovered per 100k</option>
                                 </select>
                             </div>
-                            <input onChange={this.onInputChange} placeholder="Search..." type="text" />
+                            <input onChange={this.onInputChange} placeholder="Search..." type="text" id="searсh" />
                             <ul ref={this.listRef} className="country-list">
                                 <Scrollbars style={{width: 'auto', height: '75vh'}}>
                                     {listItems}

@@ -67,6 +67,7 @@ margin-bottom: 1rem;
   padding: 8px 6px 6px;
   text-align: right;
   background: #efefef;
+  border-bottom: 1px solid #dddddd;
   border-radius: 4px 4px 0 0;
 
   .title {
@@ -103,4 +104,11 @@ margin-bottom: 1rem;
 
 .flex-block {
   display: flex;
+}
+
+.filters div {
+  text-align: left;
+}
+h4 {
+  margin: 0 0 0.5em;
 }
