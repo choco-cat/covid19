@@ -1,9 +1,13 @@
 .summary-wrapper {
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     background-color: white;
     z-index: 1000;
     margin: 2rem;
     border-radius: 10px;
+}
+
+.tables-wrap:last-child {
+    margin-bottom: 15px;
 }
 
 .summaries-table {
@@ -45,14 +49,25 @@
 }
 
 .count-change-wrap {
-    padding: 10px 10px;
+    padding: 15px 10px;
     margin-top: 15px;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     border: 1px solid #ccc;
+    align-items: center;
+
 }
 
 @media screen and (max-width: 600px) {
+
+    .count-change-wrap {
+        padding: 15px 5px;
+        flex-direction: column;
+        div {
+            padding: 5px 0;
+        }
+    }
+
     .summaries-table {
         border: 0;
 

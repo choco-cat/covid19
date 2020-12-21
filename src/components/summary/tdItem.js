@@ -1,3 +1,3 @@
-export default function TdItem(props) {
-    return <td aria-label={props.value}>{props.value}</td>
+export default function TdItem({value, thNames}) {
+    return <td aria-label={thNames}>{value}</td>
 }

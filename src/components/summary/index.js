@@ -5,10 +5,6 @@ import { ReactComponent as ToggleSize } from "../../icons/small.svg";
 import { ReactComponent as Expand } from "../../icons/expand.svg";
 import { sortByParameter } from '../../services/sorting';
 import { calc100Men } from '../../services/calculations';
-import Filters from "../filters";
-
-const defaultPosition = {x: 0, y: 0};
-const options = {'status': false, 'relative': true, 'world': true};
 
 class Summary extends React.Component {
   constructor(props) {
@@ -25,14 +21,14 @@ class Summary extends React.Component {
       currentTotal: this.getBySelect(this.props.summaries),
       currentCountry: this.getBySelect(currentCountryObj),
       defaultCountryTitle: maxCasesCountry,
+      defaultPosition: { x: 0, y: 0 },
       populationWorld: 7 * 10 ** 9,
       populationCountry: population,
       checkedAbsolute: true,
       checkedPer100k: false
     };
 
-    this.handleCountryChange = this.handleCountryChange.bind(this);
-    this.handleTotalChange = this.handleTotalChange.bind(this);
+    this.handleFilterChange = this.handleFilterChange.bind(this);
     this.getBySelect = this.getBySelect.bind(this);
     this.getByCountry = this.getByCountry.bind(this);
     this.handlePer100kChange = this.handlePer100kChange.bind(this);
@@ -65,6 +61,23 @@ class Summary extends React.Component {
       }, {});
   }
 
+  handleAbsoluteChange() {
+
+    const currentCountryObj = this.getByCountry(this.props.summariesCountries, this.props.filters.geography || this.state.defaultCountryTitle);
+
+    this.setState({
+      currentTotal: this.getBySelect(this.props.summaries),
+      currentCountry: this.getBySelect(currentCountryObj),
+      checkedAbsolute: true,
+      checkedPer100k: false,
+    });
+
+    this.props.updateFilters({
+      relative: 'Absolute'
+    })
+  }
+
+
   handlePer100kChange(event) {
     const { getBySelect, getByCountry } = this;
     const { populationCountry, populationWorld, defaultCountryTitle } = this.state
@@ -89,32 +102,7 @@ class Summary extends React.Component {
     })
   }
 
-  handleAbsoluteChange() {
 
-    const currentCountryObj = this.getByCountry(this.props.summariesCountries, this.props.filters.geography || this.state.defaultCountryTitle);
-
-    this.setState({
-      currentTotal: this.getBySelect(this.props.summaries),
-      currentCountry: this.getBySelect(currentCountryObj),
-      checkedAbsolute: true,
-      checkedPer100k: false,
-    });
-
-    this.props.updateFilters({
-      relative: 'Absolute'
-    })
-  }
-
-  handleTotalChange(event) {
-
-    const { checkedPer100k } = this.state;
-    const totalObj = this.summariesSelect(this.props.summaries, event.target.value)
-
-    this.setState({
-      currentTotal: (checkedPer100k) ? totalObj.per100k : totalObj.absolute,
-    });
-
-  }
 
   summariesSelect(obj, e, countrySelected = false) {
 
@@ -134,26 +122,34 @@ class Summary extends React.Component {
     }
   }
 
-  handleCountryChange(event) {
+  handleFilterChange(event) {
+
     const { checkedPer100k } = this.state;
+    const totalObj = this.summariesSelect(this.props.summaries, event.target.value)
     const countryObj = this.summariesSelect(this.props.summariesCountries, event.target.value, true);
 
     this.setState({
+      currentTotal: (checkedPer100k) ? totalObj.per100k : totalObj.absolute,
       currentCountry: (checkedPer100k) ? countryObj.per100k : countryObj.absolute
     });
+
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { filters, summariesCountries } = this.props;
+  componentDidUpdate(prevProps) {
 
-    const currentCountryObj = this.getByCountry(summariesCountries, filters.geography);
+    const { getBySelect, getByCountry } = this;
+    const { filters, summariesCountries } = this.props;
+    const { checkedPer100k, checkedAbsolute, populationCountry } = this.state;
+
+    const countryObj = getByCountry(summariesCountries, filters.geography);
+    const per100kCountry = getBySelect(calc100Men([getBySelect(countryObj)], populationCountry)[0])
 
     if (filters.geography !== prevProps.filters.geography) {
       this.setState({
-        currentCountry: this.getBySelect(currentCountryObj),
-        checkedAbsolute: true,
-        checkedPer100k: false,
-        populationCountry: currentCountryObj.population
+        currentCountry: (checkedPer100k) ? per100kCountry : this.getBySelect(countryObj),
+        checkedAbsolute: checkedAbsolute,
+        checkedPer100k: checkedPer100k,
+        populationCountry: countryObj.population
       })
     }
   }
@@ -169,24 +165,30 @@ class Summary extends React.Component {
   render() {
 
     const { filters } = this.props;
-    const { defaultCountryTitle, currentCountry, currentTotal } = this.state;
+    const { defaultCountryTitle, currentCountry, currentTotal, defaultPosition } = this.state;
 
     return (
-      <Draggable  position={this.state.expanded ? defaultPosition : null}>
+      <Draggable position={this.state.expanded ? defaultPosition : null}>
         <div className={`summary-wrapper ${this.state.expanded ? 'expanded' : ''}`}>
           <div className="controls">
             <div className="title">Summary</div>
-            <ToggleSize className="controls-icons" onClick={() =>this.handleToggSize()} style={{display: !this.state.expanded ? 'inline-block' : 'none'}} />
-            <Expand className="controls-icons" onClick={() => this.handleToggleExpanded()} style={{display: this.state.fullSize ? 'inline-block' : 'none'}} />
+            <ToggleSize className="controls-icons" onClick={() => this.handleToggSize()} style={{ display: !this.state.expanded ? 'inline-block' : 'none' }} />
+            <Expand className="controls-icons" onClick={() => this.handleToggleExpanded()} style={{ display: this.state.fullSize ? 'inline-block' : 'none' }} />
           </div>
           {
             this.state.fullSize ? (
               <div className="tables-wrap">
                 <div className="count-change-wrap">
+                  <div className="table-filter-select-wrap">
+                    <select onChange={this.handleFilterChange}>
+                      <option value="total">Entire period</option>
+                      <option value="lastDay">Last day</option>
+                    </select>
+                  </div>
                   <div className="absolute-change">
                     <label>
                       <input type="radio" value="absolute" checked={filters.relative === 'Absolute'} onChange={this.handleAbsoluteChange} />
-                      Absolute
+                      Absolute count
                     </label>
                   </div>
                   <div className="per100k-change">
@@ -199,20 +201,7 @@ class Summary extends React.Component {
 
                 <Table tableName='Total' current={currentTotal} />
 
-                <div className="total-select-wrap">
-                  <select onChange={this.handleTotalChange}>
-                    <option value="total">Entire period</option>
-                    <option value="lastDay">Last day</option>
-                  </select>
-                </div>
-
                 <Table currentCountryTitle={filters.geography || defaultCountryTitle} tableName='Country' current={currentCountry} />
-                <div className="country-select-wrap">
-                  <select onChange={this.handleCountryChange}>
-                    <option value="total">Entire period</option>
-                    <option value="lastDay">Last day</option>
-                  </select>
-                </div>
 
               </div>
             ) : null
