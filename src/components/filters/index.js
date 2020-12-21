@@ -26,7 +26,7 @@ const Filters = ({ globalFilters, updateFilters, dataForCountry, options }) => {
   };
 
   return (
-    <>
+    <div className="filters">
       {
         options.status && (
       <div>
@@ -90,7 +90,7 @@ const Filters = ({ globalFilters, updateFilters, dataForCountry, options }) => {
       </div>
         )
       }
-    </>
+    </div>
   );
 };
 

@@ -11,6 +11,7 @@
 .map-button {
   z-index: 1000;
   cursor: pointer;
+  position: relative;
 }
 
 .map {
@@ -18,7 +19,7 @@
 }
 
 .map-container {
-  overflow: hidden;
+
 }
 
 .map-legend {

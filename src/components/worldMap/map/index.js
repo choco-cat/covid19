@@ -142,39 +142,37 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters, updateFilter
 
   return (
     <>
-      <div>
-        <button
-          onClick={() => scaleMap(scaleIndex - zoomIndex)}
-          disabled={scaleIndex === 2 * zoomIndex}
-          className='map-button'
-        >
-          <span>-</span>
-        </button>
-        <button
-          onClick={() => scaleMap(scaleIndex + zoomIndex)}
-          disabled={scaleIndex === maxZoom - zoomIndex}
-          className='map-button'
-        >
-          <span>+</span>
-        </button>
-      </div>
-
       <Tooltip customStyles={customStyles} dataCountry={dataCountry} globalFilters={globalFilters}/>
-
       <div className='map-container' onWheel={handleMouseWeel}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="500"
-            width="700"
-            viewBox="0 0 2000 1001"
-            style={{transform: `scale(${scaleIndex}) translate(${diffX}px, ${diffY}px`}}
-            className="map"
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-            onMouseMove={handleMouseMove}
+        <div>
+          <button
+            onClick={() => scaleMap(scaleIndex - zoomIndex)}
+            disabled={scaleIndex === 2 * zoomIndex}
+            className='map-button'
           >
-            {mapCountries}
-          </svg>
+            <span>-</span>
+          </button>
+          <button
+            onClick={() => scaleMap(scaleIndex + zoomIndex)}
+            disabled={scaleIndex === maxZoom - zoomIndex}
+            className='map-button'
+          >
+            <span>+</span>
+          </button>
+        </div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="auto"
+          width="auto"
+          viewBox="0 0 2000 1001"
+          style={{transform: `scale(${scaleIndex}) translate(${diffX}px, ${diffY}px`}}
+          className="map"
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
+        >
+          {mapCountries}
+        </svg>
       </div>
 
       <Legend data={legend} diffCoeff={diffCoeff} globalFilters={globalFilters} updateFilters={updateFilters}/>

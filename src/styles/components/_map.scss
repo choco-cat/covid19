@@ -10,4 +10,18 @@
 
 .world-map-container {
     height: 100vh;
+    overflow: hidden;
+}
+
+.container-block {
+    display: flex;
+}
+
+.map-legend {
+    position: absolute;
+    bottom: 0;
+    width: 500px;
+    margin-left: calc(50% - 250px);
+    margin-bottom: 1em;
+    background: rgba(255, 255, 255, 0.9);
 }

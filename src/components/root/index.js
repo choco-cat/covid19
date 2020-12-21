@@ -112,15 +112,13 @@ const Root = () => {
               handleClickOnCountry={getDataForCountry}
               updateFilters={updateFilter}
             />
-            <div className="summary-container">
-              <Summary
+            <Summary
                 summaries={summaries.Global}
                 summariesCountries = {summaries.Countries}
                 filters={indicatorsForFilter}
                 updateFilters={updateFilter}
-              />
-              <Graph dataWorld={dataAll} globalFilters={indicatorsForFilter} updateFilters={updateFilter} dataForCountry={getDataForCountry}/>
-            </div>
+            />
+            <Graph dataWorld={dataAll} globalFilters={indicatorsForFilter} updateFilters={updateFilter} dataForCountry={getDataForCountry}/>
           </>
         )
       }
