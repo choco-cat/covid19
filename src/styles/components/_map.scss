@@ -22,5 +22,7 @@
     background: rgba(255, 255, 255, 0.9);
     .filters {
         flex-direction: column;
+        justify-content: space-around;
+        align-items: baseline;
     }
 }
