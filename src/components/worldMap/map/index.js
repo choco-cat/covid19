@@ -3,8 +3,11 @@ import country from 'world-map-country-shapes';
 import Tooltip from './tooltip';
 import Legend from './legend';
 import { getColorsFromFilters } from '../../../services/calculations';
+import {ReactComponent as Plus} from "../../../icons/plus.svg";
+import {ReactComponent as Minus} from "../../../icons/minus.svg";
 
 import './index.scss';
+import {ReactComponent as ToggleSize} from "../../../icons/small.svg";
 
 const Map = ({ summaries = [], handleClickOnCountry, globalFilters, updateFilters, handleOnMouseUp }) => {
   const [selectedCountries, setSelectedCountries] = useState({});
@@ -152,14 +155,14 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters, updateFilter
             disabled={scaleIndex === 2 * zoomIndex}
             className='map-button'
           >
-            <span>-</span>
+            <div><Minus className="" style={{}} /></div>
           </button>
           <button
             onClick={() => scaleMap(scaleIndex + zoomIndex)}
             disabled={scaleIndex === maxZoom - zoomIndex}
             className='map-button'
           >
-            <span>+</span>
+            <div><Plus className="" style={{}} /></div>
           </button>
         </div>
         <svg
