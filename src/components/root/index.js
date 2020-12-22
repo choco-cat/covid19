@@ -92,7 +92,6 @@ const Root = () => {
       el.style.zIndex="1";
     });
     e.target.closest('.react-draggable').style.zIndex="6000";
-    console.log(e.target.closest('.react-draggable').style.zIndex);
   };
 
   return (

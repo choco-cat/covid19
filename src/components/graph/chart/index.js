@@ -14,6 +14,9 @@ const chartEvents = [
 ];
 
 const prepereOptions = (data, statuses) => {
+  if(!data || data.length === 0) {
+    return {};
+  }
   return {
     title: '',
     hAxis: {title: "Days", viewWindow: {min: 1, max: data.length}},
@@ -51,7 +54,7 @@ const calculateMaxY = (data) => {
 
 const prepereData = (data, status, compare) => {
   let resultArr = [];
-  if (!data.length || !Array.isArray(data)) {
+  if (!data || !data.length || !Array.isArray(data)) {
     return [];
   }
   if (compare) {
