@@ -6,8 +6,7 @@ import { getColorsFromFilters } from '../../../services/calculations';
 
 import './index.scss';
 
-const Map = ({ summaries = [], handleClickOnCountry, globalFilters, updateFilters }) => {
-
+const Map = ({ summaries = [], handleClickOnCountry, globalFilters, updateFilters, handleOnMouseUp }) => {
   const [selectedCountries, setSelectedCountries] = useState({});
   const [customStyles, setStyle] = useState({ display: 'none' });
   const [dataCountry, setDataCountry] = useState({});
@@ -123,8 +122,8 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters, updateFilter
   const handleMouseDown = (e) => {
     e.stopPropagation();
     setDragStart(true);
-    setMapPositionX(e.pageX - diffX);
-    setMapPositionY(e.pageY - diffY);
+    setMapPositionX(e.pageX - diffX * scaleIndex);
+    setMapPositionY(e.pageY - diffY * scaleIndex);
   };
 
   const handleMouseUp = (e) => {
@@ -142,42 +141,40 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters, updateFilter
 
   return (
     <>
-      <div>
-        <button
-          onClick={() => scaleMap(scaleIndex - zoomIndex)}
-          disabled={scaleIndex === 2 * zoomIndex}
-          className='map-button'
-        >
-          <span>-</span>
-        </button>
-        <button
-          onClick={() => scaleMap(scaleIndex + zoomIndex)}
-          disabled={scaleIndex === maxZoom - zoomIndex}
-          className='map-button'
-        >
-          <span>+</span>
-        </button>
-      </div>
-
       <Tooltip customStyles={customStyles} dataCountry={dataCountry} globalFilters={globalFilters}/>
-
       <div className='map-container' onWheel={handleMouseWeel}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="500"
-            width="700"
-            viewBox="0 0 2000 1001"
-            style={{transform: `scale(${scaleIndex}) translate(${diffX}px, ${diffY}px`}}
-            className="map"
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-            onMouseMove={handleMouseMove}
+        <div>
+          <button
+            onClick={() => scaleMap(scaleIndex - zoomIndex)}
+            disabled={scaleIndex === 2 * zoomIndex}
+            className='map-button'
           >
-            {mapCountries}
-          </svg>
+            <span>-</span>
+          </button>
+          <button
+            onClick={() => scaleMap(scaleIndex + zoomIndex)}
+            disabled={scaleIndex === maxZoom - zoomIndex}
+            className='map-button'
+          >
+            <span>+</span>
+          </button>
+        </div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="auto"
+          width="auto"
+          viewBox="0 0 2000 1001"
+          style={{transform: `scale(${scaleIndex}) translate(${diffX}px, ${diffY}px`}}
+          className="map"
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
+        >
+          {mapCountries}
+        </svg>
       </div>
 
-      <Legend data={legend} diffCoeff={diffCoeff} globalFilters={globalFilters} updateFilters={updateFilters}/>
+      <Legend data={legend} diffCoeff={diffCoeff} globalFilters={globalFilters} updateFilters={updateFilters} handleOnMouseUp={handleOnMouseUp}/>
     </>
   )
 };

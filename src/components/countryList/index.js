@@ -181,7 +181,7 @@ class CountryList extends React.Component {
         let listItems = this.makeList(data);
 
         return (
-          <Draggable position={this.state.expanded ? defaultPosition : null}>
+          <Draggable position={this.state.expanded ? defaultPosition : null} onMouseDown={this.props.handleOnMouseUp}>
               <div
                 ref={this.containerRef}
                 className={`country-list-container ${this.state.expanded ? 'expanded' : ''} ${!this.state.fullSize ? 'min-size' : ''}`}
@@ -193,8 +193,8 @@ class CountryList extends React.Component {
                   </div>
                   {
                       this.state.fullSize ? (
-                        <>
-                            <h2 className="country-list-header">
+                        <div className="block-inner">
+                            <div className="country-list-header">
                                 <span>Sorted by </span>
                                 <select ref={this.selectRef} onChange={this.onSelectChange}>
                                     <option defaultValue="total cases">total cases</option>
@@ -210,15 +210,15 @@ class CountryList extends React.Component {
                                     <option value="total recovered per 100k">total recovered per 100k</option>
                                     <option value="new recovered per 100k">new recovered per 100k</option>
                                 </select>
-                            </h2>
-                            <input onChange={this.onInputChange} placeholder="Search..." type="text" />
+                            </div>
+                            <input onChange={this.onInputChange} placeholder="Search..." type="text" id="searсh" />
                             <ul ref={this.listRef} className="country-list">
-                                <Scrollbars style={{width: 'auto', height: '70vh'}}>
+                                <Scrollbars style={{width: 'auto', height: '75vh'}}>
                                     {listItems}
                                 </Scrollbars>
 
                             </ul>
-                        </>
+                        </div>
                       ) : null
                   }
               </div>
