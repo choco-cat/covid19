@@ -191,21 +191,17 @@ class Summary extends React.Component {
     }
 
     if (globalFilters.geography !== prevProps.globalFilters.geography) {
+      if (globalFilters.geography !== prevProps.globalFilters.geography && globalFilters.geography !== '') {
+        this.setState({
+          currentCountry: (checkedPer100k) ? per100kCountry : this.getBySelect(countryObj),
+          checkedAbsolute: checkedAbsolute,
+          checkedPer100k: checkedPer100k,
+          populationCountry: populationWorld || countryObj.population
 
-      console.log(per100kCountry, 'per100kCountry');
-      console.log(this.getBySelect(countryObj), 'getBySelect')
-
-    if (filters.geography !== prevProps.filters.geography && filters.geography !== '') {
-      this.setState({
-        currentCountry: (checkedPer100k) ? per100kCountry : this.getBySelect(countryObj),
-        checkedAbsolute: checkedAbsolute,
-        checkedPer100k: checkedPer100k,
-        populationCountry: populationWorld || countryObj.population
-
-      })
+        })
+      }
     }
   }
-
   handleToggleExpanded() {
     this.setState({ expanded: !this.state.expanded });
   };
@@ -230,49 +226,49 @@ class Summary extends React.Component {
           {
             this.state.fullSize ? (
               <div className="block-inner">
-              <div className="tables-wrap">
-                <div className="tables-filters-wrap">
-                  <div className='period-wrap'>
-                    <div className='absolute-change'>
-                      <label>
-                        <input type="radio" value={filters.relative.absolute} checked={globalFilters.relative === filters.relative.absolute} onChange={this.handleAbsoluteChange} />
+                <div className="tables-wrap">
+                  <div className="tables-filters-wrap">
+                    <div className='period-wrap'>
+                      <div className='absolute-change'>
+                        <label>
+                          <input type="radio" value={filters.relative.absolute} checked={globalFilters.relative === filters.relative.absolute} onChange={this.handleAbsoluteChange} />
                         Absolute
                       </label>
-                    </div>
+                      </div>
 
-                    <div className='all-time-change'>
-                      <label>
-                        <input type="radio" value={filters.period.all} checked={globalFilters.period === filters.period.all} onChange={this.handleAllChange} />
+                      <div className='all-time-change'>
+                        <label>
+                          <input type="radio" value={filters.period.all} checked={globalFilters.period === filters.period.all} onChange={this.handleAllChange} />
                         All Time
                     </label>
+                      </div>
+
                     </div>
 
-                  </div>
-
-                  <div className="relative-wrap">
-                    <div className="per100k-change">
-                      <label>
-                        <input type="radio" value={filters.relative.to100men} checked={globalFilters.relative === filters.relative.to100men} onChange={this.handlePer100kChange} />
+                    <div className="relative-wrap">
+                      <div className="per100k-change">
+                        <label>
+                          <input type="radio" value={filters.relative.to100men} checked={globalFilters.relative === filters.relative.to100men} onChange={this.handlePer100kChange} />
                         Per 100k
                       </label>
-                    </div>
+                      </div>
 
-                    <div className="lastDay-change">
-                      <label>
-                        <input type="radio" value={filters.period.lastDay} checked={globalFilters.period === filters.period.lastDay} onChange={this.handleLastDayChange} />
+                      <div className="lastDay-change">
+                        <label>
+                          <input type="radio" value={filters.period.lastDay} checked={globalFilters.period === filters.period.lastDay} onChange={this.handleLastDayChange} />
                         Last Day
                     </label>
+                      </div>
+
                     </div>
 
                   </div>
 
+                  <Table tableName='Total' current={currentTotal} />
+
+                  <Table currentCountryTitle={globalFilters.geography || defaultCountryTitle} tableName='Country' current={currentCountry} />
+
                 </div>
-
-                <Table tableName='Total' current={currentTotal} />
-
-                <Table currentCountryTitle={globalFilters.geography || defaultCountryTitle} tableName='Country' current={currentCountry} />
-
-              </div>
               </div>
             ) : null
           }
