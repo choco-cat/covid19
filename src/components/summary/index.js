@@ -227,7 +227,8 @@ class Summary extends React.Component {
             this.state.fullSize ? (
               <div className="block-inner">
                 <div className="tables-wrap">
-                  <div className="tables-filters-wrap">
+                  <div className="border-stroke">
+                  <div className="filters">
                     <div className='period-wrap'>
                       <div className='absolute-change'>
                         <label>
@@ -236,21 +237,22 @@ class Summary extends React.Component {
                       </label>
                       </div>
 
-                      <div className='all-time-change'>
+                      <div className="per100k-change">
                         <label>
-                          <input type="radio" value={filters.period.all} checked={globalFilters.period === filters.period.all} onChange={this.handleAllChange} />
-                        All Time
-                    </label>
+                          <input type="radio" value={filters.relative.to100men} checked={globalFilters.relative === filters.relative.to100men} onChange={this.handlePer100kChange} />
+                          Per 100k
+                        </label>
                       </div>
 
                     </div>
 
                     <div className="relative-wrap">
-                      <div className="per100k-change">
+
+                      <div className='all-time-change'>
                         <label>
-                          <input type="radio" value={filters.relative.to100men} checked={globalFilters.relative === filters.relative.to100men} onChange={this.handlePer100kChange} />
-                        Per 100k
-                      </label>
+                          <input type="radio" value={filters.period.all} checked={globalFilters.period === filters.period.all} onChange={this.handleAllChange} />
+                          All Time
+                        </label>
                       </div>
 
                       <div className="lastDay-change">
@@ -263,7 +265,7 @@ class Summary extends React.Component {
                     </div>
 
                   </div>
-
+                  </div>
                   <Table tableName='Total' current={currentTotal} />
 
                   <Table currentCountryTitle={globalFilters.geography || defaultCountryTitle} tableName='Country' current={currentCountry} />

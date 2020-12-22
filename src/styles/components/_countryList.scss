@@ -22,8 +22,12 @@
 }
 
 .country-list {
-    list-style: none;
     overflow: hidden;
+    padding: 1em 0;
+
+    table {
+        width: 94%;
+    }
 }
 
 .country-list-fullscreen {
@@ -36,8 +40,14 @@
 }
 
 .country-list-item {
-    font-size: 0.7rem;
     cursor: pointer;
+    text-align: left;
+    padding: 0.1em;
+
+    td:last-child {
+        text-align: right;
+        font-weight: 600;
+    }
 }
 
 .country-list-item_selected {
@@ -45,12 +55,14 @@
 }
 
 .country-list-item-country {
-    color: darkred;
+
 }
 
 .country-list-item-flag {
-    width: 1rem;
     height: auto;
+    width: 1.3rem;
+    height: auto;
+    border: 1px solid #ccc;
 }
 
 .fullscreen-button {

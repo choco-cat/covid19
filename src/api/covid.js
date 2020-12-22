@@ -31,6 +31,9 @@ Date: "2020-12-10T00:00:00Z"
 }
 */
 export const getDataCountryFromDays = async (country_slug) => {
+  if(!country_slug) {
+    return;
+  }
   country_slug = country_slug.split('(').join().split(')').join();
   if (cache[country_slug]) {
     return cache[country_slug];

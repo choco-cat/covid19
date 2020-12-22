@@ -50,6 +50,7 @@ const Graph = ({dataWorld, globalFilters, updateFilters, dataForCountry, handleO
           fullSize ? (
             <div className="block-inner">
               <h4>{globalFilters.world ? 'World' : globalFilters.geography}</h4>
+              <div className="border-stroke">
               <div className="filters">
               <Filters globalFilters={globalFilters} updateFilters={updateFilters} dataForCountry={dataForCountry} options={options}/>
               <div className="adv-filters">
@@ -72,6 +73,7 @@ const Graph = ({dataWorld, globalFilters, updateFilters, dataForCountry, handleO
                   onChange={handleToggleCompare}
                 />
                 <label htmlFor="compare">Compare</label>
+              </div>
               </div>
               </div>
               </div>

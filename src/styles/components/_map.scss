@@ -16,13 +16,32 @@
 .map-legend {
     position: absolute;
     bottom: 0;
-    width: 500px;
-    margin-left: calc(50% - 250px);
+    width: 350px;
+    margin-left: calc(50% - 175px);
     margin-bottom: 1em;
     background: rgba(255, 255, 255, 0.9);
+
     .filters {
         flex-direction: column;
         justify-content: space-around;
         align-items: baseline;
+        padding: 0.4em;
+    }
+
+    table {
+        h4 {
+            margin-top: -4px;
+        }
+
+        td {
+            text-align: right;
+
+            span {
+                margin-left: 1em;
+            }
+        }
+        td:last-child {
+           width: 20%;
+        }
     }
 }

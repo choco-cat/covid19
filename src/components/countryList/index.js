@@ -85,7 +85,7 @@ class CountryList extends React.Component {
             this.setState({geography: this.props.globalFilters.geography});
             const countryIdx = sortByParameter(this.props.summaries, sortParameters[this.state.sortedBy]).findIndex(el => el['Country'] === this.props.globalFilters.geography);
             if (countryIdx) {
-                this.listRef.current.children[0].children[0].children[countryIdx].scrollIntoView({
+                this.listRef.current.querySelector('tbody').children[countryIdx].scrollIntoView({
                     behavior: 'smooth',
                     block: 'start',
                 });
@@ -105,11 +105,11 @@ class CountryList extends React.Component {
             amount = new Intl.NumberFormat(userLang, { minimumFractionDigits: 0, maximumFractionDigits: 2}).format(amount);
 
             return (
-                <li className={`country-list-item ${geography === Country ? 'country-list-item_selected' : ''}`} key={index} onClick={() => this.onCountryClick(Country)}>
-                    <img className="country-list-item-flag" loading="lazy" src={flag} alt="flag"/>
-                    <span className="country-list-item-country">{Country} </span>
-                    {amount}
-                </li>
+                <tr className={`country-list-item ${geography === Country ? 'country-list-item_selected' : ''}`} key={index} onClick={() => this.onCountryClick(Country)}>
+                    <td><img className="country-list-item-flag" loading="lazy" src={flag} alt="flag"/></td>
+                    <td><span className="country-list-item-country">{Country} </span></td>
+                    <td>{amount}</td>
+                </tr>
             )
         })
     }
@@ -175,18 +175,23 @@ class CountryList extends React.Component {
                   {
                       this.state.fullSize ? (
                         <div className="block-inner">
-                            <div className="country-list-header">
+                            <div className="border-stroke">
                                 <div className="filters">
                                     <Filters globalFilters={this.props.globalFilters} updateFilters={this.props.updateFilters} options={options}/>
                                 </div>
-                            </div>
                             <input onChange={this.onInputChange} placeholder="Search..." type="text" id="searсh" />
-                            <ul ref={this.listRef} className="country-list">
-                                <Scrollbars style={{width: 'auto', height: '75vh'}}>
+                            </div>
+                            <div ref={this.listRef} className="country-list">
+
+                                <Scrollbars style={{width: 'auto', height: '67vh'}}>
+                                    <table>
+                                        <tbody>
                                     {listItems}
+                                        </tbody>
+                                    </table>
                                 </Scrollbars>
 
-                            </ul>
+                            </div>
                         </div>
                       ) : null
                   }

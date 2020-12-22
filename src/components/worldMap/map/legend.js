@@ -37,11 +37,10 @@ const Legend = ({data, diffCoeff, globalFilters, updateFilters, handleOnMouseUp}
           fullSize ? (
             <div className="block-inner">
               <div className="flex-block">
-                <table style={{margin: 'auto'}}>
+                <table>
                   <thead>
                   <tr>
-                    <th>Colors</th>
-                    <th>{getFilterName(globalFilters.status)} {getFilterName(globalFilters.relative)} {getFilterName(globalFilters.period)}</th>
+                    <th colSpan="3"><h4>{getFilterName(globalFilters.status)} {getFilterName(globalFilters.relative)} {getFilterName(globalFilters.period)}</h4></th>
                   </tr>
                   </thead>
                   <tbody>
@@ -49,22 +48,27 @@ const Legend = ({data, diffCoeff, globalFilters, updateFilters, handleOnMouseUp}
                     data.sort().map((value, index) => (
                       <tr key={index}>
                         <td style={{
-                          width: '25px',
+                          width: '45px',
                           backgroundColor: `rgba(${getColorsFromFilters(globalFilters.status)},${value})`
                         }}/>
+                        <td><span>from </span></td>
                         <td>
-                          from {(new Intl.NumberFormat(userLang, {
+                         <span>
+                          {(new Intl.NumberFormat(userLang, {
                           minimumFractionDigits: 0,
                           maximumFractionDigits: 2
                         }).format((value * diffCoeff).toFixed(roundDijit)))}
+                          </span>
                         </td>
                       </tr>
                     ))
                   }
                   </tbody>
                 </table>
+                <div className="border-stroke">
                 <div className="filters">
                   <Filters globalFilters={globalFilters} updateFilters={updateFilters} options={options}/>
+                </div>
                 </div>
               </div>
             </div>
