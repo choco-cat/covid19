@@ -13,5 +13,9 @@ export const filters = {
     to100men : 'To100men',
   },
   geography: '',
+  allowed: {
+    allowedNew: ['NewConfirmed', 'NewDeaths', 'NewRecovered'],
+    allowedTotal: ['TotalConfirmed', 'TotalDeaths', 'TotalRecovered']
+  },
   world: true,
 };

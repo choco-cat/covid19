@@ -127,7 +127,7 @@ const Root = () => {
             <Summary
                 summaries={summaries.Global}
                 summariesCountries = {summaries.Countries}
-                filters={indicatorsForFilter}
+                globalFilters={indicatorsForFilter}
                 updateFilters={updateFilter}
                 handleOnMouseUp={changeZIndex}
             />
