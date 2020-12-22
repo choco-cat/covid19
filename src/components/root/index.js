@@ -21,11 +21,6 @@ const Root = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState('');
 
-  const [expanded, setExpanded] = useState(false);
-  const [fullSize, setFullSize] = useState(true);
-  const [minimize, setMinimize] = useState(true);
-  const [maximize, setMaximize] = useState(false);
-
   const [indicatorsForFilter, updateIndicators] = useState({
     status: filters.status.confirmed,
     period: filters.period.all,
@@ -99,23 +94,6 @@ const Root = () => {
     e.target.closest('.react-draggable').style.zIndex = "6000";
   };
 
-  const handleFullSize = () => {
-    setExpanded(!expanded)
-    setMinimize(!minimize)
-  };
-
-  const handleMinimize = () => {
-    setFullSize(!fullSize)
-    setMaximize(true)
-    setMinimize(false)
-  }
-
-  const handleMaximize = () => {
-    setFullSize(!fullSize)
-    setMaximize(false)
-    setMinimize(true)
-  }
-
   return (
     <div className="main-container">
       {
@@ -151,7 +129,6 @@ const Root = () => {
                 globalFilters={indicatorsForFilter}
                 updateFilters={updateFilter}
                 handleOnMouseUp={changeZIndex}
-                windowControl = {{states:{expanded, fullSize, minimize, maximize}, handlers : {handleFullSize, handleMinimize, handleMaximize}}}
               />
               <Graph dataWorld={dataAll}
                 globalFilters={indicatorsForFilter}

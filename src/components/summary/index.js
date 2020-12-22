@@ -3,7 +3,9 @@ import Draggable from 'react-draggable';
 import Table from './table';
 import { calc100Men } from '../../services/calculations';
 import { filters } from '../../constants/filters'
-import WindowControl from '../windowControl'
+import { ReactComponent as MinimizeIcon } from "../../icons/small.svg";
+import { ReactComponent as MaximizeIcon } from "../../icons/plus.svg";
+import { ReactComponent as Expand } from "../../icons/expand.svg";
 
 class Summary extends React.Component {
   constructor(props) {
@@ -21,6 +23,11 @@ class Summary extends React.Component {
       defaultCountryTitle: 'Belarus',
       defaultPosition: { x: 0, y: 0 },
 
+      expanded:false,
+      fullSize:true,
+      minimize:true,
+      maximize:false,
+
       populationWorld: 7 * 10 ** 9,
       populationCountry: population,
 
@@ -34,10 +41,8 @@ class Summary extends React.Component {
 
     this.getBySelect = this.getBySelect.bind(this);
     this.getByCountry = this.getByCountry.bind(this);
-
     this.handlePer100kChange = this.handlePer100kChange.bind(this);
     this.handleAbsoluteChange = this.handleAbsoluteChange.bind(this);
-
     this.handleLastDayChange = this.handleLastDayChange.bind(this);
 
   }
@@ -200,25 +205,50 @@ class Summary extends React.Component {
     }
   }
 
+  handleFullSize() {
+    this.setState({
+      expanded: !this.state.expanded,
+      minimize: !this.state.minimize,
+    })
+  };
+
+  handleMinimize() {
+    this.setState({
+      fullSize: !this.state.fullSize,
+      maximize: true,
+      minimize: false
+    })
+  }
+
+  handleMaximize = () => {
+
+    this.setState({
+      fullSize: !this.state.fullSize,
+      maximize: false,
+      minimize: true
+    })
+  }
   
   render() {
 
     const { globalFilters } = this.props;
     const { defaultCountryTitle, currentCountry, currentTotal, defaultPosition } = this.state;
 
-    console.log()
-
     return (
-      <Draggable position={this.props.windowControl.states.expanded ? defaultPosition : null} onMouseDown={this.props.handleOnMouseUp}>
-        <div className={`summary-wrapper ${this.props.windowControl.states.expanded ? 'expanded' : ''}`}>
+      <Draggable position={this.state.expanded ? defaultPosition : null} onMouseDown={this.props.handleOnMouseUp}>
+        <div className={`summary-wrapper ${this.state.expanded ? 'expanded' : ''}`}>
           <div className="controls">
             <div className="title">Summary</div>
 
-            <WindowControl windowStates={this.props.windowControl.states} handlers = {this.props.windowControl.handlers} />
+            <MaximizeIcon className="controls-icons" onClick={() => this.handleMaximize()} style={{ display: this.state.maximize ? 'inline-block' : 'none' }} />
+
+            <MinimizeIcon className="controls-icons" onClick={() => this.handleMinimize()} style={{ display: this.state.minimize ? 'inline-block' : 'none' }} />
+
+            <Expand className="controls-icons" onClick={() =>this.handleFullSize()} style={{ display: this.state.fullSize ? 'inline-block' : 'none' }} />
 
           </div>
           {
-            this.props.windowControl.states.fullSize ? (
+            this.state.fullSize ? (
               <div className="block-inner">
                 <div className="tables-wrap">
                   <div className="border-stroke">
