@@ -25,6 +25,7 @@
     padding: 0;
     width: 100%;
     table-layout: fixed;
+    background: #fff;
 
     .current-country {
         margin-bottom: 15px;
@@ -32,26 +33,21 @@
     }
 
     .title {
-        margin-bottom: 0;
-        margin-top: 20px;
+        margin-top: 0.8em;
     }
 
     th {
-        font-size: .85em;
-        letter-spacing: .1em;
-        text-transform: uppercase;
+        font-weight: normal;
     }
 
     tr {
-        background: #f8f8f8;
         border: 1px solid #ddd;
-        padding: .35em;
     }
 
     th,
     td {
-        padding: .625em;
         text-align: center;
+        padding: 0.5em;
     }
 
 }

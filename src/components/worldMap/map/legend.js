@@ -51,7 +51,7 @@ const Legend = ({data, diffCoeff, globalFilters, updateFilters, handleOnMouseUp}
                           width: '45px',
                           backgroundColor: `rgba(${getColorsFromFilters(globalFilters.status)},${value})`
                         }}/>
-                        <td><span>from </span></td>
+                        <td><span>before</span></td>
                         <td>
                          <span>
                           {(new Intl.NumberFormat(userLang, {

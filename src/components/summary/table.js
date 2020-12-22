@@ -9,8 +9,7 @@ export default function Table({ tableName, current, currentCountryTitle }) {
 
     return (
         <table className='summaries-table'>
-            <caption><h2 className='title'>{tableName}</h2></caption>
-            <caption><h4 className='current-country'>{currentCountryTitle}</h4></caption>
+            <caption><h4 className='title'>{currentCountryTitle ? currentCountryTitle : tableName}</h4></caption>
             <thead>
                 <tr>
                     {thNames.map((el) =>
