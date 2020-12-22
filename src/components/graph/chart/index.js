@@ -17,13 +17,14 @@ const prepereOptions = (data, statuses) => {
   if(!data || data.length === 0) {
     return {};
   }
+
   return {
     title: '',
     hAxis: {title: "Days", viewWindow: {min: 1, max: data.length}},
     vAxis: {title: "", viewWindow: {min: 0, max: calculateMaxY(data)}},
     legend: { position: 'top', maxLines: 3 },
     colors: getColors(statuses),
-    chartArea: { marginleft: '2em', width: '80%', height: '70%' },
+    chartArea: { marginleft: '4em', width: '75%', height: '70%' },
     animation: {
       duration: 600,
       easing: 'out',
