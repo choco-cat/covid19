@@ -7,6 +7,7 @@ import { getSelectFilters, getSortedBy } from "../../services/selectFilters";
 import { getFilterName } from "../../services/calculations";
 import {ReactComponent as ToggleSize} from "../../icons/small.svg";
 import {ReactComponent as Expand} from "../../icons/expand.svg";
+import Filters from "../filters";
 
 const sortParameters = {
     'total cases': 'TotalConfirmed',
@@ -31,27 +32,20 @@ class CountryList extends React.Component {
 
         this.state = {
             sortedBy: 'total cases',
-            status: '',
-            period: '',
-            relative: '',
+            globalFilters: {},
             filterText: '',
-            geography: '',
             expanded: false,
             fullSize: true,
         };
 
         this.listRef = React.createRef();
         this.containerRef = React.createRef();
-        this.selectRef = React.createRef();
     }
 
     componentDidMount() {
         this.setState({
             sortedBy: 'total cases',
-            status: this.props.globalFilters.status,
-            period: this.props.globalFilters.period,
-            relative: this.props.globalFilters.relative,
-            geography: this.props.globalFilters.geography,
+            globalFilters: this.props.globalFilters,
             filterText: '',
             expanded: false,
             fullSize: true,
@@ -59,19 +53,10 @@ class CountryList extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevState.sortedBy !== this.state.sortedBy) {
-            this.props.updateFilters({
-                status: this.state.status,
-                period: this.state.period,
-                relative: this.state.relative,
-                sortedBy: this.state.sortedBy,
-            });
-        }
 
-        if ((this.props.globalFilters.status !== this.state.status || this.props.globalFilters.period !== this.state.period || this.props.globalFilters.relative !== this.state.relative) && this.props !== prevProps) {
+        if ((this.props.globalFilters !== this.state.globalFilters) && this.props !== prevProps) {
             const { status, period, relative } = this.props.globalFilters;
             const sortedByObj = getSortedBy(status, period, relative);
-            this.selectRef.current.selectedIndex = sortedByObj.idx;
             this.setState({ sortedBy: sortedByObj.sortedBy, status, period, relative });
 
             if (this.state.geography) {
@@ -87,7 +72,7 @@ class CountryList extends React.Component {
                     }
                 })
                 const countryIdx = sortByParameter(data, sortParameters[sortedByObj.sortedBy]).findIndex(el => el['Country'] === this.props.globalFilters.geography);
-                if (countryIdx) {
+                if (countryIdx && this.listRef.current.children[0].children[0].children[countryIdx]) {
                     this.listRef.current.children[0].children[0].children[countryIdx].scrollIntoView({
                         behavior: 'smooth',
                         block: 'start',
@@ -115,7 +100,7 @@ class CountryList extends React.Component {
 
         return sortByParameter(data, sortParameters[sortedBy]).map((item, index) => {
             const { Country, flag } = item;
-            const { geography } = this.state;
+            const { geography } = this.state.globalFilters;
             let amount = item[sortParameters[sortedBy]];
             amount = new Intl.NumberFormat(userLang, { minimumFractionDigits: 0, maximumFractionDigits: 2}).format(amount);
 
@@ -128,12 +113,6 @@ class CountryList extends React.Component {
             )
         })
     }
-
-    onSelectChange = (e) => {
-        const optionNumber = e.target.selectedIndex;
-        const { status, period, relative } = getSelectFilters(optionNumber);
-        this.setState({sortedBy: e.target.value, status, period, relative});
-    };
 
     onInputChange = (e) => {
         this.setState({filterText: e.target.value});
@@ -180,6 +159,8 @@ class CountryList extends React.Component {
 
         let listItems = this.makeList(data);
 
+        const options = {'status': true, 'relative': true, 'period': true};
+
         return (
           <Draggable position={this.state.expanded ? defaultPosition : null} onMouseDown={this.props.handleOnMouseUp}>
               <div
@@ -195,21 +176,9 @@ class CountryList extends React.Component {
                       this.state.fullSize ? (
                         <div className="block-inner">
                             <div className="country-list-header">
-                                <span>Sorted by </span>
-                                <select ref={this.selectRef} onChange={this.onSelectChange}>
-                                    <option defaultValue="total cases">total cases</option>
-                                    <option value="new cases">new cases</option>
-                                    <option value="total deaths">total deaths</option>
-                                    <option value="new deaths">new deaths</option>
-                                    <option value="total recovered">total recovered</option>
-                                    <option value="new recovered">new recovered</option>
-                                    <option value="total cases per 100k">total cases per 100k</option>
-                                    <option value="new cases per 100k">new cases per 100k</option>
-                                    <option value="total deaths per 100k">total deaths per 100k</option>
-                                    <option value="new deaths per 100k">new deaths per 100k</option>
-                                    <option value="total recovered per 100k">total recovered per 100k</option>
-                                    <option value="new recovered per 100k">new recovered per 100k</option>
-                                </select>
+                                <div className="filters">
+                                    <Filters globalFilters={this.props.globalFilters} updateFilters={this.props.updateFilters} options={options}/>
+                                </div>
                             </div>
                             <input onChange={this.onInputChange} placeholder="Search..." type="text" id="searсh" />
                             <ul ref={this.listRef} className="country-list">
