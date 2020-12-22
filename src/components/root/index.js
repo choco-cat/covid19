@@ -26,6 +26,7 @@ const Root = () => {
     period: filters.period.all,
     relative: filters.relative.absolute,
     geography: filters.geography,
+    world: filters.world,
   });
 
   useEffect(() => {
@@ -56,12 +57,12 @@ const Root = () => {
   }, []);
 
   useEffect(() => {
-    if (indicatorsForFilter.geography) {
+    if (indicatorsForFilter.world) {
+      setDataAll(getData(dataWorldFromDays, indicatorsForFilter));
+    } else if(indicatorsForFilter.geography) {
       const country = indicatorsForFilter.geography;
       const population = missedPopulations[country] || flags.find(flag => flag.name === country).population;
       setDataAll(getData(dataCountryFromDays, indicatorsForFilter, population));
-    } else {
-      setDataAll(getData(dataWorldFromDays, indicatorsForFilter));
     }
     //для карты
       setDataMap(getDataCountries(summaries.Countries, indicatorsForFilter));
@@ -78,11 +79,20 @@ const Root = () => {
     //Тут уже страна выбрана
     updateIndicators({
       ...indicatorsForFilter,
-      geography: country
+      geography: country,
+      world: false
     });
 
     const dataCountryFromDaysResult = await getDataCountryFromDays(country);
     setDataCountry(dataCountryFromDaysResult);
+  };
+
+  const changeZIndex = (e) => {
+    document.querySelectorAll('.react-draggable').forEach(el => {
+      el.style.zIndex="1";
+    });
+    e.target.closest('.react-draggable').style.zIndex="6000";
+    console.log(e.target.closest('.react-draggable').style.zIndex);
   };
 
   return (
@@ -102,25 +112,31 @@ const Root = () => {
             <CountryList
               summaries={summaries.Countries}
               flags={flags}
-              filters={indicatorsForFilter}
-              updateFilter={updateFilter}
+              globalFilters={indicatorsForFilter}
+              updateFilters={updateFilter}
               handleClickOnCountry={getDataForCountry}
+              handleOnMouseUp={changeZIndex}
             />
             <WorldMap
               summaries={dataMap}
               globalFilters={indicatorsForFilter}
               handleClickOnCountry={getDataForCountry}
               updateFilters={updateFilter}
+              handleOnMouseUp={changeZIndex}
             />
-            <div className="summary-container">
-              <Summary
+            <Summary
                 summaries={summaries.Global}
                 summariesCountries = {summaries.Countries}
                 globalFilters={indicatorsForFilter}
                 updateFilters={updateFilter}
-              />
-              <Graph dataWorld={dataAll} globalFilters={indicatorsForFilter} updateFilters={updateFilter} dataForCountry={getDataForCountry}/>
-            </div>
+                handleOnMouseUp={changeZIndex}
+            />
+            <Graph dataWorld={dataAll}
+                   globalFilters={indicatorsForFilter}
+                   updateFilters={updateFilter}
+                   dataForCountry={getDataForCountry}
+                   handleOnMouseUp={changeZIndex}
+            />
           </>
         )
       }

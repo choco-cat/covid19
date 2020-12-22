@@ -16,6 +16,6 @@ export const filters = {
   allowed: {
     allowedNew: ['NewConfirmed', 'NewDeaths', 'NewRecovered'],
     allowedTotal: ['TotalConfirmed', 'TotalDeaths', 'TotalRecovered']
-  }
-
+  },
+  world: true,
 };

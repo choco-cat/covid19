@@ -5,27 +5,133 @@
 
 .main-container {
   text-align: center;
-  display: grid;
-  grid-template-columns: 1fr 4fr 2fr;
   height: 100vh;
-  overflow: hidden;
   position: relative;
 }
 
-.summary-container {
-  display: flex;
+.country-list-container, .summary-wrapper, .graph-wrapper {
+  /*display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;*/
+  position: absolute;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 4px 4px 0 0;
+  box-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);
+}
+
+.map-legend {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 4px 4px 0 0;
+  box-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);
+}
+
+.country-list-container {
+  width: 300px;
+}
+
+.summary-wrapper {
+  width: 300px;
+  top:0;
+  right: 0;
+}
+
+.graph-wrapper {
+  width: 350px;
+  bottom: 0;
+  right: 0;
+  overflow: hidden;
+}
+
+.summary-container {
+  top:0;
+  right: 0;
+}
+
+.graph-wrapper {
+
 }
 
 .main-loader {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
 
-  & > div {
-    margin: 0 auto;
-    margin-bottom: 1rem;
+& > div {
+margin: 0 auto;
+margin-bottom: 1rem;
+}
+}
+
+.controls {
+  padding: 8px 6px 6px;
+  text-align: right;
+  background: #efefef;
+  border-bottom: 1px solid #dddddd;
+  border-radius: 4px 4px 0 0;
+
+  .title {
+    margin-left: 0.5em;
+    float: left;
+    font-weight: 600;
+    line-height: 1em;
   }
+}
+
+.expanded {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: 0;
+  width: 100% !important;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  z-index: 2000;
+  background: #fff !important;
+
+  .filters {
+    display: inline-flex;
+  }
+}
+
+.block-inner {
+  padding: 0.8em;
+  box-sizing: border-box;
+}
+
+.expanded .block-inner {
+  flex: 1 0 auto;
+  max-height: none;
+}
+
+.flex-block {
+  display: flex;
+}
+
+.filters div {
+  text-align: left;
+}
+
+.filters > div {
+  margin: 0.5em;
+}
+
+.filters {
+  align-items: center;
+  border: 1px solid #dddddd;
+  padding: 0.5em;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+
+  div {
+    margin: 0 0.3em;
+  }
+}
+
+h4 {
+  margin: 0 0 0.5em;
 }

@@ -195,6 +195,7 @@ class Summary extends React.Component {
       console.log(per100kCountry, 'per100kCountry');
       console.log(this.getBySelect(countryObj), 'getBySelect')
 
+    if (filters.geography !== prevProps.filters.geography && filters.geography !== '') {
       this.setState({
         currentCountry: (checkedPer100k) ? per100kCountry : this.getBySelect(countryObj),
         checkedAbsolute: checkedAbsolute,
@@ -219,7 +220,7 @@ class Summary extends React.Component {
     const { defaultCountryTitle, currentCountry, currentTotal, defaultPosition } = this.state;
 
     return (
-      <Draggable position={this.state.expanded ? defaultPosition : null}>
+      <Draggable position={this.state.expanded ? defaultPosition : null} onMouseDown={this.props.handleOnMouseUp}>
         <div className={`summary-wrapper ${this.state.expanded ? 'expanded' : ''}`}>
           <div className="controls">
             <div className="title">Summary</div>
@@ -228,6 +229,7 @@ class Summary extends React.Component {
           </div>
           {
             this.state.fullSize ? (
+              <div className="block-inner">
               <div className="tables-wrap">
                 <div className="tables-filters-wrap">
                   <div className='period-wrap'>
@@ -270,6 +272,7 @@ class Summary extends React.Component {
 
                 <Table currentCountryTitle={globalFilters.geography || defaultCountryTitle} tableName='Country' current={currentCountry} />
 
+              </div>
               </div>
             ) : null
           }
