@@ -165,7 +165,7 @@ class CountryList extends React.Component {
         let listItems = this.makeList(data);
 
         return (
-          <Draggable position={this.state.expanded ? defaultPosition : null}>
+          <Draggable position={this.state.expanded ? defaultPosition : null} onMouseDown={this.props.handleOnMouseUp}>
               <div
                 ref={this.containerRef}
                 className={`country-list-container ${this.state.expanded ? 'expanded' : ''} ${!this.state.fullSize ? 'min-size' : ''}`}

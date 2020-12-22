@@ -95,6 +95,7 @@ margin-bottom: 1rem;
 
 .block-inner {
   padding: 0.8em;
+  box-sizing: border-box;
 }
 
 .expanded .block-inner {
@@ -109,6 +110,24 @@ margin-bottom: 1rem;
 .filters div {
   text-align: left;
 }
+
+.filters > div {
+  margin: 0.5em;
+}
+
+.filters {
+  align-items: center;
+  border: 1px solid #dddddd;
+  padding: 0.5em;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+
+  div {
+    margin: 0 0.3em;
+  }
+}
+
 h4 {
   margin: 0 0 0.5em;
 }

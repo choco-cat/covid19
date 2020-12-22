@@ -6,7 +6,7 @@ import { getColorsFromFilters, getFilterName } from '../../../services/calculati
 import { filters } from "../../../constants/filters";
 import Filters from "../../filters";
 
-const Legend = ({ data, diffCoeff, globalFilters, updateFilters }) => {
+const Legend = ({data, diffCoeff, globalFilters, updateFilters, handleOnMouseUp}) => {
   const [expanded, setExpanded] = useState(false);
   const [fullSize, setSize] = useState(true);
   const defaultPosition = {x: 0, y: 0};
@@ -24,39 +24,49 @@ const Legend = ({ data, diffCoeff, globalFilters, updateFilters }) => {
   const userLang = navigator.language;
 
   return (
-    <Draggable position={expanded ? defaultPosition : null}>
+    <Draggable position={expanded ? defaultPosition : null} onMouseDown={handleOnMouseUp}>
       <div className={`map-legend ${expanded ? 'expanded' : ''}`}>
         <div className="controls">
           <div className="title">Legend</div>
-          <ToggleSize className="controls-icons" onClick={handleToggSize} style={{display: !expanded ? 'inline-block' : 'none'}} />
-          <Expand className="controls-icons" onClick={handleToggleExpanded} style={{display: fullSize ? 'inline-block' : 'none'}} />
+          <ToggleSize className="controls-icons" onClick={handleToggSize}
+                      style={{display: !expanded ? 'inline-block' : 'none'}}/>
+          <Expand className="controls-icons" onClick={handleToggleExpanded}
+                  style={{display: fullSize ? 'inline-block' : 'none'}}/>
         </div>
         {
           fullSize ? (
             <div className="block-inner">
               <div className="flex-block">
-            <table style={{margin: 'auto'}}>
-              <thead>
-              <tr>
-                <th>Colors</th>
-                <th>{getFilterName(globalFilters.status)} {getFilterName(globalFilters.relative)} {getFilterName(globalFilters.period)}</th>
-              </tr>
-              </thead>
-              <tbody>
-              {
-                data.sort().map((value, index) => (
-                  <tr key={index}>
-                    <td style={{width: '25px', backgroundColor: `rgba(${getColorsFromFilters(globalFilters.status)},${value})`}} />
-                    <td>
-                      from {(new Intl.NumberFormat(userLang, { minimumFractionDigits: 0, maximumFractionDigits: 2}).format((value * diffCoeff).toFixed(roundDijit)))}
-                    </td>
+                <table style={{margin: 'auto'}}>
+                  <thead>
+                  <tr>
+                    <th>Colors</th>
+                    <th>{getFilterName(globalFilters.status)} {getFilterName(globalFilters.relative)} {getFilterName(globalFilters.period)}</th>
                   </tr>
-                ))
-              }
-              </tbody>
-            </table>
-            <Filters globalFilters={globalFilters} updateFilters={updateFilters} options={options}/>
-            </div>
+                  </thead>
+                  <tbody>
+                  {
+                    data.sort().map((value, index) => (
+                      <tr key={index}>
+                        <td style={{
+                          width: '25px',
+                          backgroundColor: `rgba(${getColorsFromFilters(globalFilters.status)},${value})`
+                        }}/>
+                        <td>
+                          from {(new Intl.NumberFormat(userLang, {
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 2
+                        }).format((value * diffCoeff).toFixed(roundDijit)))}
+                        </td>
+                      </tr>
+                    ))
+                  }
+                  </tbody>
+                </table>
+                <div className="filters">
+                  <Filters globalFilters={globalFilters} updateFilters={updateFilters} options={options}/>
+                </div>
+              </div>
             </div>
           ) : null
         }

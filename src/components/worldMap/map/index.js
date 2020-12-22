@@ -6,8 +6,7 @@ import { getColorsFromFilters } from '../../../services/calculations';
 
 import './index.scss';
 
-const Map = ({ summaries = [], handleClickOnCountry, globalFilters, updateFilters }) => {
-
+const Map = ({ summaries = [], handleClickOnCountry, globalFilters, updateFilters, handleOnMouseUp }) => {
   const [selectedCountries, setSelectedCountries] = useState({});
   const [customStyles, setStyle] = useState({ display: 'none' });
   const [dataCountry, setDataCountry] = useState({});
@@ -175,7 +174,7 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters, updateFilter
         </svg>
       </div>
 
-      <Legend data={legend} diffCoeff={diffCoeff} globalFilters={globalFilters} updateFilters={updateFilters}/>
+      <Legend data={legend} diffCoeff={diffCoeff} globalFilters={globalFilters} updateFilters={updateFilters} handleOnMouseUp={handleOnMouseUp}/>
     </>
   )
 };

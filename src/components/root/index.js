@@ -87,6 +87,14 @@ const Root = () => {
     setDataCountry(dataCountryFromDaysResult);
   };
 
+  const changeZIndex = (e) => {
+    document.querySelectorAll('.react-draggable').forEach(el => {
+      el.style.zIndex="1";
+    });
+    e.target.closest('.react-draggable').style.zIndex="6000";
+    console.log(e.target.closest('.react-draggable').style.zIndex);
+  };
+
   return (
     <div className="main-container">
       {
@@ -107,20 +115,28 @@ const Root = () => {
               filters={indicatorsForFilter}
               updateFilter={updateFilter}
               handleClickOnCountry={getDataForCountry}
+              handleOnMouseUp={changeZIndex}
             />
             <WorldMap
               summaries={dataMap}
               globalFilters={indicatorsForFilter}
               handleClickOnCountry={getDataForCountry}
               updateFilters={updateFilter}
+              handleOnMouseUp={changeZIndex}
             />
             <Summary
                 summaries={summaries.Global}
                 summariesCountries = {summaries.Countries}
                 filters={indicatorsForFilter}
                 updateFilters={updateFilter}
+                handleOnMouseUp={changeZIndex}
             />
-            <Graph dataWorld={dataAll} globalFilters={indicatorsForFilter} updateFilters={updateFilter} dataForCountry={getDataForCountry}/>
+            <Graph dataWorld={dataAll}
+                   globalFilters={indicatorsForFilter}
+                   updateFilters={updateFilter}
+                   dataForCountry={getDataForCountry}
+                   handleOnMouseUp={changeZIndex}
+            />
           </>
         )
       }

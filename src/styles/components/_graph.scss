@@ -12,19 +12,6 @@ h2, h3{
     top: initial;
     bottom: initial;
     transform: translate(0, 0);
-
-    .filters {
-        align-items: center;
-        border: 1px solid #dddddd;
-        padding: 0.5em;
-        background: #fff;
-        display: flex;
-        justify-content: space-between;
-
-        div {
-            margin: 0 0.3em;
-        }
-    }
 }
 
 .graph-filters {

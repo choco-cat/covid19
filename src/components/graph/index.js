@@ -5,7 +5,7 @@ import { ReactComponent as Expand } from '../../icons/expand.svg';
 import { ReactComponent as ToggleSize } from '../../icons/small.svg';
 import Filters from '../filters';
 
-const Graph = ({dataWorld, globalFilters, updateFilters, dataForCountry}) => {
+const Graph = ({dataWorld, globalFilters, updateFilters, dataForCountry, handleOnMouseUp}) => {
   const [expanded, setExpanded] = useState(false);
   const [fullSize, setSize] = useState(true);
   const [compare, setCompare] = useState(false);
@@ -39,7 +39,7 @@ const Graph = ({dataWorld, globalFilters, updateFilters, dataForCountry}) => {
   const options = {'status': true, 'relative': true};
 
   return (
-    <Draggable position={expanded ? defaultPosition : null}>
+    <Draggable position={expanded ? defaultPosition : null} onMouseDown={handleOnMouseUp}>
       <div className={`graph-wrapper ${expanded ? 'expanded' : ''}`}>
         <div className="controls">
           <div className="title">Chart</div>

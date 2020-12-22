@@ -168,7 +168,7 @@ class Summary extends React.Component {
     const { defaultCountryTitle, currentCountry, currentTotal, defaultPosition } = this.state;
 
     return (
-      <Draggable position={this.state.expanded ? defaultPosition : null}>
+      <Draggable position={this.state.expanded ? defaultPosition : null} onMouseDown={this.props.handleOnMouseUp}>
         <div className={`summary-wrapper ${this.state.expanded ? 'expanded' : ''}`}>
           <div className="controls">
             <div className="title">Summary</div>
