@@ -26,6 +26,7 @@ const Root = () => {
     period: filters.period.all,
     relative: filters.relative.absolute,
     geography: filters.geography,
+    world: filters.world,
   });
 
   useEffect(() => {
@@ -56,12 +57,12 @@ const Root = () => {
   }, []);
 
   useEffect(() => {
-    if (indicatorsForFilter.geography) {
+    if (indicatorsForFilter.world) {
+      setDataAll(getData(dataWorldFromDays, indicatorsForFilter));
+    } else if(indicatorsForFilter.geography) {
       const country = indicatorsForFilter.geography;
       const population = missedPopulations[country] || flags.find(flag => flag.name === country).population;
       setDataAll(getData(dataCountryFromDays, indicatorsForFilter, population));
-    } else {
-      setDataAll(getData(dataWorldFromDays, indicatorsForFilter));
     }
     //для карты
       setDataMap(getDataCountries(summaries.Countries, indicatorsForFilter));
@@ -78,7 +79,8 @@ const Root = () => {
     //Тут уже страна выбрана
     updateIndicators({
       ...indicatorsForFilter,
-      geography: country
+      geography: country,
+      world: false
     });
 
     const dataCountryFromDaysResult = await getDataCountryFromDays(country);

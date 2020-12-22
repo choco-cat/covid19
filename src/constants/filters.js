@@ -13,4 +13,5 @@ export const filters = {
     to100men : 'To100men',
   },
   geography: '',
+  world: true,
 };

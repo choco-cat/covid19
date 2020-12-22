@@ -21,10 +21,13 @@ const Graph = ({dataWorld, globalFilters, updateFilters, dataForCountry}) => {
 
   const onCheckChange = (e) => {
     if (e.target.checked) {
-      updateFilters({geography: ""});
+      updateFilters({world: true});
     } else {
-      if (dataForCountry) {
-        dataForCountry("Belarus");
+      updateFilters({world: false});
+      if (dataForCountry && globalFilters.geography) {
+        dataForCountry(globalFilters.geography);
+      } else {
+        dataForCountry('Belarus');
       }
     }
   };
@@ -46,19 +49,19 @@ const Graph = ({dataWorld, globalFilters, updateFilters, dataForCountry}) => {
         {
           fullSize ? (
             <div className="block-inner">
-              <h4>{globalFilters.geography ? globalFilters.geography : 'World'}</h4>
+              <h4>{globalFilters.world ? 'World' : globalFilters.geography}</h4>
               <div className="filters">
               <Filters globalFilters={globalFilters} updateFilters={updateFilters} dataForCountry={dataForCountry} options={options}/>
               <div className="adv-filters">
               <div>
                   <input
                     type="checkbox"
-                    name="geography"
+                    name="world"
                     value=""
                     onChange={onCheckChange}
-                    checked={globalFilters.geography === ''}
+                    checked={globalFilters.world === true}
                   />
-                  <label htmlFor="geography">World</label>
+                  <label htmlFor="world">World</label>
               </div>
               <div>
                 <input
