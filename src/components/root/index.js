@@ -59,13 +59,13 @@ const Root = () => {
   useEffect(() => {
     if (indicatorsForFilter.world) {
       setDataAll(getData(dataWorldFromDays, indicatorsForFilter));
-    } else if(indicatorsForFilter.geography) {
+    } else if (indicatorsForFilter.geography) {
       const country = indicatorsForFilter.geography;
       const population = missedPopulations[country] || flags.find(flag => flag.name === country).population;
       setDataAll(getData(dataCountryFromDays, indicatorsForFilter, population));
     }
     //для карты
-      setDataMap(getDataCountries(summaries.Countries, indicatorsForFilter));
+    setDataMap(getDataCountries(summaries.Countries, indicatorsForFilter));
   }, [indicatorsForFilter, summaries, dataWorldFromDays, dataCountryFromDays, flags]);
 
   const updateFilter = (newFilterParams) => {
@@ -89,9 +89,9 @@ const Root = () => {
 
   const changeZIndex = (e) => {
     document.querySelectorAll('.react-draggable').forEach(el => {
-      el.style.zIndex="1";
+      el.style.zIndex = "1";
     });
-    e.target.closest('.react-draggable').style.zIndex="6000";
+    e.target.closest('.react-draggable').style.zIndex = "6000";
   };
 
   return (
@@ -107,37 +107,37 @@ const Root = () => {
             {error}
           </div>
         ) : (
-          <>
-            <CountryList
-              summaries={summaries.Countries}
-              flags={flags}
-              globalFilters={indicatorsForFilter}
-              updateFilters={updateFilter}
-              handleClickOnCountry={getDataForCountry}
-              handleOnMouseUp={changeZIndex}
-            />
-            <WorldMap
-              summaries={dataMap}
-              globalFilters={indicatorsForFilter}
-              handleClickOnCountry={getDataForCountry}
-              updateFilters={updateFilter}
-              handleOnMouseUp={changeZIndex}
-            />
-            <Summary
+            <>
+              <CountryList
+                summaries={summaries.Countries}
+                flags={flags}
+                globalFilters={indicatorsForFilter}
+                updateFilters={updateFilter}
+                handleClickOnCountry={getDataForCountry}
+                handleOnMouseUp={changeZIndex}
+              />
+              <WorldMap
+                summaries={dataMap}
+                globalFilters={indicatorsForFilter}
+                handleClickOnCountry={getDataForCountry}
+                updateFilters={updateFilter}
+                handleOnMouseUp={changeZIndex}
+              />
+              <Summary
                 summaries={summaries.Global}
-                summariesCountries = {summaries.Countries}
+                summariesCountries={summaries.Countries}
                 globalFilters={indicatorsForFilter}
                 updateFilters={updateFilter}
                 handleOnMouseUp={changeZIndex}
-            />
-            <Graph dataWorld={dataAll}
-                   globalFilters={indicatorsForFilter}
-                   updateFilters={updateFilter}
-                   dataForCountry={getDataForCountry}
-                   handleOnMouseUp={changeZIndex}
-            />
-          </>
-        )
+              />
+              <Graph dataWorld={dataAll}
+                globalFilters={indicatorsForFilter}
+                updateFilters={updateFilter}
+                dataForCountry={getDataForCountry}
+                handleOnMouseUp={changeZIndex}
+              />
+            </>
+          )
       }
     </div>
   );
