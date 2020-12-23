@@ -3,11 +3,10 @@ import country from 'world-map-country-shapes';
 import Tooltip from './tooltip';
 import Legend from './legend';
 import { getColorsFromFilters } from '../../../services/calculations';
-import {ReactComponent as Plus} from "../../../icons/plus.svg";
-import {ReactComponent as Minus} from "../../../icons/minus.svg";
+import {ReactComponent as Plus} from "../../../icons/plus_map.svg";
+import {ReactComponent as Minus} from "../../../icons/minus_map.svg";
 
 import './index.scss';
-import {ReactComponent as ToggleSize} from "../../../icons/small.svg";
 
 const Map = ({ summaries = [], handleClickOnCountry, globalFilters, updateFilters, handleOnMouseUp }) => {
   const [selectedCountries, setSelectedCountries] = useState({});
