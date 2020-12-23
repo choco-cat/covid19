@@ -39,6 +39,7 @@ class CountryList extends React.Component {
         };
 
         this.listRef = React.createRef();
+        this.tbodyRef = React.createRef();
         this.containerRef = React.createRef();
     }
 
@@ -54,42 +55,43 @@ class CountryList extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
 
-        if ((this.props.globalFilters !== this.state.globalFilters) && this.props !== prevProps) {
+        const scrollToActive = () => {
             const { status, period, relative } = this.props.globalFilters;
+            const sortedByObj = getSortedBy(status, period, relative);
+
+            const data = this.props.summaries.map(country => {
+                return {
+                    ...country,
+                    TotalConfirmedPerPopulation: ((country.TotalConfirmed * 100000) / country.population),
+                    NewConfirmedPerPopulation: ((country.NewConfirmed * 100000) / country.population),
+                    TotalDeathsPerPopulation: ((country.TotalDeaths * 100000) / country.population),
+                    NewDeathsPerPopulation: ((country.NewDeaths * 100000) / country.population),
+                    TotalRecoveredPerPopulation: ((country.TotalRecovered * 100000) / country.population),
+                    NewRecoveredPerPopulation: ((country.NewRecovered * 100000) / country.population),
+                }
+            })
+            const countryIdx = sortByParameter(data, sortParameters[sortedByObj.sortedBy]).findIndex(el => el['Country'] === this.props.globalFilters.geography);
+            if (countryIdx && this.tbodyRef.current.children[countryIdx]) {
+
+                this.tbodyRef.current.children[countryIdx].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start',
+                });
+            }
+        }
+
+        if ((this.props.globalFilters !== this.state.globalFilters) && this.props !== prevProps) {
+            const { status, period, relative, geography } = this.props.globalFilters;
             const sortedByObj = getSortedBy(status, period, relative);
             this.setState({ sortedBy: sortedByObj.sortedBy, status, period, relative });
 
-            if (this.state.geography) {
-                const data = this.props.summaries.map(country => {
-                    return {
-                        ...country,
-                        TotalConfirmedPerPopulation: ((country.TotalConfirmed * 100000) / country.population),
-                        NewConfirmedPerPopulation: ((country.NewConfirmed * 100000) / country.population),
-                        TotalDeathsPerPopulation: ((country.TotalDeaths * 100000) / country.population),
-                        NewDeathsPerPopulation: ((country.NewDeaths * 100000) / country.population),
-                        TotalRecoveredPerPopulation: ((country.TotalRecovered * 100000) / country.population),
-                        NewRecoveredPerPopulation: ((country.NewRecovered * 100000) / country.population),
-                    }
-                })
-                const countryIdx = sortByParameter(data, sortParameters[sortedByObj.sortedBy]).findIndex(el => el['Country'] === this.props.globalFilters.geography);
-                if (countryIdx && this.listRef.current.children[0].children[0].children[countryIdx]) {
-                    this.listRef.current.children[0].children[0].children[countryIdx].scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start',
-                    });
-                }
+            if (geography) {
+                scrollToActive()
             }
         }
 
         if (this.props.globalFilters.geography !== this.state.geography && this.props.globalFilters.geography) {
             this.setState({geography: this.props.globalFilters.geography});
-            const countryIdx = sortByParameter(this.props.summaries, sortParameters[this.state.sortedBy]).findIndex(el => el['Country'] === this.props.globalFilters.geography);
-            if (countryIdx) {
-                this.listRef.current.querySelector('tbody').children[countryIdx].scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start',
-                });
-            }
         }
     }
 
@@ -100,7 +102,7 @@ class CountryList extends React.Component {
 
         return sortByParameter(data, sortParameters[sortedBy]).map((item, index) => {
             const { Country, flag } = item;
-            const { geography } = this.state.globalFilters;
+            const { geography } = this.props.globalFilters;
             let amount = item[sortParameters[sortedBy]];
             amount = new Intl.NumberFormat(userLang, { minimumFractionDigits: 0, maximumFractionDigits: 2}).format(amount);
 
@@ -183,9 +185,9 @@ class CountryList extends React.Component {
                             </div>
                             <div ref={this.listRef} className="country-list">
 
-                                <Scrollbars style={{width: 'auto', height: '67vh'}}>
+                                <Scrollbars style={{width: 'auto', height: '60vh'}}>
                                     <table>
-                                        <tbody>
+                                        <tbody ref={this.tbodyRef}>
                                     {listItems}
                                         </tbody>
                                     </table>
