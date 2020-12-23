@@ -1,10 +1,11 @@
 import React from 'react';
 import Draggable from 'react-draggable';
 import Table from './table';
-import { ReactComponent as ToggleSize } from "../../icons/small.svg";
-import { ReactComponent as Expand } from "../../icons/expand.svg";
 import { calc100Men } from '../../services/calculations';
 import { filters } from '../../constants/filters'
+import { ReactComponent as MinimizeIcon } from "../../icons/small.svg";
+import { ReactComponent as MaximizeIcon } from "../../icons/plus.svg";
+import { ReactComponent as Expand } from "../../icons/expand.svg";
 
 class Summary extends React.Component {
   constructor(props) {
@@ -15,14 +16,17 @@ class Summary extends React.Component {
 
     this.state = {
       current: this.getBySelect(),
-      expanded: false,
-      fullSize: true,
 
       currentTotal: this.getBySelect(this.props.summaries),
       currentCountry: this.getBySelect(currentCountryObj),
 
       defaultCountryTitle: 'Belarus',
       defaultPosition: { x: 0, y: 0 },
+
+      expanded:false,
+      fullSize:true,
+      minimize:true,
+      maximize:false,
 
       populationWorld: 7 * 10 ** 9,
       populationCountry: population,
@@ -37,12 +41,10 @@ class Summary extends React.Component {
 
     this.getBySelect = this.getBySelect.bind(this);
     this.getByCountry = this.getByCountry.bind(this);
-
     this.handlePer100kChange = this.handlePer100kChange.bind(this);
     this.handleAbsoluteChange = this.handleAbsoluteChange.bind(this);
-
     this.handleLastDayChange = this.handleLastDayChange.bind(this);
-    this.handleAllChange = this.handleAllChange.bind(this);
+
   }
 
   getByCountry(countries, findCountry) {
@@ -202,14 +204,31 @@ class Summary extends React.Component {
       }
     }
   }
-  handleToggleExpanded() {
-    this.setState({ expanded: !this.state.expanded });
+
+  handleFullSize() {
+    this.setState({
+      expanded: !this.state.expanded,
+      minimize: !this.state.minimize,
+    })
   };
 
-  handleToggSize() {
-    this.setState({ fullSize: !this.state.fullSize });
-  };
+  handleMinimize() {
+    this.setState({
+      fullSize: !this.state.fullSize,
+      maximize: true,
+      minimize: false
+    })
+  }
 
+  handleMaximize = () => {
+
+    this.setState({
+      fullSize: !this.state.fullSize,
+      maximize: false,
+      minimize: true
+    })
+  }
+  
   render() {
 
     const { globalFilters } = this.props;
@@ -220,8 +239,13 @@ class Summary extends React.Component {
         <div className={`summary-wrapper ${this.state.expanded ? 'expanded' : ''}`}>
           <div className="controls">
             <div className="title">Summary</div>
-            <ToggleSize className="controls-icons" onClick={() => this.handleToggSize()} style={{ display: !this.state.expanded ? 'inline-block' : 'none' }} />
-            <Expand className="controls-icons" onClick={() => this.handleToggleExpanded()} style={{ display: this.state.fullSize ? 'inline-block' : 'none' }} />
+
+            <MaximizeIcon className="controls-icons" onClick={() => this.handleMaximize()} style={{ display: this.state.maximize ? 'inline-block' : 'none' }} />
+
+            <MinimizeIcon className="controls-icons" onClick={() => this.handleMinimize()} style={{ display: this.state.minimize ? 'inline-block' : 'none' }} />
+
+            <Expand className="controls-icons" onClick={() =>this.handleFullSize()} style={{ display: this.state.fullSize ? 'inline-block' : 'none' }} />
+
           </div>
           {
             this.state.fullSize ? (
@@ -266,9 +290,9 @@ class Summary extends React.Component {
 
                   </div>
                   </div>
-                  <Table tableName='Total' current={currentTotal} />
+                  <Table tableName='World' current={currentTotal} />
 
-                  <Table currentCountryTitle={globalFilters.geography || defaultCountryTitle} tableName='Country' current={currentCountry} />
+                  <Table currentCountryTitle={globalFilters.geography || defaultCountryTitle} tableName="" current={currentCountry} />
 
                 </div>
               </div>

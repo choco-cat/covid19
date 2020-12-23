@@ -3,6 +3,8 @@ import country from 'world-map-country-shapes';
 import Tooltip from './tooltip';
 import Legend from './legend';
 import { getColorsFromFilters } from '../../../services/calculations';
+import {ReactComponent as Plus} from "../../../icons/plus_map.svg";
+import {ReactComponent as Minus} from "../../../icons/minus_map.svg";
 
 import './index.scss';
 
@@ -50,8 +52,8 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters, updateFilter
   const getFormatedCoefficient = (coefficient) => {
     let formattedCoefficiend = parseFloat(coefficient.toFixed(1));
     if (formattedCoefficiend > 1) formattedCoefficiend = 1;
-    if (isNaN(formattedCoefficiend)) formattedCoefficiend = 0.1;
-    if (formattedCoefficiend < 0.1) formattedCoefficiend = 0.1;
+    if (isNaN(formattedCoefficiend)) formattedCoefficiend = 0;
+    if (formattedCoefficiend < 0.1) formattedCoefficiend = 0;
 
     return formattedCoefficiend;
   };
@@ -59,15 +61,18 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters, updateFilter
   useEffect(() => {
     const listOfCoef = new Set();
     const temp = summaries.sort((el1, el2) => el1.Data > el2.Data ? 1 : -1);
-    const diffCoeff = (temp[temp.length-1].Data - temp[0].Data) * 0.8;
+    const diffCoeff = (temp[temp.length-1].Data - temp[0].Data);
     const summariesWithCoef = summaries.map(summaryForCountry => {
       const coefficient = (summaryForCountry.Data - temp[0].Data) / diffCoeff;
-      listOfCoef.add(getFormatedCoefficient(coefficient));
+      if (getFormatedCoefficient(coefficient) > 0) {
+        listOfCoef.add(getFormatedCoefficient(coefficient));
+      }
       return {
         ...summaryForCountry,
         coefficient: getFormatedCoefficient(coefficient)
       }
     });
+
     updateSummaries(summariesWithCoef);
     updateLegend([...listOfCoef]);
     updateDiffCoeff(diffCoeff);
@@ -81,7 +86,7 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters, updateFilter
     if (selectedCountries[countryID]) {
       return "#fde5bc";
     }
-    return `rgba(${getColorsFromFilters(globalFilters.status)},${covidDataForCountry.coefficient || 0.2})`;
+    return `rgba(${getColorsFromFilters(globalFilters.status)},${covidDataForCountry.coefficient || 0.1})`;
   };
 
   const mapCountries = country.map(country => {
@@ -143,20 +148,20 @@ const Map = ({ summaries = [], handleClickOnCountry, globalFilters, updateFilter
     <>
       <Tooltip customStyles={customStyles} dataCountry={dataCountry} globalFilters={globalFilters}/>
       <div className='map-container' onWheel={handleMouseWeel}>
-        <div>
+        <div className="map-buttons">
           <button
             onClick={() => scaleMap(scaleIndex - zoomIndex)}
             disabled={scaleIndex === 2 * zoomIndex}
             className='map-button'
           >
-            <span>-</span>
+            <div><Minus className="" style={{}} /></div>
           </button>
           <button
             onClick={() => scaleMap(scaleIndex + zoomIndex)}
             disabled={scaleIndex === maxZoom - zoomIndex}
             className='map-button'
           >
-            <span>+</span>
+            <div><Plus className="" style={{}} /></div>
           </button>
         </div>
         <svg
