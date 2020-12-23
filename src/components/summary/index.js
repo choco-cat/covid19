@@ -44,6 +44,7 @@ class Summary extends React.Component {
     this.handlePer100kChange = this.handlePer100kChange.bind(this);
     this.handleAbsoluteChange = this.handleAbsoluteChange.bind(this);
     this.handleLastDayChange = this.handleLastDayChange.bind(this);
+    this.handleAllChange = this.handleAllChange.bind(this);
 
   }
 
