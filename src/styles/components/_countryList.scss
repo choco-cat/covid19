@@ -1,10 +1,11 @@
 .country-list-container {
-    height: 89vh;
     width: 25vw;
     background-color: white;
     z-index: 1000;
     margin: 2rem;
     overflow: hidden;
+    max-width: 315px;
+    min-width: 230px;
 
     &.min-size {
         height: 40px;
@@ -85,7 +86,7 @@
     justify-content: left;
 }
 
-#search {
+#searсh {
     width: 100%;
 }
 
@@ -95,4 +96,8 @@
     align-items: center;
     justify-content: center;
     margin-right: 0;
+
+    svg {
+        margin-right: 0;
+    }
 }

@@ -23,10 +23,6 @@
   box-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);
 }
 
-.country-list-container {
-  width: 310px;
-}
-
 .summary-wrapper {
   width: 260px;
   top:0;
@@ -140,17 +136,33 @@ input {
   margin-left: 0;
 }
 
+label {
+  cursor: pointer;
+}
+
 @media screen and (max-width: 600px) {
   .main-container {
     display: flex;
     flex-wrap: wrap;
   }
+
   .country-list-container {
     max-height: 360px;;
   }
+
   .country-list-container, .summary-wrapper {
     width: calc(50% - 3vw);
     position: static;
     height: auto;
+  }
+
+  .graph-wrapper {
+    position: static;
+    width: 100%;
+  }
+
+  .world-map-container {
+    height: auto;
+    width: 100%;
   }
 }
