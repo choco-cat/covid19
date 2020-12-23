@@ -59,13 +59,13 @@ const Root = () => {
   useEffect(() => {
     if (indicatorsForFilter.world) {
       setDataAll(getData(dataWorldFromDays, indicatorsForFilter));
-    } else if(indicatorsForFilter.geography) {
+    } else if (indicatorsForFilter.geography) {
       const country = indicatorsForFilter.geography;
       const population = missedPopulations[country] || flags.find(flag => flag.name === country).population;
       setDataAll(getData(dataCountryFromDays, indicatorsForFilter, population));
     }
     //для карты
-      setDataMap(getDataCountries(summaries.Countries, indicatorsForFilter));
+    setDataMap(getDataCountries(summaries.Countries, indicatorsForFilter));
   }, [indicatorsForFilter, summaries, dataWorldFromDays, dataCountryFromDays, flags]);
 
   const updateFilter = (newFilterParams) => {
@@ -89,9 +89,9 @@ const Root = () => {
 
   const changeZIndex = (e) => {
     document.querySelectorAll('.react-draggable').forEach(el => {
-      el.style.zIndex="1";
+      el.style.zIndex = "2";
     });
-    e.target.closest('.react-draggable').style.zIndex="6000";
+    e.target.closest('.react-draggable').style.zIndex = "6000";
   };
 
   return (
@@ -116,19 +116,19 @@ const Root = () => {
               handleClickOnCountry={getDataForCountry}
               handleOnMouseUp={changeZIndex}
             />
+            <Summary
+              summaries={summaries.Global}
+              summariesCountries={summaries.Countries}
+              globalFilters={indicatorsForFilter}
+              updateFilters={updateFilter}
+              handleOnMouseUp={changeZIndex}
+            />
             <WorldMap
               summaries={dataMap}
               globalFilters={indicatorsForFilter}
               handleClickOnCountry={getDataForCountry}
               updateFilters={updateFilter}
               handleOnMouseUp={changeZIndex}
-            />
-            <Summary
-                summaries={summaries.Global}
-                summariesCountries = {summaries.Countries}
-                globalFilters={indicatorsForFilter}
-                updateFilters={updateFilter}
-                handleOnMouseUp={changeZIndex}
             />
             <Graph dataWorld={dataAll}
                    globalFilters={indicatorsForFilter}

@@ -7,6 +7,7 @@ import { getSelectFilters, getSortedBy } from "../../services/selectFilters";
 import { getFilterName } from "../../services/calculations";
 import {ReactComponent as ToggleSize} from "../../icons/small.svg";
 import {ReactComponent as Expand} from "../../icons/expand.svg";
+import {ReactComponent as VKeyboard} from "../../icons/keypad.svg";
 import Filters from "../filters";
 
 const sortParameters = {
@@ -49,7 +50,9 @@ class CountryList extends React.Component {
             filterText: '',
             expanded: false,
             fullSize: true,
-        })
+        });
+
+        this.initKeyboard();
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -131,6 +134,20 @@ class CountryList extends React.Component {
         this.setState({ fullSize: !this.state.fullSize });
     };
 
+    initKeyboard() {
+        const searchInput = document.getElementById("searсh");
+        if (searchInput) {
+            window.VKeyboard.init(searchInput);
+        }
+    }
+
+    openKeyboard() {
+       const searchInput = document.getElementById("searсh");
+        if (searchInput) {
+            window.VKeyboard.keyboardToggle();
+        }
+    }
+
     render() {
         const { summaries = [], flags = [] } = this.props;
         const { filterText } = this.state;
@@ -169,24 +186,32 @@ class CountryList extends React.Component {
               >
                   <div className="controls">
                       <div className="title">Countries</div>
-                      <ToggleSize className="controls-icons" onClick={() =>this.handleToggSize()} style={{display: !this.state.expanded ? 'inline-block' : 'none'}} />
-                      <Expand className="controls-icons" onClick={() => this.handleToggleExpanded()} style={{display: this.state.fullSize ? 'inline-block' : 'none'}} />
+                      <ToggleSize className="controls-icons" onClick={() => this.handleToggSize()}
+                                  style={{display: !this.state.expanded ? 'inline-block' : 'none'}}/>
+                      <Expand className="controls-icons" onClick={() => this.handleToggleExpanded()}
+                              style={{display: this.state.fullSize ? 'inline-block' : 'none'}}/>
                   </div>
                   {
                       this.state.fullSize ? (
                         <div className="block-inner">
                             <div className="border-stroke">
                                 <div className="filters">
-                                    <Filters globalFilters={this.props.globalFilters} updateFilters={this.props.updateFilters} options={options}/>
+                                    <Filters globalFilters={this.props.globalFilters}
+                                             updateFilters={this.props.updateFilters} options={options}/>
                                 </div>
-                            <input onChange={this.onInputChange} placeholder="Search..." type="text" id="searсh" />
+                                <div className="row-search">
+                                    <input onChange={this.onInputChange} onFocus={this.onInputChange}
+                                           placeholder="Search..." type="text" id="searсh"/>
+                                    <div className="v-keyboard">
+                                        <VKeyboard className="controls-icons" onClick={this.openKeyboard}/></div>
+                                </div>
                             </div>
                             <div ref={this.listRef} className="country-list">
 
                                 <Scrollbars style={{width: 'auto', height: '67vh'}}>
                                     <table>
                                         <tbody>
-                                    {listItems}
+                                        {listItems}
                                         </tbody>
                                     </table>
                                 </Scrollbars>

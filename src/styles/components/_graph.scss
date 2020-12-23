@@ -8,10 +8,13 @@ h2, h3{
     border-radius: 10px;
     position: relative;
     left: initial;
-    right: initial;
     top: initial;
-    bottom: initial;
     transform: translate(0, 0);
+    bottom: 0;
+    right: 0;
+    overflow: hidden;
+    width: 27vw;
+    min-width: 250px;
 }
 
 .graph-filters {
@@ -24,7 +27,8 @@ h2, h3{
 }
 
 .chart {
-    height: 23vw;
+    height: 21vw;
+    min-height: 150px;
 }
 
 .expanded {
@@ -52,10 +56,6 @@ h2, h3{
     display: inline-block;
     margin-right: 8px;
     cursor: pointer;
-}
-
-.chart-container {
-    max-height: 300px;
 }
 
 rect:not([height="1"]):not([fill-opacity="0.3"]) {

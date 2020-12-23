@@ -33,13 +33,6 @@
   right: 0;
 }
 
-.graph-wrapper {
-  bottom: 0;
-  right: 0;
-  overflow: hidden;
-  width: 350px;
-}
-
 .summary-container {
   top:0;
   right: 0;
@@ -111,20 +104,21 @@ margin-bottom: 1rem;
   justify-content: space-around;
 }
 
-
-.filters div {
-  text-align: left;
-}
-
 .filters {
   align-items: center;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   padding: 0 0.4em;
 
   div {
+    text-align: left;
     margin: 0 0.3em;
   }
+}
+
+.filer-select {
+
 }
 
 .border-stroke {
@@ -146,6 +140,17 @@ input {
   margin-left: 0;
 }
 
-#searсh {
-  margin: 0.6em;
+@media screen and (max-width: 600px) {
+  .main-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .country-list-container {
+    max-height: 360px;;
+  }
+  .country-list-container, .summary-wrapper {
+    width: calc(50% - 3vw);
+    position: static;
+    height: auto;
+  }
 }

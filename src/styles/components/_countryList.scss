@@ -61,7 +61,6 @@
 .country-list-item-flag {
     height: auto;
     width: 1.3rem;
-    height: auto;
     border: 1px solid #ccc;
 }
 
@@ -77,4 +76,23 @@
 .fullscreen-image {
     width: 100%;
     height: auto;
+}
+
+.row-search {
+    display: flex;
+    align-items: center;
+    margin: 0.5em 1em;
+    justify-content: left;
+}
+
+#search {
+    width: 100%;
+}
+
+.v-keyboard {
+    display: flex;
+    margin-left: 0.4em;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0;
 }

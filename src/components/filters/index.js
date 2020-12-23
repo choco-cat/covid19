@@ -19,7 +19,7 @@ const Filters = ({ globalFilters, updateFilters, dataForCountry, options }) => {
     <>
       {
         options.status && (
-      <div>
+      <div className="filer-select">
         <select onChange={onSelectChange} value={globalFilters.status}>
           <option value={filters.status.confirmed}>{getFilterName(filters.status.confirmed)}</option>
           <option value={filters.status.deaths}>{getFilterName(filters.status.deaths)}</option>
