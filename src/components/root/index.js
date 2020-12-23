@@ -107,37 +107,37 @@ const Root = () => {
             {error}
           </div>
         ) : (
-          <>
-            <CountryList
-              summaries={summaries.Countries}
-              flags={flags}
-              globalFilters={indicatorsForFilter}
-              updateFilters={updateFilter}
-              handleClickOnCountry={getDataForCountry}
-              handleOnMouseUp={changeZIndex}
-            />
-            <Summary
-              summaries={summaries.Global}
-              summariesCountries={summaries.Countries}
-              globalFilters={indicatorsForFilter}
-              updateFilters={updateFilter}
-              handleOnMouseUp={changeZIndex}
-            />
-            <WorldMap
-              summaries={dataMap}
-              globalFilters={indicatorsForFilter}
-              handleClickOnCountry={getDataForCountry}
-              updateFilters={updateFilter}
-              handleOnMouseUp={changeZIndex}
-            />
-            <Graph dataWorld={dataAll}
-                   globalFilters={indicatorsForFilter}
-                   updateFilters={updateFilter}
-                   dataForCountry={getDataForCountry}
-                   handleOnMouseUp={changeZIndex}
-            />
-          </>
-        )
+            <>
+              <CountryList
+                summaries={summaries.Countries}
+                flags={flags}
+                globalFilters={indicatorsForFilter}
+                updateFilters={updateFilter}
+                handleClickOnCountry={getDataForCountry}
+                handleOnMouseUp={changeZIndex}
+              />
+              <Summary
+                summaries={summaries.Global}
+                summariesCountries={summaries.Countries}
+                globalFilters={indicatorsForFilter}
+                updateFilters={updateFilter}
+                handleOnMouseUp={changeZIndex}
+              />
+              <WorldMap
+                summaries={dataMap}
+                globalFilters={indicatorsForFilter}
+                handleClickOnCountry={getDataForCountry}
+                updateFilters={updateFilter}
+                handleOnMouseUp={changeZIndex}
+              />
+              <Graph dataWorld={dataAll}
+                globalFilters={indicatorsForFilter}
+                updateFilters={updateFilter}
+                dataForCountry={getDataForCountry}
+                handleOnMouseUp={changeZIndex}
+              />
+            </>
+          )
       }
     </div>
   );

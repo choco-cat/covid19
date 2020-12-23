@@ -1,24 +1,41 @@
 import React, {useState} from 'react';
 import Draggable from 'react-draggable';
-import { ReactComponent as ToggleSize } from "../../../icons/small.svg";
+import { ReactComponent as MinimizeIcon } from "../../../icons/small.svg";
+import { ReactComponent as MaximizeIcon } from "../../../icons/plus.svg";
 import { ReactComponent as Expand } from "../../../icons/expand.svg";
 import { getColorsFromFilters, getFilterName } from '../../../services/calculations';
 import { filters } from "../../../constants/filters";
 import Filters from "../../filters";
 
 const Legend = ({data, diffCoeff, globalFilters, updateFilters, handleOnMouseUp}) => {
+
   const [expanded, setExpanded] = useState(false);
-  const [fullSize, setSize] = useState(true);
+  const [fullSize, setFullSize] = useState(true);
+  const [minimize, setMinimize] = useState(true);
+  const [maximize, setMaximize] = useState(false);
+
   const defaultPosition = {x: 0, y: 0};
 
-  const handleToggleExpanded = () => {
+  const handleFullSize = () => {
     setExpanded(!expanded);
+    setMinimize(!minimize);
   };
 
+  const handleMinimize = () => {
+    setFullSize(!fullSize)
+    setMaximize(true)
+    setMinimize(false)
+
+  }
+
+  const handleMaximize = () => {
+    setFullSize(!fullSize)
+    setMaximize(false)
+    setMinimize(true)
+  }
+
   const options = {'status': true, 'relative': true, 'period': true};
-  const handleToggSize = () => {
-    setSize(!fullSize);
-  };
+  
 
   const roundDijit = (globalFilters.relative === filters.relative.to100men) ? 2 : 0;
   const userLang = navigator.language;
@@ -28,10 +45,11 @@ const Legend = ({data, diffCoeff, globalFilters, updateFilters, handleOnMouseUp}
       <div className={`map-legend ${expanded ? 'expanded' : ''}`}>
         <div className="controls">
           <div className="title">Legend</div>
-          <ToggleSize className="controls-icons" onClick={handleToggSize}
-                      style={{display: !expanded ? 'inline-block' : 'none'}}/>
-          <Expand className="controls-icons" onClick={handleToggleExpanded}
-                  style={{display: fullSize ? 'inline-block' : 'none'}}/>
+           <MaximizeIcon className="controls-icons" onClick={handleMaximize} style={{ display: maximize ? 'inline-block' : 'none' }} />
+
+          <MinimizeIcon className="controls-icons" onClick={handleMinimize} style={{ display: minimize ? 'inline-block' : 'none' }} />
+
+          <Expand className="controls-icons" onClick={handleFullSize} style={{ display: fullSize ? 'inline-block' : 'none' }} />
         </div>
         {
           fullSize ? (
