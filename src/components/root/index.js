@@ -89,7 +89,7 @@ const Root = () => {
 
   const changeZIndex = (e) => {
     document.querySelectorAll('.react-draggable').forEach(el => {
-      el.style.zIndex = "1";
+      el.style.zIndex = "2";
     });
     e.target.closest('.react-draggable').style.zIndex = "6000";
   };
@@ -116,17 +116,17 @@ const Root = () => {
                 handleClickOnCountry={getDataForCountry}
                 handleOnMouseUp={changeZIndex}
               />
-              <WorldMap
-                summaries={dataMap}
-                globalFilters={indicatorsForFilter}
-                handleClickOnCountry={getDataForCountry}
-                updateFilters={updateFilter}
-                handleOnMouseUp={changeZIndex}
-              />
               <Summary
                 summaries={summaries.Global}
                 summariesCountries={summaries.Countries}
                 globalFilters={indicatorsForFilter}
+                updateFilters={updateFilter}
+                handleOnMouseUp={changeZIndex}
+              />
+              <WorldMap
+                summaries={dataMap}
+                globalFilters={indicatorsForFilter}
+                handleClickOnCountry={getDataForCountry}
                 updateFilters={updateFilter}
                 handleOnMouseUp={changeZIndex}
               />

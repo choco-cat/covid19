@@ -8,10 +8,13 @@ h2, h3{
     border-radius: 10px;
     position: relative;
     left: initial;
-    right: initial;
     top: initial;
-    bottom: initial;
     transform: translate(0, 0);
+    bottom: 0;
+    right: 0;
+    overflow: hidden;
+    width: 27vw;
+    min-width: 250px;
 }
 
 .graph-filters {
@@ -24,8 +27,8 @@ h2, h3{
 }
 
 .chart {
-    height: 300px;
-    width: 350px;
+    height: 21vw;
+    min-height: 150px;
 }
 
 .expanded {
@@ -38,6 +41,8 @@ h2, h3{
         flex:1 0 auto;
         max-height: none;
         height: 90%;
+        width: 100%;
+        margin: 0 auto;
 
         div {
             height: 100%;
@@ -53,10 +58,10 @@ h2, h3{
     cursor: pointer;
 }
 
-.chart-container {
-    max-height: 300px;
+rect:not([height="1"]):not([fill-opacity="0.3"]) {
+    fill: transparent !important;
 }
 
-rect:not([height="1"]) {
-    fill: transparent !important;
+.goog-tooltip {
+    z-index: 6001;
 }

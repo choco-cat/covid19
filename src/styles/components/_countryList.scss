@@ -1,10 +1,11 @@
 .country-list-container {
-    height: 89vh;
     width: 25vw;
     background-color: white;
     z-index: 1000;
     margin: 2rem;
     overflow: hidden;
+    max-width: 315px;
+    min-width: 230px;
 
     &.min-size {
         height: 40px;
@@ -61,7 +62,6 @@
 .country-list-item-flag {
     height: auto;
     width: 1.3rem;
-    height: auto;
     border: 1px solid #ccc;
 }
 
@@ -77,4 +77,27 @@
 .fullscreen-image {
     width: 100%;
     height: auto;
+}
+
+.row-search {
+    display: flex;
+    align-items: center;
+    margin: 0.5em 1em;
+    justify-content: left;
+}
+
+#searсh {
+    width: 100%;
+}
+
+.v-keyboard {
+    display: flex;
+    margin-left: 0.4em;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0;
+
+    svg {
+        margin-right: 0;
+    }
 }

@@ -290,9 +290,9 @@ class Summary extends React.Component {
 
                   </div>
                   </div>
-                  <Table tableName='Total' current={currentTotal} />
+                  <Table tableName='World' current={currentTotal} />
 
-                  <Table currentCountryTitle={globalFilters.geography || defaultCountryTitle} tableName='Country' current={currentCountry} />
+                  <Table currentCountryTitle={globalFilters.geography || defaultCountryTitle} tableName="" current={currentCountry} />
 
                 </div>
               </div>

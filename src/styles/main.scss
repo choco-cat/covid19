@@ -10,13 +10,11 @@
 }
 
 .country-list-container, .summary-wrapper, .graph-wrapper {
-  /*display: flex;
-  flex-direction: column;
-  justify-content: flex-start;*/
   position: absolute;
   background: rgba(255, 255, 255, 0.9);
   border-radius: 4px 4px 0 0;
   box-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);
+  margin: 1.5vw;
 }
 
 .map-legend {
@@ -25,21 +23,10 @@
   box-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);
 }
 
-.country-list-container {
-  width: 310px;
-}
-
 .summary-wrapper {
-  width: 300px;
+  width: 260px;
   top:0;
   right: 0;
-}
-
-.graph-wrapper {
-  width: 350px;
-  bottom: 0;
-  right: 0;
-  overflow: hidden;
 }
 
 .summary-container {
@@ -113,20 +100,21 @@ margin-bottom: 1rem;
   justify-content: space-around;
 }
 
-
-.filters div {
-  text-align: left;
-}
-
 .filters {
   align-items: center;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   padding: 0 0.4em;
 
   div {
+    text-align: left;
     margin: 0 0.3em;
   }
+}
+
+.filer-select {
+
 }
 
 .border-stroke {
@@ -148,6 +136,33 @@ input {
   margin-left: 0;
 }
 
-#searсh {
-  margin: 0.6em;
+label {
+  cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+  .main-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .country-list-container {
+    max-height: 360px;;
+  }
+
+  .country-list-container, .summary-wrapper {
+    width: calc(50% - 3vw);
+    position: static;
+    height: auto;
+  }
+
+  .graph-wrapper {
+    position: static;
+    width: 100%;
+  }
+
+  .world-map-container {
+    height: auto;
+    width: 100%;
+  }
 }
