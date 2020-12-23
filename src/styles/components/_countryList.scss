@@ -4,12 +4,7 @@
     z-index: 1000;
     margin: 2rem;
     overflow: hidden;
-    max-width: 315px;
     min-width: 230px;
-
-    &.min-size {
-        height: 40px;
-    }
 }
 
 .country-list-container-fullscreen {
@@ -22,12 +17,18 @@
     z-index: 9999;
 }
 
+.expanded .country-list {
+    margin: 0 auto;
+}
+
 .country-list {
     overflow: hidden;
     padding: 1em 0;
+    max-width: 400px;
 
     table {
         width: 94%;
+        border-collapse: collapse;
     }
 }
 
@@ -43,7 +44,11 @@
 .country-list-item {
     cursor: pointer;
     text-align: left;
-    padding: 0.1em;
+
+    td {
+        padding: 0.3em;
+        line-height: 1.2em;
+    }
 
     td:last-child {
         text-align: right;
@@ -51,12 +56,13 @@
     }
 }
 
-.country-list-item_selected {
-    background: thistle;
+.country-list-item:hover {
+    border: 1px solid #3e3e3e;
 }
 
-.country-list-item-country {
-
+.country-list-item_selected {
+    border: 1px solid #808080;
+    background: cornsilk;
 }
 
 .country-list-item-flag {
@@ -82,12 +88,15 @@
 .row-search {
     display: flex;
     align-items: center;
-    margin: 0.5em 1em;
+     margin: 0.5em 0.9em;
     justify-content: left;
 }
 
 #searсh {
     width: 100%;
+    line-height: 1.5em;
+    border: 1px solid #9c9c9c;
+    padding: 0.15em 0.5em;
 }
 
 .v-keyboard {
