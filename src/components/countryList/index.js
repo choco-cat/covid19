@@ -233,7 +233,7 @@ class CountryList extends React.Component {
                             </div>
                             <div ref={this.listRef} className="country-list">
 
-                                <Scrollbars style={{width: 'auto', height: '60vh'}}>
+                                <Scrollbars style={{width: 'auto', height: this.state.expanded ? '80vh' : '50vh'}}>
                                     <table>
                                         <tbody ref={this.tbodyRef}>
                                     {listItems}
